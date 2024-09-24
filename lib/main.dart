@@ -47,22 +47,23 @@ class LoginPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                SizedBox(height: screenHeight * 0.07),
+                SizedBox(height: screenHeight * 0.075),
                 Container(
                   alignment: Alignment.center,
                   child: Image.asset(
                     'assets/logoadda.png',
                     fit: BoxFit.fitWidth,
-                    width: screenWidth * 0.3,
-                    height: screenHeight * 0.2,
+                    width: screenWidth * 0.26,
+                    height: screenHeight * 0.16,
                   ),
                 ),
+                SizedBox(height: screenHeight * 0.05),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.064),
                   child: Text(
                     "Bem vindo(a) ao ADDA!",
                     style: TextStyle(
-                      fontSize: screenWidth * 0.14,
+                      fontSize: screenWidth * 0.132,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
                       fontFamily: 'Amaranth',
@@ -73,11 +74,11 @@ class LoginPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.064),
                   child: Text(
                     "Aqui você encontra estações de tripulantes que combinam com você, de forma altamente personalizável!",
                     style: TextStyle(
-                      fontSize: screenWidth * 0.059,
+                      fontSize: screenWidth * 0.0572,
                       fontFamily: 'Inter',
                       color: Colors.white,
                       fontStyle: FontStyle.italic,
@@ -133,7 +134,7 @@ class LoginPage extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.symmetric(
                             horizontal: screenWidth * 0.24,
-                            vertical: screenHeight * 0.014),
+                            vertical: screenHeight * 0.012),
                         backgroundColor: branco,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -161,7 +162,7 @@ class LoginPage extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.symmetric(
                             horizontal: screenWidth * 0.361,
-                            vertical: screenHeight * 0.014),
+                            vertical: screenHeight * 0.012),
                         backgroundColor: Colors.transparent,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
