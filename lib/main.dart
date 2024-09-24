@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'segundaTela.dart';
 
 const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
@@ -184,27 +185,6 @@ class LoginPage extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class SegundaRota extends StatelessWidget {
-  const SegundaRota({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Segunda Rota (tela)"),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text('Retornar !'),
-        ),
       ),
     );
   }
