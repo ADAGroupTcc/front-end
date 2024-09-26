@@ -15,15 +15,15 @@ class NoInternet extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const LoginPage(title: 'offline'),
+      home: const offlinePage(title: 'offline'),
     );
   }
 }
 
-class LoginPage extends StatelessWidget {
+class offlinePage extends StatelessWidget {
   final String title;
 
-  const LoginPage({super.key, required this.title});
+  const offlinePage({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {

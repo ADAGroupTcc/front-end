@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'segundaTela.dart';
+import 'login.dart';
 
 const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
@@ -10,21 +11,17 @@ class FirstScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Login page',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const LoginPage(title: 'Login'),
+      home: WelcomePage(title: 'Welcome!'),
     );
   }
 }
 
-class LoginPage extends StatelessWidget {
+class WelcomePage extends StatelessWidget {
   final String title;
 
-  const LoginPage({super.key, required this.title});
+  const WelcomePage({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -44,18 +41,20 @@ class LoginPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                SizedBox(height: screenHeight * 0.075),
-                Container(
-                  alignment: Alignment.center,
-                  child: Image.asset(
-                    'assets/logoadda.png',
-                    fit: BoxFit.fitWidth,
-                    width: screenWidth * 0.26,
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: screenHeight * 0.083),
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Image.asset(
+                      'assets/logoadda.png',
+                      fit: BoxFit.fitWidth,
+                      width: screenWidth * 0.26,
+                    ),
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.05),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.064),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: screenWidth * 0.064),
                   child: Text(
                     "Bem vindo(a) ao ADDA!",
                     style: TextStyle(
@@ -70,7 +69,8 @@ class LoginPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.064),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: screenWidth * 0.064),
                   child: Text(
                     "Aqui você encontra estações de tripulantes que combinam com você, de forma altamente personalizável!",
                     style: TextStyle(
@@ -102,8 +102,8 @@ class LoginPage extends StatelessWidget {
                   children: [
                     const SizedBox(height: 30),
                     Padding(
-                        padding:
-                        EdgeInsets.symmetric(horizontal: screenWidth * 0.064),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: screenWidth * 0.064),
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
@@ -116,8 +116,7 @@ class LoginPage extends StatelessWidget {
                               decoration: TextDecoration.none,
                             ),
                           ),
-                        )
-                    ),
+                        )),
                     const SizedBox(height: 12),
                     ElevatedButton(
                       onPressed: () {
@@ -152,7 +151,7 @@ class LoginPage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const SegundaRota()),
+                              builder: (context) => const Login()),
                         );
                       },
                       style: ElevatedButton.styleFrom(

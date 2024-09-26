@@ -14,15 +14,15 @@ class SearchingStations extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const LoginPage(title: 'searching stations'),
+      home: const searchingPage(title: 'searching stations'),
     );
   }
 }
 
-class LoginPage extends StatelessWidget {
+class searchingPage extends StatelessWidget {
   final String title;
 
-  const LoginPage({super.key, required this.title});
+  const searchingPage({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {

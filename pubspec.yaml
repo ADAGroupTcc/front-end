@@ -27,6 +27,7 @@ flutter:
     - assets/blackwave.png
     - assets/astronautinha.png
     - assets/torredesinal.png
+    - assets/voltarbtn.png
 
   fonts:
     - family: Amaranth
