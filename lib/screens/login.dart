@@ -144,7 +144,8 @@ class LoginPage extends StatelessWidget {
                         ..onTap = () {
                           // guiar para a tela de cadastro
                         })
-                ]))
+                ])),
+            SizedBox(height: screenHeight * 0.12),
           ],
         ),
         Positioned(
