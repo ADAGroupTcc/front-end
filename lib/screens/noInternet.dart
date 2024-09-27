@@ -31,6 +31,7 @@ class offlinePage extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Stack(children: [
       Image.asset(
         'assets/registerbackground.png',
