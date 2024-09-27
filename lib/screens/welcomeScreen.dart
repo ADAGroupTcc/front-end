@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'segundaTela.dart';
+import 'register.dart';
 import 'login.dart';
 
 const Color branco = Color(0xFFFFFAFE);
@@ -124,7 +124,7 @@ class WelcomePage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const SegundaRota()),
+                              builder: (context) => RegisterPage(title: 'Register', contexto: context)),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -152,7 +152,7 @@ class WelcomePage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const Login()),
+                              builder: (context) => LoginPage(title: 'Login', contexto: context)),
                         );
                       },
                       style: ElevatedButton.styleFrom(

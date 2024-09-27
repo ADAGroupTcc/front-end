@@ -1,7 +1,7 @@
 import '../reutilizables/CustomTextField.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'register.dart';
+import 'login.dart';
 
 const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
@@ -13,17 +13,17 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Login page',
-      home: LoginPage(title: 'Login', contexto: context),
+      title: 'Register page',
+      home: RegisterPage(title: 'Register', contexto: context),
     );
   }
 }
 
-class LoginPage extends StatelessWidget {
+class RegisterPage extends StatelessWidget {
   final String title;
   final BuildContext contexto;
 
-  const LoginPage({super.key, required this.title, required this.contexto});
+  const RegisterPage({super.key, required this.title, required this.contexto});
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,7 @@ class LoginPage extends StatelessWidget {
                   horizontal: screenWidth * 0.064,
                   vertical: screenHeight * 0.02),
               child: Text(
-                "Bem vindo(a) de volta!",
+                "Crie sua conta!",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: screenWidth * 0.107,
@@ -67,31 +67,22 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 40),
             const CustomTextField(
-                label: 'Email', inputType: TextInputType.emailAddress),
+                label: 'Nome', inputType: TextInputType.text),
             const CustomTextField(
-                label: 'Senha', inputType: TextInputType.visiblePassword),
+                label: 'Sobrenome', inputType: TextInputType.text),
+            const CustomTextField(
+                label: 'E-mail', inputType: TextInputType.emailAddress),
+            const CustomTextField(
+                label: 'CPF', inputType: TextInputType.text),
+            const CustomTextField(
+                label: 'Crie uma senha', inputType: TextInputType.visiblePassword),
+            const CustomTextField(
+                label: 'Confirme sua senha', inputType: TextInputType.visiblePassword),
             const SizedBox(height: 4),
-            Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: EdgeInsets.only(left: screenWidth * 0.064),
-                  child: Text(
-                    "Esqueceu a senha?",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontFamily: 'Inter',
-                      color: Colors.white,
-                      fontWeight: FontWeight.w300,
-                      fontSize: screenWidth * 0.046,
-                      decoration: TextDecoration.none,
-                    ),
-                  ),
-                )),
             Padding(
               padding: EdgeInsets.only(
-                  top: screenHeight * 0.07, bottom: screenHeight * 0.01),
+                  top: screenHeight * 0.05, bottom: screenHeight * 0.01),
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.push(
@@ -101,7 +92,7 @@ class LoginPage extends StatelessWidget {
                 },
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(
-                      horizontal: screenWidth * 0.361,
+                      horizontal: screenWidth * 0.313,
                       vertical: screenHeight * 0.012),
                   backgroundColor: Colors.transparent,
                   shape: RoundedRectangleBorder(
@@ -111,7 +102,7 @@ class LoginPage extends StatelessWidget {
                 ),
                 child: RichText(
                   text: TextSpan(
-                      text: "Login",
+                      text: "Continuar",
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
                           // enviar um email com a senha
@@ -134,26 +125,25 @@ class LoginPage extends StatelessWidget {
                       decoration: TextDecoration.none,
                     ),
                     children: [
-                  const TextSpan(text: 'ainda não tem conta? '),
-                  TextSpan(
-                      text: 'Cadastre-se!',
-                      style: TextStyle(
-                        fontFamily: 'Inter',
-                        color: Colors.white,
-                        fontSize: screenWidth * 0.046,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.none,
-                      ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => RegisterPage(title: 'Register', contexto: context)),
-                          );
-                        })
-                ])),
-            SizedBox(height: screenHeight * 0.177),
+                      const TextSpan(text: 'Já tem conta? '),
+                      TextSpan(
+                          text: 'Faça login aqui!',
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            color: Colors.white,
+                            fontSize: screenWidth * 0.046,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.none,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => LoginPage(title: 'Login', contexto: context)),
+                              );
+                            })
+                    ])),
           ],
         ),
         Positioned(
