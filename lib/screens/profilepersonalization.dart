@@ -4,29 +4,28 @@ const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
 const Color cinzar = Color(0x4dfffafe);
 
-class Login extends StatelessWidget {
-  const Login({super.key});
+class ProfilePersonalization extends StatelessWidget {
+  const ProfilePersonalization({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Profile personalization page',
-      home: ProfilePersonalizationPage(title: 'Profile personalization', contexto: context),
+      home: ProfilePersonalizationPage(title: 'Profile personalization'),
     );
   }
 }
 
 class ProfilePersonalizationPage extends StatelessWidget {
   final String title;
-  final BuildContext contexto;
 
-  const ProfilePersonalizationPage({super.key, required this.title, required this.contexto});
+  const ProfilePersonalizationPage({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
     // final screenWidth = MediaQuery.of(context).size.width;
     // final screenHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold();
+    return const Scaffold();
   }
 }

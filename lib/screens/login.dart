@@ -1,3 +1,5 @@
+import 'package:addaproject/screens/welcomescreen.dart';
+
 import '../utils/customtextfield.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -12,18 +14,17 @@ class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Login page',
-      home: LoginPage(title: 'Login', contexto: context),
+      home: LoginPage(title: 'Login'),
     );
   }
 }
 
 class LoginPage extends StatelessWidget {
   final String title;
-  final BuildContext contexto;
 
-  const LoginPage({super.key, required this.title, required this.contexto});
+  const LoginPage({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +95,7 @@ class LoginPage extends StatelessWidget {
                   top: screenHeight * 0.07, bottom: screenHeight * 0.01),
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => const Login()),
                   );
@@ -149,7 +150,8 @@ class LoginPage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => RegisterPage(title: 'Register', contexto: context)),
+                                builder: (context) =>
+                                    const RegisterPage(title: 'Register')),
                           );
                         })
                 ])),
@@ -161,7 +163,12 @@ class LoginPage extends StatelessWidget {
             left: screenWidth * 0.04,
             child: GestureDetector(
               onTap: () {
-                Navigator.pop(contexto);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          const WelcomePage(title: 'Welcome!')),
+                );
               },
               child: Container(
                 alignment: Alignment.center,

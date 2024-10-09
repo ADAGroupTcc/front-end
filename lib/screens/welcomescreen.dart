@@ -121,10 +121,11 @@ class WelcomePage extends StatelessWidget {
                     const SizedBox(height: 12),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => RegisterPage(title: 'Register', contexto: context)),
+                              builder: (context) =>
+                                  const RegisterPage(title: 'Register')),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -152,7 +153,8 @@ class WelcomePage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => LoginPage(title: 'Login', contexto: context)),
+                              builder: (context) =>
+                                  const LoginPage(title: 'Login')),
                         );
                       },
                       style: ElevatedButton.styleFrom(
