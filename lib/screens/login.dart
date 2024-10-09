@@ -59,7 +59,7 @@ class LoginPage extends StatelessWidget {
                 style: TextStyle(
                   fontSize: screenWidth * 0.107,
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  color: branco,
                   fontFamily: 'Amaranth',
                   decoration: TextDecoration.none,
                   height: 1,
@@ -87,7 +87,7 @@ class LoginPage extends StatelessWidget {
                     textAlign: TextAlign.left,
                     style: TextStyle(
                       fontFamily: 'Inter',
-                      color: Colors.white,
+                      color: branco,
                       fontWeight: FontWeight.w300,
                       fontSize: screenWidth * 0.046,
                       decoration: TextDecoration.none,
@@ -133,7 +133,7 @@ class LoginPage extends StatelessWidget {
                 text: TextSpan(
                     style: TextStyle(
                       fontFamily: 'Inter',
-                      color: Colors.white,
+                      color: branco,
                       fontWeight: FontWeight.w300,
                       fontSize: screenWidth * 0.046,
                       decoration: TextDecoration.none,
@@ -144,7 +144,7 @@ class LoginPage extends StatelessWidget {
                       text: 'Cadastre-se!',
                       style: TextStyle(
                         fontFamily: 'Inter',
-                        color: Colors.white,
+                        color: branco,
                         fontSize: screenWidth * 0.046,
                         fontWeight: FontWeight.bold,
                         decoration: TextDecoration.none,

@@ -60,7 +60,7 @@ class RegisterPage extends StatelessWidget {
                 style: TextStyle(
                   fontSize: screenWidth * 0.107,
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  color: branco,
                   fontFamily: 'Amaranth',
                   decoration: TextDecoration.none,
                   height: 1,
@@ -124,7 +124,7 @@ class RegisterPage extends StatelessWidget {
                 text: TextSpan(
                     style: TextStyle(
                       fontFamily: 'Inter',
-                      color: Colors.white,
+                      color: branco,
                       fontWeight: FontWeight.w300,
                       fontSize: screenWidth * 0.046,
                       decoration: TextDecoration.none,
@@ -135,7 +135,7 @@ class RegisterPage extends StatelessWidget {
                       text: 'Faça login aqui!',
                       style: TextStyle(
                         fontFamily: 'Inter',
-                        color: Colors.white,
+                        color: branco,
                         fontSize: screenWidth * 0.046,
                         fontWeight: FontWeight.bold,
                         decoration: TextDecoration.none,
