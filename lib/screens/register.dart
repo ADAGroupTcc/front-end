@@ -67,18 +67,18 @@ class RegisterPage extends StatelessWidget {
                 ),
               ),
             ),
-            const CustomTextField(label: 'Nome', inputType: TextInputType.text),
+            const CustomTextField(label: 'Nome', inputType: TextInputType.text, isobscure: false,),
             const CustomTextField(
-                label: 'Sobrenome', inputType: TextInputType.text),
+                label: 'Sobrenome', inputType: TextInputType.text, isobscure: false,),
             const CustomTextField(
-                label: 'E-mail', inputType: TextInputType.emailAddress),
-            const CustomTextField(label: 'CPF', inputType: TextInputType.text),
+                label: 'E-mail', inputType: TextInputType.emailAddress, isobscure: false,),
+            const CustomTextField(label: 'CPF', inputType: TextInputType.text, isobscure: false,),
             const CustomTextField(
                 label: 'Crie uma senha',
-                inputType: TextInputType.visiblePassword),
+                inputType: TextInputType.visiblePassword, isobscure: true,),
             const CustomTextField(
                 label: 'Confirme sua senha',
-                inputType: TextInputType.visiblePassword),
+                inputType: TextInputType.visiblePassword, isobscure: true,),
             const SizedBox(height: 4),
             Padding(
               padding: EdgeInsets.only(

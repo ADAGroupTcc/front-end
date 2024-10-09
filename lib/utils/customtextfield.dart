@@ -6,10 +6,11 @@ const Color cinzar = Color(0x4dfffafe);
 
 class CustomTextField extends StatefulWidget {
   final String label;
+  final bool isobscure;
   final TextInputType inputType;
 
   const CustomTextField(
-      {super.key, required this.label, required this.inputType});
+      {super.key, required this.label, required this.inputType, required this.isobscure});
 
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
@@ -37,6 +38,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   Padding(
                     padding: const EdgeInsets.only(top: 20.0, bottom: 3),
                     child: TextField(
+                      obscureText: widget.isobscure,
                       controller: _controller,
                       keyboardType: widget.inputType,
                       style: const TextStyle(color: branco),

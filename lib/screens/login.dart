@@ -68,9 +68,15 @@ class LoginPage extends StatelessWidget {
             ),
             const SizedBox(height: 40),
             const CustomTextField(
-                label: 'Email', inputType: TextInputType.emailAddress),
+              label: 'Email',
+              inputType: TextInputType.emailAddress,
+              isobscure: false,
+            ),
             const CustomTextField(
-                label: 'Senha', inputType: TextInputType.visiblePassword),
+              label: 'Senha',
+              inputType: TextInputType.visiblePassword,
+              isobscure: true,
+            ),
             const SizedBox(height: 4),
             Align(
                 alignment: Alignment.centerLeft,
@@ -148,8 +154,7 @@ class LoginPage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    const RegisterPage()),
+                                builder: (context) => const RegisterPage()),
                           );
                         })
                 ])),
@@ -163,9 +168,7 @@ class LoginPage extends StatelessWidget {
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          const WelcomePage()),
+                  MaterialPageRoute(builder: (context) => const WelcomePage()),
                 );
               },
               child: Container(

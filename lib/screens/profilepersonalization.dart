@@ -24,6 +24,15 @@ class ProfilePersonalizationPage extends StatelessWidget {
     // final screenWidth = MediaQuery.of(context).size.width;
     // final screenHeight = MediaQuery.of(context).size.height;
 
-    return const Scaffold();
+    return Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Stack(children: [
+          Image.asset(
+            'assets/registerbackground.png',
+            fit: BoxFit.cover,
+            height: double.infinity,
+            width: double.infinity,
+          ),
+        ]));
   }
 }
