@@ -16,15 +16,13 @@ class Login extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'Login page',
-      home: LoginPage(title: 'Login'),
+      home: LoginPage(),
     );
   }
 }
 
 class LoginPage extends StatelessWidget {
-  final String title;
-
-  const LoginPage({super.key, required this.title});
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +149,7 @@ class LoginPage extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    const RegisterPage(title: 'Register')),
+                                    const RegisterPage()),
                           );
                         })
                 ])),
@@ -167,7 +165,7 @@ class LoginPage extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          const WelcomePage(title: 'Welcome!')),
+                          const WelcomePage()),
                 );
               },
               child: Container(

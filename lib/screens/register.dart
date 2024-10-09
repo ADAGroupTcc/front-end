@@ -16,15 +16,14 @@ class Register extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'Register page',
-      home: RegisterPage(title: 'Register'),
+      home: RegisterPage(),
     );
   }
 }
 
 class RegisterPage extends StatelessWidget {
-  final String title;
 
-  const RegisterPage({super.key, required this.title});
+  const RegisterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -110,8 +109,7 @@ class RegisterPage extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    const ProfilePersonalizationPage(
-                                        title: 'Profile personalization')),
+                                    const ProfilePersonalizationPage()),
                           );
                         },
                       style: TextStyle(
@@ -148,7 +146,7 @@ class RegisterPage extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    const LoginPage(title: 'Login')),
+                                    const LoginPage()),
                           );
                         })
                 ])),
@@ -163,7 +161,7 @@ class RegisterPage extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          const WelcomePage(title: 'Welcome!')),
+                          const WelcomePage()),
                 );
               },
               child: Container(

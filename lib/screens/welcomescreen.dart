@@ -13,15 +13,13 @@ class FirstScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'Login page',
-      home: WelcomePage(title: 'Welcome!'),
+      home: WelcomePage(),
     );
   }
 }
 
 class WelcomePage extends StatelessWidget {
-  final String title;
-
-  const WelcomePage({super.key, required this.title});
+  const WelcomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +123,7 @@ class WelcomePage extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  const RegisterPage(title: 'Register')),
+                                  const RegisterPage()),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -154,7 +152,7 @@ class WelcomePage extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  const LoginPage(title: 'Login')),
+                                  const LoginPage()),
                         );
                       },
                       style: ElevatedButton.styleFrom(
