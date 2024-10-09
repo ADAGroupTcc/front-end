@@ -4,7 +4,7 @@ import 'login.dart';
 
 const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
-const Color pretor = Color(0x500D0D0D);
+// const Color pretor = Color(0x500D0D0D);
 
 class FirstScreen extends StatelessWidget {
   const FirstScreen({super.key});

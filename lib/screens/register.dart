@@ -1,4 +1,5 @@
-import '../utils/CustomTextField.dart';
+import 'package:addaproject/screens/profilepersonalization.dart';
+import '../utils/customtextfield.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'login.dart';
@@ -67,18 +68,18 @@ class RegisterPage extends StatelessWidget {
                 ),
               ),
             ),
-            const CustomTextField(
-                label: 'Nome', inputType: TextInputType.text),
+            const CustomTextField(label: 'Nome', inputType: TextInputType.text),
             const CustomTextField(
                 label: 'Sobrenome', inputType: TextInputType.text),
             const CustomTextField(
                 label: 'E-mail', inputType: TextInputType.emailAddress),
+            const CustomTextField(label: 'CPF', inputType: TextInputType.text),
             const CustomTextField(
-                label: 'CPF', inputType: TextInputType.text),
+                label: 'Crie uma senha',
+                inputType: TextInputType.visiblePassword),
             const CustomTextField(
-                label: 'Crie uma senha', inputType: TextInputType.visiblePassword),
-            const CustomTextField(
-                label: 'Confirme sua senha', inputType: TextInputType.visiblePassword),
+                label: 'Confirme sua senha',
+                inputType: TextInputType.visiblePassword),
             const SizedBox(height: 4),
             Padding(
               padding: EdgeInsets.only(
@@ -105,7 +106,14 @@ class RegisterPage extends StatelessWidget {
                       text: "Continuar",
                       recognizer: TapGestureRecognizer()
                         ..onTap = () {
-                          // enviar um email com a senha
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ProfilePersonalizationPage(
+                                        title: 'Profile personalization',
+                                        contexto: context)),
+                          );
                         },
                       style: TextStyle(
                         color: branco,
@@ -125,25 +133,26 @@ class RegisterPage extends StatelessWidget {
                       decoration: TextDecoration.none,
                     ),
                     children: [
-                      const TextSpan(text: 'Já tem conta? '),
-                      TextSpan(
-                          text: 'Faça login aqui!',
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            color: Colors.white,
-                            fontSize: screenWidth * 0.046,
-                            fontWeight: FontWeight.bold,
-                            decoration: TextDecoration.none,
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => LoginPage(title: 'Login', contexto: context)),
-                              );
-                            })
-                    ])),
+                  const TextSpan(text: 'Já tem conta? '),
+                  TextSpan(
+                      text: 'Faça login aqui!',
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        color: Colors.white,
+                        fontSize: screenWidth * 0.046,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.none,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage(
+                                    title: 'Login', contexto: context)),
+                          );
+                        })
+                ])),
           ],
         ),
         Positioned(
