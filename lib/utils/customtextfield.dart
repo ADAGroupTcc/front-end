@@ -6,11 +6,11 @@ const Color cinzar = Color(0x4dfffafe);
 
 class CustomTextField extends StatefulWidget {
   final String label;
-  final bool isobscure;
   final TextInputType inputType;
+  final TextEditingController? controller;
 
   const CustomTextField(
-      {super.key, required this.label, required this.inputType, required this.isobscure});
+      {super.key, required this.label, required this.inputType, this.controller});
 
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
@@ -38,10 +38,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   Padding(
                     padding: const EdgeInsets.only(top: 20.0, bottom: 3),
                     child: TextField(
-                      obscureText: widget.isobscure,
                       controller: _controller,
                       keyboardType: widget.inputType,
-                      style: const TextStyle(color: branco),
                       decoration: InputDecoration(
                           filled: true,
                           fillColor: cinzar,
@@ -69,19 +67,18 @@ class _CustomTextFieldState extends State<CustomTextField> {
                       left: _hasFocus || _controller.text.isNotEmpty ? 0 : 12,
                       top: _hasFocus || _controller.text.isNotEmpty ? -4 : 32,
                       child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          child: IgnorePointer(
-                            child: Text(
-                              widget.label,
-                              style: TextStyle(
-                                fontFamily: 'Inter',
-                                color: Colors.white,
-                                fontWeight: FontWeight.w300,
-                                fontSize: screenWidth * 0.043,
-                                decoration: TextDecoration.none,
-                              ),
-                            ),
-                          )))
+                        duration: const Duration(milliseconds: 200),
+                        child: Text(
+                          widget.label,
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            color: Colors.white,
+                            fontWeight: FontWeight.w300,
+                            fontSize: screenWidth * 0.043,
+                            decoration: TextDecoration.none,
+                          ),
+                        ),
+                      ))
                 ],
               ),
             )));

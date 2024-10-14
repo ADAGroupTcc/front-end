@@ -122,6 +122,38 @@ class RegisterPage extends StatelessWidget {
             ),
             RichText(
                 text: TextSpan(
+                  style: TextStyle(
+                    fontFamily: 'Inter',
+                    color: Colors.white,
+                    fontWeight: FontWeight.w300,
+                    fontSize: screenWidth * 0.046,
+                    decoration: TextDecoration.none,
+                  ),
+                  children: [
+                    const TextSpan(text: 'Já tem conta? '),
+                    TextSpan(
+                      text: 'Faça login aqui!',
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        color: Colors.white,
+                        fontSize: screenWidth * 0.046,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.none,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const Login()),
+                          );
+                        },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Positioned(
                     style: TextStyle(
                       fontFamily: 'Inter',
                       color: branco,
@@ -172,8 +204,10 @@ class RegisterPage extends StatelessWidget {
                   width: screenWidth * 0.1,
                 ),
               ),
-            )),
-      ]),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
