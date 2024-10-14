@@ -7,9 +7,10 @@ const Color cinzar = Color(0x4dfffafe);
 class CustomTextField extends StatefulWidget {
   final String label;
   final TextInputType inputType;
+  final TextEditingController? controller;
 
   const CustomTextField(
-      {super.key, required this.label, required this.inputType});
+      {super.key, required this.label, required this.inputType, this.controller});
 
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();

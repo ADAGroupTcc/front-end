@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'screens/welcomeScreen.dart';
-import 'screens/noInternet.dart';
+import '../screens/welcomeScreen.dart';
+import '../screens/noInternet.dart';
 
 void main() {
   runApp(const MyApp());
