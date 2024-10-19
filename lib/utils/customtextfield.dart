@@ -6,18 +6,23 @@ const Color cinzar = Color(0x4dfffafe);
 
 class CustomTextField extends StatefulWidget {
   final String label;
+  final bool isobscure;
   final TextInputType inputType;
-  final TextEditingController? controller;
+  final TextEditingController controller; // Adicionado o parâmetro controller
 
-  const CustomTextField(
-      {super.key, required this.label, required this.inputType, this.controller});
+  const CustomTextField({
+    super.key, 
+    required this.label, 
+    required this.inputType, 
+    required this.isobscure,
+    required this.controller, // Adicionado o parâmetro controller
+  });
 
   @override
   _CustomTextFieldState createState() => _CustomTextFieldState();
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
-  final TextEditingController _controller = TextEditingController();
   bool _hasFocus = false;
 
   @override
@@ -38,8 +43,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   Padding(
                     padding: const EdgeInsets.only(top: 20.0, bottom: 3),
                     child: TextField(
-                      controller: _controller,
+                      obscureText: widget.isobscure,
+                      controller: widget.controller, // Usando o controller do widget
                       keyboardType: widget.inputType,
+                      style: const TextStyle(color: branco),
                       decoration: InputDecoration(
                           filled: true,
                           fillColor: cinzar,
@@ -64,21 +71,22 @@ class _CustomTextFieldState extends State<CustomTextField> {
                     ),
                   ),
                   Positioned(
-                      left: _hasFocus || _controller.text.isNotEmpty ? 0 : 12,
-                      top: _hasFocus || _controller.text.isNotEmpty ? -4 : 32,
+                      left: _hasFocus || widget.controller.text.isNotEmpty ? 0 : 12,
+                      top: _hasFocus || widget.controller.text.isNotEmpty ? -4 : 32,
                       child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        child: Text(
-                          widget.label,
-                          style: TextStyle(
-                            fontFamily: 'Inter',
-                            color: Colors.white,
-                            fontWeight: FontWeight.w300,
-                            fontSize: screenWidth * 0.043,
-                            decoration: TextDecoration.none,
-                          ),
-                        ),
-                      ))
+                          duration: const Duration(milliseconds: 200),
+                          child: IgnorePointer(
+                            child: Text(
+                              widget.label,
+                              style: TextStyle(
+                                fontFamily: 'Inter',
+                                color: Colors.white,
+                                fontWeight: FontWeight.w300,
+                                fontSize: screenWidth * 0.043,
+                                decoration: TextDecoration.none,
+                              ),
+                            ),
+                          )))
                 ],
               ),
             )));

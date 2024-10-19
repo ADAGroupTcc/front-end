@@ -123,7 +123,7 @@ class WelcomePage extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  const RegisterPage()),
+                                  RegisterPage()),
                         );
                       },
                       style: ElevatedButton.styleFrom(

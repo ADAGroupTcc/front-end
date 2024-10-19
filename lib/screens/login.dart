@@ -1,5 +1,4 @@
 import 'package:addaproject/screens/welcomescreen.dart';
-
 import '../utils/customtextfield.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +27,10 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+
+    // Declare os controllers como variáveis
+    final TextEditingController _emailController = TextEditingController();
+    final TextEditingController _passwordController = TextEditingController();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -67,12 +70,14 @@ class LoginPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 40),
-            const CustomTextField(
+            CustomTextField(
+              controller: _emailController, // Agora é uma variável
               label: 'Email',
               inputType: TextInputType.emailAddress,
               isobscure: false,
             ),
-            const CustomTextField(
+            CustomTextField(
+              controller: _passwordController, // Agora é uma variável
               label: 'Senha',
               inputType: TextInputType.visiblePassword,
               isobscure: true,
@@ -154,7 +159,7 @@ class LoginPage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const RegisterPage()),
+                                builder: (context) => RegisterPage()),
                           );
                         })
                 ])),

@@ -10,7 +10,7 @@ abstract interface class IAddaSDK {
 }
 
 class AddaSDK implements IAddaSDK {
-  final String baseUrl = "{{ms-users-api-host}}"; //URL FAKE
+  final String baseUrl = "https://ms-users-api.onrender.com";
 
 //////Users//////
 
@@ -68,35 +68,54 @@ class AddaSDK implements IAddaSDK {
     }
   }
 
-  Future<User?> createUser(User newUser) async {
+  Future<User?> createUser(User newUser,
+      {required String email,
+      required String cpf,
+      required String firstName,
+      required String lastName}) async {
     try {
+      // Cria o body da requisição
+      final body = jsonEncode({
+        'first_name': newUser.firstName,
+        'last_name': newUser.lastName,
+        'email': newUser.email,
+        'cpf': newUser.cpf,
+      });
+
+      // Exibe o body no console
+      print('Enviando para o backend: $body');
+      print('URL: $baseUrl/v1/users');
+
+      // Faz a requisição POST
       final response = await http.post(
         Uri.parse('$baseUrl/v1/users'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonEncode({
-          'first_name': newUser.firstName,
-          'last_name': newUser.lastName,
-          'email': newUser.email,
-          'description': newUser.description,
-          'nickname': newUser.nickname,
-          'cpf': newUser.cpf,
-          'categories': newUser.categories.map((cat) => cat.toJson()).toList(),
-          'isDenunciated': newUser.isDenunciated
-        }),
+        body: body,
       );
 
+      // Verifica o código de status da resposta
       if (response.statusCode == 201) {
+        // Se a criação do usuário foi bem-sucedida
         final Map<String, dynamic> data = jsonDecode(response.body);
         return User.fromJson(data);
       } else {
-        print('Erro ao criar usuário: ${response.statusCode}');
-        return null;
+        // Se houver erro, processa a resposta de erro
+        final Map<String, dynamic> errorData = jsonDecode(response.body);
+        final int errorCode = errorData['code'] ?? response.statusCode;
+        final String errorMessage = errorData['message'] ?? 'Erro desconhecido';
+
+        // Exibe o código e mensagem de erro no console
+        print('$errorCode - $errorMessage');
+
+        // Lança uma exceção com os detalhes do erro
+        throw Exception('Erro $errorCode: $errorMessage');
       }
     } catch (e) {
-      print('Erro inesperado: $e');
-      return null;
+      // Captura e exibe erros inesperados
+      print('$e');
+      throw Exception('$e');
     }
   }
 
@@ -346,6 +365,10 @@ class AddaSDK implements IAddaSDK {
       print('Erro inesperado ao enviar Message: $e');
       return false;
     }
+  }
+
+  String getAccessToken() {
+    return "Token";
   }
 
   Future<bool> deleteUnreadMessages() async {
