@@ -1,10 +1,11 @@
 import 'package:addaproject/screens/profilepersonalization.dart';
 import 'package:addaproject/utils/customtextfield.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart'
+    as firebase_auth; // Adiciona o prefixo
+import 'package:firebase_database/firebase_database.dart'; // Importa o Firebase Realtime Database
 import '../sdk/AddaSDK.dart'; // Importe sua SDK
 import '../sdk/model/User.dart';
-import 'package:http/http.dart' as http; // Importa o http para interações com o Firebase
-import 'dart:convert'; // Importa para usar jsonEncode
 
 const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
@@ -80,6 +81,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
 
     try {
+      // 1. Cria o usuário no banco de dados
       final createdUser = await AddaSDK().createUser(
         newUser,
         email: email,
@@ -89,47 +91,30 @@ class _RegisterPageState extends State<RegisterPage> {
       );
 
       if (createdUser != null) {
-        // Se o usuário for criado, mostrar uma mensagem de sucesso
+        // 2. Cria o usuário no Firebase Authentication
+        firebase_auth.UserCredential userCredential = await firebase_auth
+            .FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+
+        // 3. Salva o token de acesso no Firebase Realtime Database
+        final accessToken = AddaSDK().getAccessToken();
+        await FirebaseDatabase.instance
+            .ref()
+            .child(
+                'users/${userCredential.user!.uid}') // UID do usuário autenticado
+            .set({
+          'token': accessToken,
+        });
+
         _showPopup('Usuário criado com sucesso!');
-
-        // Obter o token de acesso
-        String accessToken = await AddaSDK()
-            .getAccessToken(); // Supondo que essa função retorne um String
-
-        // Salvar no Firebase
-        await _saveToFirebase(email, password, accessToken);
       } else {
-        // Mostrar uma mensagem de erro genérica se o usuário não for criado
         _showPopup('Erro ao criar usuário. Tente novamente.');
       }
     } catch (e) {
-      // Se ocorrer um erro, mostrar a mensagem detalhada no pop-up
       _showPopup('Erro ao criar usuário: $e');
-    }
-  }
-
-  Future<void> _saveToFirebase(
-      String email, String password, String accessToken) async {
-    final url =
-        'https://adda-project-a3549-default-rtdb.firebaseio.com/users.json';
-
-    final response = await http.post(
-      Uri.parse(url),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode({
-        'email': email,
-        'password': password,
-        'accessToken': accessToken,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      print('Dados salvos com sucesso no Firebase');
-    } else {
-      print('Erro ao salvar dados no Firebase: ${response.body}');
-      _showPopup('Erro ao salvar dados no Firebase.');
     }
   }
 

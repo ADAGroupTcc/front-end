@@ -2,9 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'screens/welcomescreen.dart';
 import 'screens/nointernet.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  try {
+    // Inicializando o Firebase
+    await Firebase.initializeApp();
+    runApp(const MyApp());
+  } catch (e) {
+    print('Erro ao inicializar o Firebase: $e');
+  }
 }
 
 class MyApp extends StatefulWidget {

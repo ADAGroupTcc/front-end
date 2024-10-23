@@ -29,8 +29,8 @@ class LoginPage extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     // Declare os controllers como variáveis
-    final TextEditingController _emailController = TextEditingController();
-    final TextEditingController _passwordController = TextEditingController();
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -71,13 +71,13 @@ class LoginPage extends StatelessWidget {
             ),
             const SizedBox(height: 40),
             CustomTextField(
-              controller: _emailController, // Agora é uma variável
+              controller: emailController, // Agora é uma variável
               label: 'Email',
               inputType: TextInputType.emailAddress,
               isobscure: false,
             ),
             CustomTextField(
-              controller: _passwordController, // Agora é uma variável
+              controller: passwordController, // Agora é uma variável
               label: 'Senha',
               inputType: TextInputType.visiblePassword,
               isobscure: true,
@@ -159,7 +159,7 @@ class LoginPage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => RegisterPage()),
+                                builder: (context) => const RegisterPage()),
                           );
                         })
                 ])),
