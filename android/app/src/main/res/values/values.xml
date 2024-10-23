@@ -1,7 +1,7 @@
 <resources>
-    <string name="google_app_id">1:575780992936:android:644250636068cd40cd4f9d</string>
-    <string name="google_api_key">AIzaSyDyXUGIZ90vO1MgdfGYoNU8Ro7TgBl0j7A</string>
+    <!-- <string name="google_app_id">1:575780992936:android:644250636068cd40cd4f9d</string>
+    <string name="google_api_key">AIzaSyDyXUGIZ90vO1MgdfGYoNU8Ro7TgBl0j7A</string> -->
     <string name="google_project_number">575780992936</string>
     <string name="google_messaging_sender_id">adda-project-a3549</string>
-    <string name="google_storage_bucket">adda-project-a3549.appspot.com</string>
+    <!-- <string name="google_storage_bucket">adda-project-a3549.appspot.com</string> -->
 </resources>

@@ -8,6 +8,7 @@
   "client": [
     {
       "client_info": {
+        "messagingSenderId": "575780992936",
         "mobilesdk_app_id": "1:575780992936:android:644250636068cd40cd4f9d",
         "android_client_info": {
           "package_name": "com.example.addaproject"
