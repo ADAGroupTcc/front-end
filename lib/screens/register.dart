@@ -1,6 +1,7 @@
 import 'package:addaproject/screens/profilepersonalization.dart';
 import 'package:addaproject/utils/customtextfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart'
     as firebase_auth; // Adiciona o prefixo
@@ -28,6 +29,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseDatabase _firebaseDatabase = FirebaseDatabase.instance;
 
   void _showPopup(String message) {
     showDialog(
@@ -57,7 +59,6 @@ class _RegisterPageState extends State<RegisterPage> {
     final String password = _passwordController.text;
     final String confirmPassword = _confirmPasswordController.text;
 
-    // Verifica se todos os campos estão preenchidos
     if (firstName.isEmpty ||
         lastName.isEmpty ||
         email.isEmpty ||
@@ -68,13 +69,11 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
-    // Verifica se as senhas coincidem
     if (password != confirmPassword) {
       _showPopup('As senhas não coincidem.');
       return;
     }
 
-    // Cria o usuário usando a função createUser da AddaSDK
     final newUser = UserCreate(
       firstName: firstName,
       lastName: lastName,
@@ -83,30 +82,23 @@ class _RegisterPageState extends State<RegisterPage> {
       categories: [],
     );
     try {
-      // 1. Cria o usuário no banco de dados
       final createdUser = await AddaSDK().createUser(
         newUser,
       );
 
       if (createdUser != null) {
-        // 2. Cria o usuário no Firebase Authentication
-
         UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
           email: email,
           password: password,
         );
 
-        // 3. Salva o token de acesso no Firebase Realtime Database
-        final accessToken = AddaSDK().getAccessToken();
-        await FirebaseDatabase.instance
-            .ref()
-            .child(
-                'users/${userCredential.user!.uid}')
-            .set({
-          'token': accessToken,
-        });
+        final accessToken = await AddaSDK().getAccessToken(createdUser.id);
 
-        _showPopup('Usuário criado com sucesso!');
+        await _firebaseDatabase.ref()
+            .child('users/${userCredential.user!.uid}')
+            .set({'session': accessToken.sessionToken, 'user_id': createdUser.id});
+
+        _showPopup("Usuario criado efetivamente");
       } else {
         _showPopup('Erro ao criar usuário. Tente novamente.');
       }
