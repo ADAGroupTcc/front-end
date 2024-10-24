@@ -1,4 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:http/http.dart' as http;
 import 'model/Message.dart';
 import 'model/User.dart';
@@ -11,8 +14,16 @@ abstract interface class IAddaSDK {
 
 class AddaSDK implements IAddaSDK {
   final String baseUrl = "https://ms-users-api.onrender.com";
-
+  Dio httpClient = Dio();
 //////Users//////
+
+  AddaSDK() {
+    // Configuração para ignorar a verificação de certificado
+    (httpClient.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
+      client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+      return client;
+    };
+  }
 
   @override
   Future<User?> getUserByID(String userId) async {
@@ -68,54 +79,22 @@ class AddaSDK implements IAddaSDK {
     }
   }
 
-  Future<User?> createUser(User newUser,
-      {required String email,
-      required String cpf,
-      required String firstName,
-      required String lastName}) async {
+  Future<User?> createUser(UserCreate newUser) async {
+    final body = jsonEncode(newUser.toJson());
     try {
-      // Cria o body da requisição
-      final body = jsonEncode({
-        'first_name': newUser.firstName,
-        'last_name': newUser.lastName,
-        'email': newUser.email,
-        'cpf': newUser.cpf,
-      });
-
-      // Exibe o body no console
-      print('Enviando para o backend: $body');
-      print('URL: $baseUrl/v1/users');
-
-      // Faz a requisição POST
-      final response = await http.post(
-        Uri.parse('$baseUrl/v1/users'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: body,
+      final response = await httpClient.post(
+        '$baseUrl/v1/users',
+        data: body,
       );
 
-      // Verifica o código de status da resposta
-      if (response.statusCode == 201) {
-        // Se a criação do usuário foi bem-sucedida
-        final Map<String, dynamic> data = jsonDecode(response.body);
-        return User.fromJson(data);
-      } else {
-        // Se houver erro, processa a resposta de erro
-        final Map<String, dynamic> errorData = jsonDecode(response.body);
-        final int errorCode = errorData['code'] ?? response.statusCode;
-        final String errorMessage = errorData['message'] ?? 'Erro desconhecido';
-
-        // Exibe o código e mensagem de erro no console
-        print('$errorCode - $errorMessage');
-
-        // Lança uma exceção com os detalhes do erro
-        throw Exception('Erro $errorCode: $errorMessage');
-      }
+      final dynamic data = response.data;
+      print(data);
+      return User.fromJson(data);
     } catch (e) {
-      // Captura e exibe erros inesperados
-      print('$e');
-      throw Exception('$e');
+      print(e);
+      e as DioException;
+      // melhorar depois
+      throw Exception('${e.response}');
     }
   }
 

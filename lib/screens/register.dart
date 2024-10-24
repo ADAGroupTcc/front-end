@@ -1,5 +1,6 @@
 import 'package:addaproject/screens/profilepersonalization.dart';
 import 'package:addaproject/utils/customtextfield.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart'
     as firebase_auth; // Adiciona o prefixo
@@ -26,6 +27,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   void _showPopup(String message) {
     showDialog(
@@ -73,28 +75,23 @@ class _RegisterPageState extends State<RegisterPage> {
     }
 
     // Cria o usuário usando a função createUser da AddaSDK
-    final newUser = User(
+    final newUser = UserCreate(
       firstName: firstName,
       lastName: lastName,
       email: email,
       cpf: cpf,
+      categories: [],
     );
-
     try {
       // 1. Cria o usuário no banco de dados
       final createdUser = await AddaSDK().createUser(
         newUser,
-        email: email,
-        cpf: cpf,
-        firstName: firstName,
-        lastName: lastName,
       );
 
       if (createdUser != null) {
         // 2. Cria o usuário no Firebase Authentication
-        firebase_auth.UserCredential userCredential = await firebase_auth
-            .FirebaseAuth.instance
-            .createUserWithEmailAndPassword(
+
+        UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
           email: email,
           password: password,
         );
@@ -104,7 +101,7 @@ class _RegisterPageState extends State<RegisterPage> {
         await FirebaseDatabase.instance
             .ref()
             .child(
-                'users/${userCredential.user!.uid}') // UID do usuário autenticado
+                'users/${userCredential.user!.uid}')
             .set({
           'token': accessToken,
         });
