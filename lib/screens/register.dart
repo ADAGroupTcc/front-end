@@ -9,6 +9,7 @@ import '../sdk/AddaSDK.dart'; // Importe sua SDK
 import '../sdk/model/User.dart';
 import 'package:http/http.dart' as http; // Importa o http para interações com o Firebase
 import 'dart:convert';
+import 'interests.dart';
 
 import '../utils/backgroundwidget.dart'; // Importa para usar jsonEncode
 
@@ -79,6 +80,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
     final newUser = UserCreate(
       firstName: firstName,
+      // description: xyz,
+      // nickname: xyz,
       lastName: lastName,
       email: email,
       cpf: cpf,
