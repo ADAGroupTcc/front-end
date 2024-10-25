@@ -23,12 +23,19 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/registerbackground.png
+    - assets/profilebackground.png
+    - assets/generalbackground.png
+    - assets/welcomebackground.png
     - assets/logoadda.png
     - assets/blackwave.png
+    - assets/blackwavetwo.png
+    - assets/personalizeprofile.png
     - assets/astronautinha.png
     - assets/torredesinal.png
     - assets/voltarbtn.png
+    - assets/target.png
+    - assets/setinha.png
+    - assets/transparenttarget.png
 
   fonts:
     - family: Amaranth

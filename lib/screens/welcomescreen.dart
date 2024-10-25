@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/backgroundwidget.dart';
 import 'register.dart';
 import 'login.dart';
 
@@ -30,12 +31,7 @@ class WelcomePage extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
-          Image.asset(
-            'assets/registerbackground.png',
-            fit: BoxFit.cover,
-            height: double.infinity,
-            width: double.infinity,
-          ),
+          const BackgroundWidget(imagePath: 'assets/welcomebackground.png'),
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -123,7 +119,7 @@ class WelcomePage extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  RegisterPage()),
+                                  const RegisterPage()),
                         );
                       },
                       style: ElevatedButton.styleFrom(
