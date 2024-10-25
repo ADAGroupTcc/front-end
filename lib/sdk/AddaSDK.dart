@@ -7,10 +7,13 @@ import 'model/Message.dart';
 import 'model/SessionToken.dart';
 import 'model/User.dart';
 import 'model/Channel.dart';
+import 'package:location/location.dart';
+
 
 abstract interface class IAddaSDK {
   Future<User?> getUserByID(String userId);
   Future<Channel?> getChannelByID(String channelId);
+  Future<LocationData?> getLocation();  
 }
 
 class AddaSDK implements IAddaSDK {
@@ -18,6 +21,7 @@ class AddaSDK implements IAddaSDK {
   final String sessionBaseUrl = "https://ms-session-api.onrender.com";
   final String baseUrl = "https://ms-users-api.onrender.com";
   Dio httpClient = Dio();
+  Location location = new Location();  
 
   AddaSDK() {
     // Configuração para ignorar a verificação de certificado
@@ -392,5 +396,36 @@ class AddaSDK implements IAddaSDK {
       print('Erro inesperado ao deletar Messages não lidas: $e');
       return false;
     }
+  }
+
+  ///Location
+  
+    @override
+  Future<LocationData?> getLocation() async {
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+
+    // Verifica se o serviço de localização está habilitado
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return null; // Serviço de localização não habilitado
+      }
+    }
+
+    // Verifica se a permissão foi concedida
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return null; // Permissão não concedida
+      }
+    }
+
+    // Obtém a localização
+    LocationData _locationData = await location.getLocation();
+    print('Localização: ${_locationData.latitude}, ${_locationData.longitude}');
+    return _locationData; // Retorna a localização
   }
 }
