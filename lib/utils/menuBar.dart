@@ -1,4 +1,5 @@
 import '../screens/home.dart';
+import '../screens/othersprofile.dart';
 import '../screens/profile.dart';
 import '../screens/searchingstations.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,7 @@ class MenuBar extends State<MenuBarGeneral> {
   static final List<Widget> _pages = <Widget>[
     const Home(),
     const Placeholder(),
-    const Profile(),
+    const OthersProfile(),
   ];
 
   @override

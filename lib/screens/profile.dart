@@ -78,13 +78,10 @@ class ProfilePage extends StatelessWidget {
               ],
             ),
           ),
-          Align(
-            alignment: Alignment.center,
-            child: Column(
+            Column(
               mainAxisSize: MainAxisSize.min,
-              // Mude para MainAxisSize.min para não ocupar todo o espaço
               children: [
-                const SizedBox(height: 180),
+                const SizedBox(height: 260),
                 Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: screenWidth * 0.064,
@@ -201,30 +198,32 @@ class ProfilePage extends StatelessWidget {
                     ),
                   ),
                 ),
-                // Ajuste o valor de top e bottom conforme necessário para controlar onde a rolagem começa.
-                Positioned.fill(
-                  top: screenHeight * 0.1, // Ajuste esse valor para mover o início da rolagem para cima ou para baixo
-                  bottom: screenHeight * 0.2, // Este valor pode ser mantido para deixar espaço embaixo
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
-                    child: SingleChildScrollView(
-                      child: Wrap(
-                        spacing: 20.0, // Espaço horizontal entre os itens
-                        runSpacing: 15.0, // Espaço vertical entre as linhas
-                        children: List.generate(
-                          18,
-                              (index) {
-                            return CustomToggleButton(
-                              text: "Interesse $index",
-                              imagePath: 'assets/transparenttarget.png',
-                            );
-                          },
-                        ),
-                      ),
+              ],
+            ),
+          Positioned.fill(
+            top: screenHeight * 0.45, // Ajuste conforme necessário para sua UI
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
+              child: SizedBox(
+                height: 100, // Altura definida para o container dos botões
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal, // Habilita rolagem horizontal
+                  child: Row(
+                    children: List.generate(
+                      18,
+                          (index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 10.0), // Espaço entre os botões
+                          child: CustomToggleButton(
+                            text: "Interesse $index",
+                            imagePath: 'assets/transparenttarget.png',
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
-              ],
+              ),
             ),
           ),
           Positioned(

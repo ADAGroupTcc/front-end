@@ -39,6 +39,8 @@ flutter:
     - assets/bglanita.png
     - assets/iconcompartilharlink.png
     - assets/transparenttarget.png
+    - assets/billie.png
+    - assets/bgbillie.png
 
   fonts:
     - family: Amaranth
