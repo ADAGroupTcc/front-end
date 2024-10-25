@@ -31,8 +31,7 @@ class HomePage extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    // Variável que define quantas estações serão exibidas.
-    const int numberOfStations = 0; // Define o número de estações
+    const int numberOfStations = 0;
 
     return Scaffold(
       body: Stack(
@@ -154,7 +153,6 @@ class HomePage extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            // Seta movida separadamente
                             Padding(
                               padding: EdgeInsets.only(left: screenWidth * 0.18, top: screenHeight * 0.012), // Move apenas a seta levemente para a esquerda
                               child: Align(

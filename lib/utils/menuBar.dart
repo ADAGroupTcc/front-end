@@ -1,4 +1,5 @@
 import '../screens/home.dart';
+import '../screens/profile.dart';
 import '../screens/searchingstations.dart';
 import 'package:flutter/material.dart';
 
@@ -34,7 +35,7 @@ class MenuBar extends State<MenuBarGeneral> {
   static final List<Widget> _pages = <Widget>[
     const Home(),
     const Placeholder(),
-    ProfileScreen(),
+    const Profile(),
   ];
 
   @override
@@ -94,23 +95,5 @@ class MenuBar extends State<MenuBarGeneral> {
         ),
       ),
     );
-  }
-}
-
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Home Screen'));
-  }
-}
-
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Profile Screen'));
   }
 }

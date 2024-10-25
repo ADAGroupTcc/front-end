@@ -35,6 +35,9 @@ flutter:
     - assets/voltarbtn.png
     - assets/target.png
     - assets/setinha.png
+    - assets/lanita.png
+    - assets/bglanita.png
+    - assets/iconcompartilharlink.png
     - assets/transparenttarget.png
 
   fonts:
