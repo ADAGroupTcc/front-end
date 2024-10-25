@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../utils/backgroundwidget.dart';
+
 const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
 
@@ -31,12 +33,7 @@ class OfflinePage extends StatelessWidget {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: Stack(children: [
-          Image.asset(
-            'assets/registerbackground.png',
-            fit: BoxFit.cover,
-            height: double.infinity,
-            width: double.infinity,
-          ),
+          const BackgroundWidget(imagePath: 'assets/welcomebackground.png'),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

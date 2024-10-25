@@ -1,7 +1,9 @@
 import 'package:addaproject/screens/welcomescreen.dart';
+import '../utils/backgroundwidget.dart';
 import '../utils/customtextfield.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'interests.dart';
 import 'register.dart';
 
 const Color branco = Color(0xFFFFFAFE);
@@ -35,12 +37,7 @@ class LoginPage extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(children: [
-        Image.asset(
-          'assets/registerbackground.png',
-          fit: BoxFit.cover,
-          height: double.infinity,
-          width: double.infinity,
-        ),
+        const BackgroundWidget(imagePath: 'assets/generalbackground.png'),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -106,7 +103,7 @@ class LoginPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => const Login()),
+                    MaterialPageRoute(builder: (context) => const Interests()),
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -119,19 +116,16 @@ class LoginPage extends StatelessWidget {
                     side: const BorderSide(color: branco, width: 2),
                   ),
                 ),
-                child: RichText(
+                child: IgnorePointer(
+                    child: RichText(
                   text: TextSpan(
                       text: "Login",
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          // enviar um email com a senha
-                        },
                       style: TextStyle(
                         color: branco,
                         fontFamily: "Amaranth",
                         fontSize: screenWidth * 0.06,
                       )),
-                ),
+                )),
               ),
             ),
             RichText(

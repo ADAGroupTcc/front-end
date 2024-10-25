@@ -1,4 +1,3 @@
-import 'package:addaproject/screens/profilepersonalization.dart';
 import 'package:addaproject/utils/customtextfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -8,6 +7,10 @@ import 'package:firebase_auth/firebase_auth.dart'
 import 'package:firebase_database/firebase_database.dart'; // Importa o Firebase Realtime Database
 import '../sdk/AddaSDK.dart'; // Importe sua SDK
 import '../sdk/model/User.dart';
+import 'package:http/http.dart' as http; // Importa o http para interações com o Firebase
+import 'dart:convert';
+
+import '../utils/backgroundwidget.dart'; // Importa para usar jsonEncode
 
 const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
@@ -116,12 +119,7 @@ class _RegisterPageState extends State<RegisterPage> {
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
-          Image.asset(
-            'assets/registerbackground.png',
-            fit: BoxFit.cover,
-            height: double.infinity,
-            width: double.infinity,
-          ),
+          const BackgroundWidget(imagePath: 'assets/generalbackground.png'),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
