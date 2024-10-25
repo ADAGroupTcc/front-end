@@ -1,11 +1,13 @@
 import 'package:addaproject/screens/temp.dart';
 import 'package:addaproject/screens/welcomescreen.dart';
+import '../utils/backgroundwidget.dart';
 import 'package:addaproject/sdk/AddaSDK.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import '../utils/customtextfield.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'interests.dart';
 import 'register.dart';
 
 const Color branco = Color(0xFFFFFAFE);
@@ -89,12 +91,7 @@ class _LoginPage extends State<Login> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(children: [
-        Image.asset(
-          'assets/registerbackground.png',
-          fit: BoxFit.cover,
-          height: double.infinity,
-          width: double.infinity,
-        ),
+        const BackgroundWidget(imagePath: 'assets/generalbackground.png'),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -168,19 +165,16 @@ class _LoginPage extends State<Login> {
                     side: const BorderSide(color: branco, width: 2),
                   ),
                 ),
-                child: RichText(
+                child: IgnorePointer(
+                    child: RichText(
                   text: TextSpan(
                       text: "Login",
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          // enviar um email com a senha
-                        },
                       style: TextStyle(
                         color: branco,
                         fontFamily: "Amaranth",
                         fontSize: screenWidth * 0.06,
                       )),
-                ),
+                )),
               ),
             ),
             RichText(
