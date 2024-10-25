@@ -48,17 +48,16 @@ class AddaSDK implements IAddaSDK {
   @override
   Future<User?> getUserByID(String userId) async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl/v1/users/$userId'));
+      final response = await httpClient.get('$baseUrl/v1/users/$userId');
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = jsonDecode(response.body);
-        return User.fromJson(data);
-      } else {
-        print('Erro ao buscar usuário: ${response.statusCode}');
-        return null;
+        return User.fromJson(response.data);
       }
     } catch (e) {
-      print('Erro inesperado: $e');
-      return null;
+      // melhorar depois
+      if (e is DioException) {
+        throw Exception('${e.response}');
+      }
+      throw Exception("$e");
     }
   }
 
@@ -138,13 +137,20 @@ class AddaSDK implements IAddaSDK {
   }
 
   Future<bool> validateAccessToken(String session, String userId) async{
-    final response = await httpClient.post(
-      '$sessionBaseUrl/v1/users/$userId/validate',
-      options: Options(headers: {
-        'Authorization': session
-      })
-    );
-    return response.statusCode == 200;
+    try {
+       await httpClient.post(
+          '$sessionBaseUrl/v1/users/$userId/validate',
+          options: Options(headers: {
+            'Authorization': session
+          })
+      );
+    }catch (e) {
+      e as DioException;
+      if (e.response!.statusCode == 401) {
+        return false;
+      }
+    }
+    return true;
   }
 
 //////Channel//////
