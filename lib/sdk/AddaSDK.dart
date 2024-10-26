@@ -428,4 +428,11 @@ class AddaSDK implements IAddaSDK {
     print('Localização: ${_locationData.latitude}, ${_locationData.longitude}');
     return _locationData; // Retorna a localização
   }
+
+
+  //Categories:
+  Future<List<String>> listCategories() async {
+    // A lista de categorias que você deseja retornar
+    return ["games", "cinema", "artes", "esportes"];
+  }
 }
