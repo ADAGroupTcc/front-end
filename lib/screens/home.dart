@@ -1,3 +1,5 @@
+import 'package:addaproject/sdk/model/User.dart';
+
 import '../utils/backgroundwidget.dart';
 import '../utils/searchbarwithnotify.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +10,9 @@ const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
 
 class Home extends StatelessWidget {
-  const Home({super.key});
+  User? user;
+
+  Home({super.key, this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -18,13 +22,15 @@ class Home extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const HomePage(),
+      home: HomePage(user: user),
     );
   }
 }
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  User? user;
+
+  HomePage({super.key, this.user});
 
   @override
   Widget build(BuildContext context) {

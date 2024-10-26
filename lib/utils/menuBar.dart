@@ -21,12 +21,13 @@ class MenuBarGeneral extends StatefulWidget {
 
 class MenuBar extends State<MenuBarGeneral> {
   int _selectedIndex = 0;
+  User? _user;
 
   @override
   void initState() {
     super.initState();
-    // Define o índice inicial com base no parâmetro passado
     _selectedIndex = widget.initialIndex;
+    _user = widget.user;
   }
 
   void _onItemTapped(int index) {
@@ -35,11 +36,10 @@ class MenuBar extends State<MenuBarGeneral> {
     });
   }
 
-  // Lista de telas
-  static final List<Widget> _pages = <Widget>[
-    const Home(),
+  List<Widget> get _pages => [
+    Home(user: _user),
     const Placeholder(),
-    const OthersProfile(),
+    OthersProfile(user: _user)
   ];
 
   @override
