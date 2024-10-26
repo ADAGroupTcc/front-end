@@ -8,14 +8,10 @@ import 'model/SessionToken.dart';
 import 'model/User.dart';
 import 'model/Channel.dart';
 
-abstract interface class IAddaSDK {
-  Future<User?> getUserByID(String userId);
-  Future<Channel?> getChannelByID(String channelId);
-}
-
-class AddaSDK implements IAddaSDK {
+class AddaSDK {
   final String userBaseUrl = "https://ms-users-api.onrender.com";
   final String sessionBaseUrl = "https://ms-session-api.onrender.com";
+  final String channelBaseUrl = "https://ms-channel-api.onrender.com";
   final String baseUrl = "https://ms-users-api.onrender.com";
   Dio httpClient = Dio();
 
@@ -45,10 +41,9 @@ class AddaSDK implements IAddaSDK {
     }
   }
 
-  @override
   Future<User?> getUserByID(String userId) async {
     try {
-      final response = await httpClient.get('$baseUrl/v1/users/$userId');
+      final response = await httpClient.get('$userBaseUrl/v1/users/$userId');
       if (response.statusCode != 200) {
         return null;
       }
@@ -156,61 +151,23 @@ class AddaSDK implements IAddaSDK {
 
 //////Channel//////
 
-  @override
-  Future<Channel?> getChannelByID(String channelId) async {
+  Future<List<Channel>> listChannelsByUserId(String userId) async {
+    List<Channel> channels = [];
     try {
-      final response =
-          await http.get(Uri.parse('$baseUrl/v1/channels/$channelId'));
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> data = jsonDecode(response.body);
-        return Channel.fromJson(data);
-      } else {
-        print('Erro ao buscar Channel: ${response.statusCode}');
-        return null;
+      final queryParameters = {
+        "user_ids": userId,
+      };
+      final response = await httpClient.get('$channelBaseUrl/v1/channels', queryParameters: queryParameters);
+      for (var channel in response.data["channels"]) {
+        channels.add(Channel.fromJson(channel));
       }
+      return channels;
     } catch (e) {
-      print('Erro inesperado: $e');
-      return null;
-    }
-  }
-
-  Future<List<Channel>?> getChannelByName(String name) async {
-    try {
-      final response =
-          await http.get(Uri.parse('$baseUrl/v1/channels?name=$name'));
-      if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
-        return data
-            .map((json) => Channel.fromJson(json as Map<String, dynamic>))
-            .toList();
-      } else {
-        print('Erro ao buscar canais: ${response.statusCode}');
-        return null;
+      // melhorar depois
+      if (e is DioException) {
+        throw Exception('${e.response}');
       }
-    } catch (e) {
-      print('Erro inesperado: $e');
-      return null;
-    }
-  }
-
-  Future<List<Channel>?> listChannelsByUser(String userId) async {
-    try {
-      final response =
-          await http.get(Uri.parse('$baseUrl/v1/channels?member=$userId'));
-
-      if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
-        return data
-            .map((json) => Channel.fromJson(json as Map<String, dynamic>))
-            .toList();
-      } else {
-        print(
-            'Erro ao buscar canais para o usuário $userId: ${response.statusCode}');
-        return null;
-      }
-    } catch (e) {
-      print('Erro inesperado: $e');
-      return null;
+      throw Exception("$e");
     }
   }
 
