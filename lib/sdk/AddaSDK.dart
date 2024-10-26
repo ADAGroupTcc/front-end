@@ -1,6 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:http/http.dart' as http;
 import 'model/Message.dart';
+import 'model/SessionToken.dart';
 import 'model/User.dart';
 import 'model/Channel.dart';
 
@@ -10,24 +14,51 @@ abstract interface class IAddaSDK {
 }
 
 class AddaSDK implements IAddaSDK {
+  final String userBaseUrl = "https://ms-users-api.onrender.com";
+  final String sessionBaseUrl = "https://ms-session-api.onrender.com";
   final String baseUrl = "https://ms-users-api.onrender.com";
+  Dio httpClient = Dio();
 
-//////Users//////
+  AddaSDK() {
+    // Configuração para ignorar a verificação de certificado
+    (httpClient.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
+      client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+      return client;
+    };
+  }
+
+  Future<User?> createUser(UserCreate newUser) async {
+    final body = jsonEncode(newUser.toJson());
+    try {
+      final response = await httpClient.post(
+        '$userBaseUrl/v1/users',
+        data: body,
+      );
+      final dynamic data = await response.data;
+      return User.fromJson(data);
+    } catch (e) {
+      // melhorar depois
+      if (e is DioException) {
+        throw Exception('${e.response}');
+      }
+      throw Exception("$e");
+    }
+  }
 
   @override
   Future<User?> getUserByID(String userId) async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl/v1/users/$userId'));
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> data = jsonDecode(response.body);
-        return User.fromJson(data);
-      } else {
-        print('Erro ao buscar usuário: ${response.statusCode}');
+      final response = await httpClient.get('$baseUrl/v1/users/$userId');
+      if (response.statusCode != 200) {
         return null;
       }
+      return User.fromJson(response.data);
     } catch (e) {
-      print('Erro inesperado: $e');
-      return null;
+      // melhorar depois
+      if (e is DioException) {
+        throw Exception('${e.response}');
+      }
+      throw Exception("$e");
     }
   }
 
@@ -52,7 +83,7 @@ class AddaSDK implements IAddaSDK {
   Future<List<User>?> getUserByName(String name) async {
     try {
       final response =
-          await http.get(Uri.parse('$baseUrl/v1/users?name=$name'));
+      await http.get(Uri.parse('$baseUrl/v1/users?name=$name'));
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
         return data
@@ -68,59 +99,7 @@ class AddaSDK implements IAddaSDK {
     }
   }
 
-  Future<User?> createUser(User newUser,
-      {required String email,
-      required String cpf,
-      required String firstName,
-      required String lastName}) async {
-    try {
-      // Cria o body da requisição
-      final body = jsonEncode({
-        'first_name': newUser.firstName,
-        'last_name': newUser.lastName,
-        'email': newUser.email,
-        'cpf': newUser.cpf,
-      });
-
-      // Exibe o body no console
-      print('Enviando para o backend: $body');
-      print('URL: $baseUrl/v1/users');
-
-      // Faz a requisição POST
-      final response = await http.post(
-        Uri.parse('$baseUrl/v1/users'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: body,
-      );
-
-      // Verifica o código de status da resposta
-      if (response.statusCode == 201) {
-        // Se a criação do usuário foi bem-sucedida
-        final Map<String, dynamic> data = jsonDecode(response.body);
-        return User.fromJson(data);
-      } else {
-        // Se houver erro, processa a resposta de erro
-        final Map<String, dynamic> errorData = jsonDecode(response.body);
-        final int errorCode = errorData['code'] ?? response.statusCode;
-        final String errorMessage = errorData['message'] ?? 'Erro desconhecido';
-
-        // Exibe o código e mensagem de erro no console
-        print('$errorCode - $errorMessage');
-
-        // Lança uma exceção com os detalhes do erro
-        throw Exception('Erro $errorCode: $errorMessage');
-      }
-    } catch (e) {
-      // Captura e exibe erros inesperados
-      print('$e');
-      throw Exception('$e');
-    }
-  }
-
-  Future<User?> updateUserByID(
-      String userId, Map<String, dynamic> updates) async {
+  Future<User?> updateUserByID(String userId, Map<String, dynamic> updates) async {
     try {
       final response = await http.patch(
         Uri.parse('$baseUrl/v1/users/$userId'),
@@ -141,6 +120,38 @@ class AddaSDK implements IAddaSDK {
       print('Erro inesperado: $e');
       return null;
     }
+  }
+
+  Future<SessionToken> getAccessToken(String userId) async {
+    try {
+      final response = await httpClient.post(
+          '$sessionBaseUrl/v1/users/$userId/session', data: null);
+      final dynamic responseBody = await response.data;
+      return SessionToken().fromJson(responseBody);
+    } catch(e) {
+      // melhorar depois
+      if (e is DioException) {
+        throw Exception('${e.response}');
+      }
+      throw Exception("$e");
+    }
+  }
+
+  Future<bool> validateAccessToken(String session, String userId) async{
+    try {
+       await httpClient.post(
+          '$sessionBaseUrl/v1/users/$userId/validate',
+          options: Options(headers: {
+            'Authorization': session
+          })
+      );
+    }catch (e) {
+      e as DioException;
+      if (e.response!.statusCode == 401) {
+        return false;
+      }
+    }
+    return true;
   }
 
 //////Channel//////
@@ -365,10 +376,6 @@ class AddaSDK implements IAddaSDK {
       print('Erro inesperado ao enviar Message: $e');
       return false;
     }
-  }
-
-  String getAccessToken() {
-    return "Token";
   }
 
   Future<bool> deleteUnreadMessages() async {

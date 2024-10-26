@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../sdk/model/User.dart';
 import '../utils/backgroundwidget.dart';
 import '../utils/customtextfield.dart';
 import '../utils/menuBar.dart';
@@ -123,7 +124,7 @@ class ProfilePersonalizationPage extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                const MenuBarGeneral()),
+                                MenuBarGeneral(user: null)), // Alterar depois
                       );
                     },
                     style: ElevatedButton.styleFrom(
