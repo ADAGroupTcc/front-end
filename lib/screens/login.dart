@@ -7,6 +7,7 @@ import 'package:firebase_database/firebase_database.dart';
 import '../utils/customtextfield.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import '../utils/menuBar.dart';
 import 'interests.dart';
 import 'register.dart';
 
@@ -75,7 +76,7 @@ class _LoginPage extends State<Login> {
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Temp(user: user!),
+            builder: (context) => MenuBarGeneral(user: user!),
           )
       );
     } catch (e) {

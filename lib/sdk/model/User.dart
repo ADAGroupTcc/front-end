@@ -15,12 +15,12 @@ class User {
 
   User({
     this.id = '',
-    required this.firstName,
-    required this.lastName,
-    required this.email,
+    this.firstName = '',
+    this.lastName = '',
+    this.email = '',
     this.description = '',
     this.nickname = '',
-    required this.cpf,
+    this.cpf = '',
     this.categories = const [],
     DateTime?
         createdAt,
