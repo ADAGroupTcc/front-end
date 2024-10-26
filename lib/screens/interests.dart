@@ -3,6 +3,7 @@ import 'package:addaproject/screens/welcomescreen.dart';
 import 'package:flutter/material.dart';
 import '../utils/backgroundwidget.dart';
 import '../utils/customtogglebutton.dart';
+import 'package:addaproject/sdk/AddaSDK.dart';
 
 const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
@@ -27,6 +28,9 @@ class InterestsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+
+    // Instanciando a AddaSDK
+    final addaSdk = AddaSDK();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -58,20 +62,34 @@ class InterestsPage extends StatelessWidget {
           bottom: screenHeight * 0.2, // Para evitar sobreposição com o botão
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
-            child: SingleChildScrollView(
-              child: Wrap(
-                spacing: 20.0, // Espaço horizontal entre os itens
-                runSpacing: 15.0, // Espaço vertical entre as linhas
-                children: List.generate(
-                  18,
-                      (index) {
-                    return CustomToggleButton(
-                      text: "Interesse $index",
-                      imagePath: 'assets/transparenttarget.png',
-                    );
-                  },
-                ),
-              ),
+            child: FutureBuilder<List<String>>(
+              future: addaSdk.listCategories(), // Chamando a função da instância addaSdk
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Erro ao carregar categorias'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Center(child: Text('Nenhuma categoria encontrada'));
+                } else {
+                  final categories = snapshot.data!;
+                  return SingleChildScrollView(
+                    child: Wrap(
+                      spacing: 20.0, // Espaço horizontal entre os itens
+                      runSpacing: 15.0, // Espaço vertical entre as linhas
+                      children: List.generate(
+                        categories.length,
+                        (index) {
+                          return CustomToggleButton(
+                            text: categories[index], // Usando as categorias obtidas
+                            imagePath: 'assets/transparenttarget.png',
+                          );
+                        },
+                      ),
+                    ),
+                  );
+                }
+              },
             ),
           ),
         ),
@@ -86,8 +104,7 @@ class InterestsPage extends StatelessWidget {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                    const ProfilePersonalization()),
+                    builder: (context) => const ProfilePersonalization()),
               );
             },
             style: ElevatedButton.styleFrom(

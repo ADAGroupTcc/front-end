@@ -1,9 +1,15 @@
 import 'package:addaproject/utils/customtextfield.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart'
+    as firebase_auth; // Adiciona o prefixo
+import 'package:firebase_database/firebase_database.dart'; // Importa o Firebase Realtime Database
 import '../sdk/AddaSDK.dart'; // Importe sua SDK
 import '../sdk/model/User.dart';
 import 'package:http/http.dart' as http; // Importa o http para interações com o Firebase
 import 'dart:convert';
+import 'interests.dart';
 
 import '../utils/backgroundwidget.dart'; // Importa para usar jsonEncode
 
@@ -26,6 +32,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseDatabase _firebaseDatabase = FirebaseDatabase.instance;
 
   void _showPopup(String message) {
     showDialog(
@@ -55,7 +63,6 @@ class _RegisterPageState extends State<RegisterPage> {
     final String password = _passwordController.text;
     final String confirmPassword = _confirmPasswordController.text;
 
-    // Verifica se todos os campos estão preenchidos
     if (firstName.isEmpty ||
         lastName.isEmpty ||
         email.isEmpty ||
@@ -66,71 +73,43 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
-    // Verifica se as senhas coincidem
     if (password != confirmPassword) {
       _showPopup('As senhas não coincidem.');
       return;
     }
 
-    // Cria o usuário usando a função createUser da AddaSDK
-    final newUser = User(
+    final newUser = UserCreate(
       firstName: firstName,
+      // description: xyz,
+      // nickname: xyz,
       lastName: lastName,
       email: email,
       cpf: cpf,
+      categories: [],
     );
-
     try {
       final createdUser = await AddaSDK().createUser(
         newUser,
-        email: email,
-        cpf: cpf,
-        firstName: firstName,
-        lastName: lastName,
       );
 
       if (createdUser != null) {
-        // Se o usuário for criado, mostrar uma mensagem de sucesso
-        _showPopup('Usuário criado com sucesso!');
+        UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
 
-        // Obter o token de acesso
-        String accessToken = await AddaSDK()
-            .getAccessToken(); // Supondo que essa função retorne um String
+        final accessToken = await AddaSDK().getAccessToken(createdUser.id);
 
-        // Salvar no Firebase
-        await _saveToFirebase(email, password, accessToken);
+        await _firebaseDatabase.ref()
+            .child('users/${userCredential.user!.uid}')
+            .set({'session': accessToken.sessionToken, 'user_id': createdUser.id});
+
+        _showPopup("Usuario criado efetivamente");
       } else {
-        // Mostrar uma mensagem de erro genérica se o usuário não for criado
         _showPopup('Erro ao criar usuário. Tente novamente.');
       }
     } catch (e) {
-      // Se ocorrer um erro, mostrar a mensagem detalhada no pop-up
       _showPopup('Erro ao criar usuário: $e');
-    }
-  }
-
-  Future<void> _saveToFirebase(
-      String email, String password, String accessToken) async {
-    final url =
-        'https://adda-project-a3549-default-rtdb.firebaseio.com/users.json';
-
-    final response = await http.post(
-      Uri.parse(url),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode({
-        'email': email,
-        'password': password,
-        'accessToken': accessToken,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      print('Dados salvos com sucesso no Firebase');
-    } else {
-      print('Erro ao salvar dados no Firebase: ${response.body}');
-      _showPopup('Erro ao salvar dados no Firebase.');
     }
   }
 
