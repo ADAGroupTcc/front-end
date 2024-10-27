@@ -29,23 +29,22 @@ class User {
   })  : createdAt = createdAt ?? DateTime.now(),
         updatedAt = updatedAt ?? DateTime.now();
 
-  factory User.fromJson(Map<String, dynamic> json) {
+  factory User.fromJson(Map<String, dynamic> user) {
     String _parseString(String? value, [String defaultValue = '']) => value ?? defaultValue;
     return User(
-      id: _parseString(json['id']),
-      firstName: _parseString(json['first_name']),
-      lastName: _parseString(json['last_name']),
-      email: _parseString(json['email']),
-      description: _parseString(json['description']),
-      nickname: _parseString(json['nickname']),
-      cpf: _parseString(json['cpf']),
-      // categories: (json['categories'] as List<dynamic>?)
-      //     ?.map((categorieJson) => Categoria.fromJson(categorieJson as Map<String, dynamic>))
-      //     .toList() ?? [],
-      categories: [],
-      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : DateTime.now(),
-      updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at']) : DateTime.now(),
-      isDenunciated: json['is_denunciated'] as bool? ?? false,
+      id: _parseString(user['id']),
+      firstName: _parseString(user['first_name']),
+      lastName: _parseString(user['last_name']),
+      email: _parseString(user['email']),
+      description: _parseString(user['description']),
+      nickname: _parseString(user['nickname']),
+      cpf: _parseString(user['cpf']),
+      categories: (user['categories'] as List<dynamic>?)
+          ?.map((categorieJson) => Categoria.fromJson(categorieJson as Map<String, dynamic>))
+          .toList() ?? [],
+      createdAt: user['created_at'] != null ? DateTime.parse(user['created_at']) : DateTime.now(),
+      updatedAt: user['updated_at'] != null ? DateTime.parse(user['updated_at']) : DateTime.now(),
+      isDenunciated: user['is_denunciated'] as bool? ?? false,
     );
   }
 }

@@ -48,11 +48,13 @@ class AddaSDK implements IAddaSDK {
   @override
   Future<User?> getUserByID(String userId) async {
     try {
-      final response = await httpClient.get('$baseUrl/v1/users/$userId');
-      if (response.statusCode != 200) {
-        return null;
-      }
-      return User.fromJson(response.data);
+      final queryParams = {
+        "user_ids": userId,
+        "show_categories": true
+      };
+      final response = await httpClient.get('$baseUrl/v1/users', queryParameters:queryParams );
+      final users = response.data;
+      return User.fromJson(users[0]);
     } catch (e) {
       // melhorar depois
       if (e is DioException) {
