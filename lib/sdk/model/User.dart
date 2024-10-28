@@ -22,15 +22,15 @@ class User {
     this.nickname = '',
     required this.cpf,
     this.categories = const [],
-    DateTime?
-        createdAt,
+    DateTime? createdAt,
     DateTime? updatedAt,
     this.isDenunciated = false,
   })  : createdAt = createdAt ?? DateTime.now(),
         updatedAt = updatedAt ?? DateTime.now();
 
   factory User.fromJson(Map<String, dynamic> json) {
-    String _parseString(String? value, [String defaultValue = '']) => value ?? defaultValue;
+    String _parseString(String? value, [String defaultValue = '']) =>
+        value ?? defaultValue;
     return User(
       id: _parseString(json['id']),
       firstName: _parseString(json['first_name']),
@@ -43,8 +43,12 @@ class User {
       //     ?.map((categorieJson) => Categoria.fromJson(categorieJson as Map<String, dynamic>))
       //     .toList() ?? [],
       categories: [],
-      createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : DateTime.now(),
-      updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at']) : DateTime.now(),
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'])
+          : DateTime.now(),
+      updatedAt: json['updated_at'] != null
+          ? DateTime.parse(json['updated_at'])
+          : DateTime.now(),
       isDenunciated: json['is_denunciated'] as bool? ?? false,
     );
   }
@@ -57,7 +61,7 @@ class UserCreate {
   final String description;
   final String nickname;
   final String cpf;
-  List<Categoria> categories;
+  List<String> categories;
 
   UserCreate({
     required this.firstName,

@@ -9,7 +9,8 @@ class CustomToggleButton extends StatefulWidget {
   final int index; // Texto dentro do botão
   final String imagePath; // Caminho da imagem dentro do botão
 
-  const CustomToggleButton({this.index = 0, required this.imagePath, super.key});
+  const CustomToggleButton(
+      {this.index = 0, required this.imagePath, super.key});
 
   @override
   _CustomToggleButtonState createState() => _CustomToggleButtonState();
@@ -24,8 +25,8 @@ class _CustomToggleButtonState extends State<CustomToggleButton> {
     setState(() {
       isSelected = !isSelected;
     });
-    if(isSelected) {
-      SelectedCategories.selectedCategories.add(categorias[index]);
+    if (isSelected) {
+      SelectedCategories.selectedCategories.add(categorias[index].id);
       return;
     }
     SelectedCategories.selectedCategories.removeAt(index);
@@ -37,7 +38,8 @@ class _CustomToggleButtonState extends State<CustomToggleButton> {
     return GestureDetector(
       onTap: toggleButton,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12), // Aumenta o padding
+        padding: const EdgeInsets.symmetric(
+            horizontal: 20, vertical: 12), // Aumenta o padding
         decoration: BoxDecoration(
           color: isSelected ? purple : transparent,
           borderRadius: BorderRadius.circular(30),
@@ -54,10 +56,9 @@ class _CustomToggleButtonState extends State<CustomToggleButton> {
             Text(
               categorias[index].name,
               style: TextStyle(
-                fontSize: 19, // Aumenta o tamanho do texto
-                color: isSelected ? Colors.black : Colors.white,
-                fontWeight: FontWeight.w500
-              ),
+                  fontSize: 19, // Aumenta o tamanho do texto
+                  color: isSelected ? Colors.black : Colors.white,
+                  fontWeight: FontWeight.w500),
             ),
           ],
         ),

@@ -24,6 +24,6 @@ class Categoria {
 }
 
 class SelectedCategories {
-  static List<Categoria> selectedCategories = [];
+  static List<String> selectedCategories = [];
   static List<Categoria> allCategories = [];
 }

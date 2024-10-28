@@ -31,7 +31,7 @@ class InterestsPage extends StatelessWidget {
   final UserCreate user;
   final addaSdk = AddaSDK();
   final FirebaseDatabase _firebaseDatabase = FirebaseDatabase.instance;
-  
+
   InterestsPage({super.key, required this.user});
 
   Future<void> _createUser(BuildContext context) async {
@@ -47,7 +47,8 @@ class InterestsPage extends StatelessWidget {
         user,
       );
 
-      await _firebaseDatabase.ref()
+      await _firebaseDatabase
+          .ref()
           .child('users/${user.email}')
           .set({'user_id': createdUser!.id});
 
@@ -55,7 +56,7 @@ class InterestsPage extends StatelessWidget {
         context,
         MaterialPageRoute(builder: (context) => MenuBarGeneral()),
       );
-    }catch(e) {
+    } catch (e) {
       print("Error creating user: $e");
     }
   }
@@ -96,7 +97,8 @@ class InterestsPage extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
             child: FutureBuilder<List<Categoria>>(
-              future: addaSdk.listCategories(), // Chamando a função da instância addaSdk
+              future: addaSdk
+                  .listCategories(), // Chamando a função da instância addaSdk
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
@@ -149,14 +151,14 @@ class InterestsPage extends StatelessWidget {
             ),
             child: IgnorePointer(
                 child: RichText(
-                  text: TextSpan(
-                      text: "Criar Conta!",
-                      style: TextStyle(
-                        color: branco,
-                        fontFamily: "Amaranth",
-                        fontSize: screenWidth * 0.06,
-                      )),
-                )),
+              text: TextSpan(
+                  text: "Criar Conta!",
+                  style: TextStyle(
+                    color: branco,
+                    fontFamily: "Amaranth",
+                    fontSize: screenWidth * 0.06,
+                  )),
+            )),
           ),
         ),
 
@@ -168,8 +170,7 @@ class InterestsPage extends StatelessWidget {
             onTap: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => const WelcomePage()),
+                MaterialPageRoute(builder: (context) => const WelcomePage()),
               );
             },
             child: Container(
