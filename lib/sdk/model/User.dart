@@ -57,7 +57,7 @@ class UserCreate {
   final String description;
   final String nickname;
   final String cpf;
-  final List<String> categories;
+  List<Categoria> categories;
 
   UserCreate({
     required this.firstName,

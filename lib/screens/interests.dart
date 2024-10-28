@@ -1,36 +1,69 @@
 import 'package:addaproject/screens/profilepersonalization.dart';
 import 'package:addaproject/screens/welcomescreen.dart';
+import 'package:addaproject/sdk/model/Categoria.dart';
+import 'package:addaproject/sdk/model/User.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import '../utils/backgroundwidget.dart';
 import '../utils/customtogglebutton.dart';
 import 'package:addaproject/sdk/AddaSDK.dart';
+
+import '../utils/menuBar.dart';
 
 const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
 const Color cinzar = Color(0x4dfffafe);
 
 class Interests extends StatelessWidget {
-  const Interests({super.key});
+  UserCreate user;
+  Interests({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Interests page',
-      home: InterestsPage(),
+      home: InterestsPage(user: user),
     );
   }
 }
 
 class InterestsPage extends StatelessWidget {
-  const InterestsPage({super.key});
+  final UserCreate user;
+  final addaSdk = AddaSDK();
+  final FirebaseDatabase _firebaseDatabase = FirebaseDatabase.instance;
+  
+  InterestsPage({super.key, required this.user});
+
+  Future<void> _createUser(BuildContext context) async {
+    try {
+      final selectedCategories = SelectedCategories.selectedCategories;
+      if (selectedCategories.length <= 3) {
+        throw Exception("Selecione pelo menos três categorias");
+      }
+
+      user.categories = selectedCategories;
+
+      final createdUser = await AddaSDK().createUser(
+        user,
+      );
+
+      await _firebaseDatabase.ref()
+          .child('users/${user.email}')
+          .set({'user_id': createdUser!.id});
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MenuBarGeneral()),
+      );
+    }catch(e) {
+      print("Error creating user: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-
-    // Instanciando a AddaSDK
-    final addaSdk = AddaSDK();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -62,7 +95,7 @@ class InterestsPage extends StatelessWidget {
           bottom: screenHeight * 0.2, // Para evitar sobreposição com o botão
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
-            child: FutureBuilder<List<String>>(
+            child: FutureBuilder<List<Categoria>>(
               future: addaSdk.listCategories(), // Chamando a função da instância addaSdk
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -73,6 +106,7 @@ class InterestsPage extends StatelessWidget {
                   return Center(child: Text('Nenhuma categoria encontrada'));
                 } else {
                   final categories = snapshot.data!;
+                  SelectedCategories.allCategories.addAll(categories);
                   return SingleChildScrollView(
                     child: Wrap(
                       spacing: 20.0, // Espaço horizontal entre os itens
@@ -81,7 +115,7 @@ class InterestsPage extends StatelessWidget {
                         categories.length,
                         (index) {
                           return CustomToggleButton(
-                            text: categories[index], // Usando as categorias obtidas
+                            index: index, // Usando as categorias obtidas
                             imagePath: 'assets/transparenttarget.png',
                           );
                         },
@@ -101,11 +135,7 @@ class InterestsPage extends StatelessWidget {
           right: screenWidth * 0.064,
           child: ElevatedButton(
             onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const ProfilePersonalization()),
-              );
+              _createUser(context);
             },
             style: ElevatedButton.styleFrom(
               padding: EdgeInsets.symmetric(

@@ -33,7 +33,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseDatabase _firebaseDatabase = FirebaseDatabase.instance;
 
   void _showPopup(String message) {
     showDialog(
@@ -80,34 +79,22 @@ class _RegisterPageState extends State<RegisterPage> {
 
     final newUser = UserCreate(
       firstName: firstName,
-      // description: xyz,
-      // nickname: xyz,
       lastName: lastName,
       email: email,
       cpf: cpf,
       categories: [],
     );
     try {
-      final createdUser = await AddaSDK().createUser(
-        newUser,
+      await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
       );
 
-      if (createdUser != null) {
-        UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
-
-        final accessToken = await AddaSDK().getAccessToken(createdUser.id);
-
-        await _firebaseDatabase.ref()
-            .child('users/${userCredential.user!.uid}')
-            .set({'session': accessToken.sessionToken, 'user_id': createdUser.id});
-
-        _showPopup("Usuario criado efetivamente");
-      } else {
-        _showPopup('Erro ao criar usuário. Tente novamente.');
-      }
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Interests(user: newUser)),
+      );
+      _showPopup("Usuario criado efetivamente");
     } catch (e) {
       _showPopup('Erro ao criar usuário: $e');
     }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:http/http.dart' as http;
+import 'model/Categoria.dart';
 import 'model/Message.dart';
 import 'model/SessionToken.dart';
 import 'model/User.dart';
@@ -431,8 +432,7 @@ class AddaSDK implements IAddaSDK {
 
 
   //Categories:
-  Future<List<String>> listCategories() async {
-    // A lista de categorias que você deseja retornar
-    return ["games", "cinema", "artes", "esportes"];
+  Future<List<Categoria>> listCategories() async {
+    return [Categoria(id:"1", name:"games"), Categoria(id:"1",name:"cinema"), Categoria(id:"1",name:"artes"), Categoria(id: "1", name:"esportes")];
   }
 }
