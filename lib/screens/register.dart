@@ -9,6 +9,7 @@ import '../sdk/AddaSDK.dart'; // Importe sua SDK
 import '../sdk/model/User.dart';
 import 'package:http/http.dart' as http; // Importa o http para interações com o Firebase
 import 'dart:convert';
+import 'interests.dart';
 
 import '../utils/backgroundwidget.dart'; // Importa para usar jsonEncode
 
@@ -31,8 +32,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseDatabase _firebaseDatabase = FirebaseDatabase.instance;
 
   void _showPopup(String message) {
     showDialog(
@@ -62,6 +61,10 @@ class _RegisterPageState extends State<RegisterPage> {
     final String password = _passwordController.text;
     final String confirmPassword = _confirmPasswordController.text;
 
+    final RegExp emailRegExp = RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$');
+    final RegExp cpfRegExp = RegExp(r'^\d{11}$');
+    final RegExp passwordRegExp = RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{6,}$');
+
     if (firstName.isEmpty ||
         lastName.isEmpty ||
         email.isEmpty ||
@@ -72,8 +75,23 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
+    if (!emailRegExp.hasMatch(email)) {
+      _showPopup('Insira um e-mail válido.');
+      return;
+    }
+
+    if (!cpfRegExp.hasMatch(cpf)) {
+      _showPopup('CPF deve conter 11 dígitos numéricos.');
+      return;
+    }
+
     if (password != confirmPassword) {
       _showPopup('As senhas não coincidem.');
+      return;
+    }
+
+    if (!passwordRegExp.hasMatch(password)) {
+      _showPopup("A senha deve ter pelo menos 6 caracteres, incluir letras, números e uma letra maiúscula.");
       return;
     }
 
@@ -82,32 +100,13 @@ class _RegisterPageState extends State<RegisterPage> {
       lastName: lastName,
       email: email,
       cpf: cpf,
+      password: password,
       categories: [],
     );
-    try {
-      final createdUser = await AddaSDK().createUser(
-        newUser,
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Interests(user: newUser)),
       );
-
-      if (createdUser != null) {
-        UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
-
-        final accessToken = await AddaSDK().getAccessToken(createdUser.id);
-
-        await _firebaseDatabase.ref()
-            .child('users/${userCredential.user!.uid}')
-            .set({'session': accessToken.sessionToken, 'user_id': createdUser.id});
-
-        _showPopup("Usuario criado efetivamente");
-      } else {
-        _showPopup('Erro ao criar usuário. Tente novamente.');
-      }
-    } catch (e) {
-      _showPopup('Erro ao criar usuário: $e');
-    }
   }
 
   @override
