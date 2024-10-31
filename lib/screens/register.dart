@@ -1,9 +1,15 @@
 import 'package:addaproject/utils/customtextfield.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart'
+    as firebase_auth; // Adiciona o prefixo
+import 'package:firebase_database/firebase_database.dart'; // Importa o Firebase Realtime Database
 import '../sdk/AddaSDK.dart'; // Importe sua SDK
 import '../sdk/model/User.dart';
 import 'package:http/http.dart' as http; // Importa o http para interações com o Firebase
 import 'dart:convert';
+import 'interests.dart';
 
 import '../utils/backgroundwidget.dart'; // Importa para usar jsonEncode
 
@@ -55,7 +61,10 @@ class _RegisterPageState extends State<RegisterPage> {
     final String password = _passwordController.text;
     final String confirmPassword = _confirmPasswordController.text;
 
-    // Verifica se todos os campos estão preenchidos
+    final RegExp emailRegExp = RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$');
+    final RegExp cpfRegExp = RegExp(r'^\d{11}$');
+    final RegExp passwordRegExp = RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{6,}$');
+
     if (firstName.isEmpty ||
         lastName.isEmpty ||
         email.isEmpty ||
@@ -66,72 +75,38 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
-    // Verifica se as senhas coincidem
+    if (!emailRegExp.hasMatch(email)) {
+      _showPopup('Insira um e-mail válido.');
+      return;
+    }
+
+    if (!cpfRegExp.hasMatch(cpf)) {
+      _showPopup('CPF deve conter 11 dígitos numéricos.');
+      return;
+    }
+
     if (password != confirmPassword) {
       _showPopup('As senhas não coincidem.');
       return;
     }
 
-    // Cria o usuário usando a função createUser da AddaSDK
-    final newUser = User(
+    if (!passwordRegExp.hasMatch(password)) {
+      _showPopup("A senha deve ter pelo menos 6 caracteres, incluir letras, números e uma letra maiúscula.");
+      return;
+    }
+
+    final newUser = UserCreate(
       firstName: firstName,
       lastName: lastName,
       email: email,
       cpf: cpf,
+      password: password,
+      categories: [],
     );
-
-    try {
-      final createdUser = await AddaSDK().createUser(
-        newUser,
-        email: email,
-        cpf: cpf,
-        firstName: firstName,
-        lastName: lastName,
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Interests(user: newUser)),
       );
-
-      if (createdUser != null) {
-        // Se o usuário for criado, mostrar uma mensagem de sucesso
-        _showPopup('Usuário criado com sucesso!');
-
-        // Obter o token de acesso
-        String accessToken = await AddaSDK()
-            .getAccessToken(); // Supondo que essa função retorne um String
-
-        // Salvar no Firebase
-        await _saveToFirebase(email, password, accessToken);
-      } else {
-        // Mostrar uma mensagem de erro genérica se o usuário não for criado
-        _showPopup('Erro ao criar usuário. Tente novamente.');
-      }
-    } catch (e) {
-      // Se ocorrer um erro, mostrar a mensagem detalhada no pop-up
-      _showPopup('Erro ao criar usuário: $e');
-    }
-  }
-
-  Future<void> _saveToFirebase(
-      String email, String password, String accessToken) async {
-    final url =
-        'https://adda-project-a3549-default-rtdb.firebaseio.com/users.json';
-
-    final response = await http.post(
-      Uri.parse(url),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode({
-        'email': email,
-        'password': password,
-        'accessToken': accessToken,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      print('Dados salvos com sucesso no Firebase');
-    } else {
-      print('Erro ao salvar dados no Firebase: ${response.body}');
-      _showPopup('Erro ao salvar dados no Firebase.');
-    }
   }
 
   @override

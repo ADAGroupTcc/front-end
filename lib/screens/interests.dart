@@ -1,32 +1,90 @@
 import 'package:addaproject/screens/profilepersonalization.dart';
 import 'package:addaproject/screens/welcomescreen.dart';
+import 'package:addaproject/sdk/model/Categoria.dart';
+import 'package:addaproject/sdk/model/User.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 import '../utils/backgroundwidget.dart';
 import '../utils/customtogglebutton.dart';
+import 'package:addaproject/sdk/AddaSDK.dart';
+
+import '../utils/menuBar.dart';
 
 const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
 const Color cinzar = Color(0x4dfffafe);
 
 class Interests extends StatelessWidget {
-  const Interests({super.key});
+  UserCreate user;
+  Interests({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Interests page',
-      home: InterestsPage(),
+      home: InterestsPage(user: user),
     );
   }
 }
 
 class InterestsPage extends StatelessWidget {
-  const InterestsPage({super.key});
+  final UserCreate user;
+  final addaSdk = AddaSDK();
+  final FirebaseDatabase _firebaseDatabase = FirebaseDatabase.instance;
+  final Location location = Location();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  LocationData? _userLocation = null;
+
+  InterestsPage({super.key, required this.user});
+
+  Future<void> _createUser(BuildContext context) async {
+    try {
+      final selectedCategories = SelectedCategories.selectedCategories;
+      if (selectedCategories.length <= 3) {
+        throw Exception("Selecione pelo menos três categorias");
+      }
+
+      user.categories = selectedCategories;
+      if(_userLocation != null) {
+        user.location = [_userLocation!.latitude, _userLocation!.longitude];
+      }else {
+        user.location = [0, 0];
+      }
+
+      final createdUser = await AddaSDK().createUser(
+        user,
+      );
+
+      final authUser = await _auth.createUserWithEmailAndPassword(
+        email: user.email,
+        password: user.password,
+      );
+
+      await _firebaseDatabase
+          .ref()
+          .child('users/${authUser.user!.uid}')
+          .set({'user_id': createdUser!.id});
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MenuBarGeneral()), // Alterar para enviar o usuário
+      );
+    } catch (e) {
+      print("Error creating user: $e");
+    }
+  }
+
+  void setLocation() async {
+    _userLocation = await addaSdk.getLocation();
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    setLocation();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -58,20 +116,36 @@ class InterestsPage extends StatelessWidget {
           bottom: screenHeight * 0.2, // Para evitar sobreposição com o botão
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
-            child: SingleChildScrollView(
-              child: Wrap(
-                spacing: 20.0, // Espaço horizontal entre os itens
-                runSpacing: 15.0, // Espaço vertical entre as linhas
-                children: List.generate(
-                  18,
-                      (index) {
-                    return CustomToggleButton(
-                      text: "Interesse $index",
-                      imagePath: 'assets/transparenttarget.png',
-                    );
-                  },
-                ),
-              ),
+            child: FutureBuilder<CategoriesResponse>(
+              future: addaSdk
+                  .listCategories(), // Chamando a função da instância addaSdk
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Erro ao carregar categorias'));
+                } else if (!snapshot.hasData || snapshot.data!.categories.isEmpty) {
+                  return Center(child: Text('Nenhuma categoria encontrada'));
+                } else {
+                  final categories = snapshot.data!.categories;
+                  SelectedCategories.allCategories.addAll(categories);
+                  return SingleChildScrollView(
+                    child: Wrap(
+                      spacing: 20.0, // Espaço horizontal entre os itens
+                      runSpacing: 15.0, // Espaço vertical entre as linhas
+                      children: List.generate(
+                        categories.length,
+                        (index) {
+                          return CustomToggleButton(
+                            index: index, // Usando as categorias obtidas
+                            imagePath: 'assets/transparenttarget.png',
+                          );
+                        },
+                      ),
+                    ),
+                  );
+                }
+              },
             ),
           ),
         ),
@@ -83,12 +157,7 @@ class InterestsPage extends StatelessWidget {
           right: screenWidth * 0.064,
           child: ElevatedButton(
             onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                    const ProfilePersonalization()),
-              );
+              _createUser(context);
             },
             style: ElevatedButton.styleFrom(
               padding: EdgeInsets.symmetric(
@@ -102,14 +171,14 @@ class InterestsPage extends StatelessWidget {
             ),
             child: IgnorePointer(
                 child: RichText(
-                  text: TextSpan(
-                      text: "Criar Conta!",
-                      style: TextStyle(
-                        color: branco,
-                        fontFamily: "Amaranth",
-                        fontSize: screenWidth * 0.06,
-                      )),
-                )),
+              text: TextSpan(
+                  text: "Criar Conta!",
+                  style: TextStyle(
+                    color: branco,
+                    fontFamily: "Amaranth",
+                    fontSize: screenWidth * 0.06,
+                  )),
+            )),
           ),
         ),
 
@@ -121,8 +190,7 @@ class InterestsPage extends StatelessWidget {
             onTap: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => const WelcomePage()),
+                MaterialPageRoute(builder: (context) => const WelcomePage()),
               );
             },
             child: Container(

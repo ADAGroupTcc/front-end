@@ -1,20 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:location/location.dart';
 import 'screens/welcomescreen.dart';
 import 'screens/nointernet.dart';
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-void main() {
-  runApp(const MyApp());
+  try {
+    await Firebase.initializeApp();
+    runApp(const MyApp());
+  } catch (e) {
+    print('Erro ao inicializar o Firebase: $e');
+  }
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  MyAppState createState() => MyAppState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'My App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const MainScreen(),
+    );
+  }
 }
 
-class MyAppState extends State<MyApp> {
+class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
+
+  @override
+  MainScreenState createState() => MainScreenState();
+}
+
+class MainScreenState extends State<MainScreen> {
   bool _isOffline = false;
   late ConnectivityResult _connectivityResult;
 
@@ -45,8 +68,6 @@ class MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: _isOffline ? const NoInternet() : const FirstScreen(),
-    );
+    return _isOffline ? const NoInternet() : const FirstScreen();
   }
 }
