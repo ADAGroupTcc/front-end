@@ -27,3 +27,13 @@ class SelectedCategories {
   static List<String> selectedCategories = [];
   static List<Categoria> allCategories = [];
 }
+
+class CategoriesResponse {
+  final List<Categoria> categories;
+  final int next;
+  CategoriesResponse({required this.categories, required this.next});
+
+  factory CategoriesResponse.fromJson(Map<String, dynamic> json) {
+    return CategoriesResponse(categories: categories, next: next);
+  }
+}
