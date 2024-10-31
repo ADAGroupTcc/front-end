@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../sdk/model/User.dart';
 import '../utils/customtogglebutton.dart';
 
 const Color branco = Color(0xFFFFFAFE);
@@ -6,19 +7,21 @@ const Color preto = Color(0xFF0D0D0D);
 const Color pretobg = Color(0xFF171717);
 
 class OthersProfile extends StatelessWidget {
-  const OthersProfile({super.key});
+  User? user;
+  OthersProfile({super.key, this.user});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Others profile page',
-      home: OthersProfilePage(),
+      home: OthersProfilePage(user: user),
     );
   }
 }
 
 class OthersProfilePage extends StatelessWidget {
-  const OthersProfilePage({super.key});
+  User? user;
+  OthersProfilePage({super.key, this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -215,7 +218,7 @@ class OthersProfilePage extends StatelessWidget {
                         return Padding(
                           padding: const EdgeInsets.only(right: 10.0), // Espaço entre os botões
                           child: CustomToggleButton(
-                            // text: "Interesse $index",
+                            text: "Interesse $index",
                             imagePath: 'assets/transparenttarget.png',
                           ),
                         );

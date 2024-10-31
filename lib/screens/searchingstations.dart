@@ -23,7 +23,7 @@ class SearchingPage extends State<SearchingStations> {
       if (mounted) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const MenuBarGeneral(initialIndex: 2)),
+          MaterialPageRoute(builder: (context) => const MenuBarGeneral(initialIndex: 2, user: null,)), // alterar depois
         );
       }
     });

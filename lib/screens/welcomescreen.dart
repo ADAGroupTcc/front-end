@@ -148,7 +148,7 @@ class WelcomePage extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  const LoginPage()),
+                                  const Login()),
                         );
                       },
                       style: ElevatedButton.styleFrom(

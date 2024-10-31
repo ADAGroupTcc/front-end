@@ -1,3 +1,5 @@
+import 'package:addaproject/sdk/model/User.dart';
+
 import '../screens/home.dart';
 import '../screens/othersprofile.dart';
 import '../screens/profile.dart';
@@ -9,8 +11,9 @@ const Color preto = Color(0xFF0D0D0D);
 
 class MenuBarGeneral extends StatefulWidget {
   final int initialIndex; // Novo parâmetro para o índice inicial
+  final User? user;
 
-  const MenuBarGeneral({super.key, this.initialIndex = 0}); // Definindo um valor padrão
+  const MenuBarGeneral({super.key, this.initialIndex = 0, required this.user}); // Definindo um valor padrão
 
   @override
   MenuBar createState() => MenuBar();
@@ -18,12 +21,13 @@ class MenuBarGeneral extends StatefulWidget {
 
 class MenuBar extends State<MenuBarGeneral> {
   int _selectedIndex = 0;
+  User? _user;
 
   @override
   void initState() {
     super.initState();
-    // Define o índice inicial com base no parâmetro passado
     _selectedIndex = widget.initialIndex;
+    _user = widget.user;
   }
 
   void _onItemTapped(int index) {
@@ -32,11 +36,10 @@ class MenuBar extends State<MenuBarGeneral> {
     });
   }
 
-  // Lista de telas
-  static final List<Widget> _pages = <Widget>[
-    const Home(),
+  List<Widget> get _pages => [
+    Home(user: _user),
     const Placeholder(),
-    const OthersProfile(),
+    OthersProfile(user: _user)
   ];
 
   @override

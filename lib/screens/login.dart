@@ -1,8 +1,12 @@
 import 'package:addaproject/screens/welcomescreen.dart';
 import '../utils/backgroundwidget.dart';
+import 'package:addaproject/sdk/AddaSDK.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import '../utils/customtextfield.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import '../utils/menuBar.dart';
 import 'interests.dart';
 import 'register.dart';
 
@@ -10,29 +14,70 @@ const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
 const Color cinzar = Color(0x4dfffafe);
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
   const Login({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Login page',
-      home: LoginPage(),
-    );
-  }
+  _LoginPage createState() => _LoginPage();
 }
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class _LoginPage extends State<Login> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseDatabase _firebaseDatabase = FirebaseDatabase.instance;
+  final AddaSDK _sdk = AddaSDK();
+// r2@g.com - 123456
+
+  void _showPopup(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Informação'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _signInUser() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+    try {
+      final authResponse = await _auth.signInWithEmailAndPassword(email: email, password: password);
+      final authUid = authResponse.user!.uid;
+      final userInfoSnapshot = await _firebaseDatabase.ref().child('users').child(authUid).get();
+      if(!userInfoSnapshot.exists) {
+        throw Exception("User not found. You need to sing up first");
+      }
+      final values = userInfoSnapshot.value as dynamic;
+      final userId = values["user_id"];
+
+      final user = await _sdk.getUserByID(userId);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MenuBarGeneral(user: user!),
+          )
+      );
+    } catch (e) {
+      _showPopup("User not found: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-
-    // Declare os controllers como variáveis
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -68,13 +113,13 @@ class LoginPage extends StatelessWidget {
             ),
             const SizedBox(height: 40),
             CustomTextField(
-              controller: emailController, // Agora é uma variável
+              controller: _emailController, // Agora é uma variável
               label: 'Email',
               inputType: TextInputType.emailAddress,
               isobscure: false,
             ),
             CustomTextField(
-              controller: passwordController, // Agora é uma variável
+              controller: _passwordController, // Agora é uma variável
               label: 'Senha',
               inputType: TextInputType.visiblePassword,
               isobscure: true,
@@ -100,12 +145,7 @@ class LoginPage extends StatelessWidget {
               padding: EdgeInsets.only(
                   top: screenHeight * 0.07, bottom: screenHeight * 0.01),
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => RegisterPage()),
-                  );
-                },
+                onPressed: _signInUser,
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(
                       horizontal: screenWidth * 0.361,

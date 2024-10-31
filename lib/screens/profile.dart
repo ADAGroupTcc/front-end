@@ -215,7 +215,7 @@ class ProfilePage extends StatelessWidget {
                         return Padding(
                           padding: const EdgeInsets.only(right: 10.0), // Espaço entre os botões
                           child: CustomToggleButton(
-                            // text: "Interesse $index",
+                            text: "Interesse $index",
                             imagePath: 'assets/transparenttarget.png',
                           ),
                         );

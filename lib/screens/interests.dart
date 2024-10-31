@@ -56,7 +56,8 @@ class InterestsPage extends StatelessWidget {
       final createdUser = await AddaSDK().createUser(
         user,
       );
-
+      SelectedCategories.selectedCategories = [];
+      SelectedCategories.allCategories = [];
       final authUser = await _auth.createUserWithEmailAndPassword(
         email: user.email,
         password: user.password,
@@ -69,7 +70,7 @@ class InterestsPage extends StatelessWidget {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => MenuBarGeneral()), // Alterar para enviar o usuário
+        MaterialPageRoute(builder: (context) => MenuBarGeneral(user: createdUser)),
       );
     } catch (e) {
       print("Error creating user: $e");
