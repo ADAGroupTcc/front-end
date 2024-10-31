@@ -56,7 +56,8 @@ class InterestsPage extends StatelessWidget {
       final createdUser = await AddaSDK().createUser(
         user,
       );
-
+      SelectedCategories.selectedCategories = [];
+      SelectedCategories.allCategories = [];
       final authUser = await _auth.createUserWithEmailAndPassword(
         email: user.email,
         password: user.password,

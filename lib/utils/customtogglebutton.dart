@@ -8,9 +8,10 @@ const Color purple = Color(0xFF8D5BCA);
 class CustomToggleButton extends StatefulWidget {
   final int index; // Texto dentro do botão
   final String imagePath; // Caminho da imagem dentro do botão
+  final String text;
 
   const CustomToggleButton(
-      {this.index = 0, required this.imagePath, super.key});
+      {this.index = 0, required this.imagePath, this.text = '', super.key});
 
   @override
   _CustomToggleButtonState createState() => _CustomToggleButtonState();
@@ -20,11 +21,17 @@ class _CustomToggleButtonState extends State<CustomToggleButton> {
   bool isSelected = false;
   int index = 0;
   final List<Categoria> categorias = SelectedCategories.allCategories;
+  String text = '';
 
   void toggleButton() {
     setState(() {
       isSelected = !isSelected;
     });
+
+    if(categorias.isEmpty) {
+      return;
+    }
+
     if (isSelected) {
       SelectedCategories.selectedCategories.add(categorias[index].id);
       return;
@@ -54,7 +61,7 @@ class _CustomToggleButtonState extends State<CustomToggleButton> {
             ),
             const SizedBox(width: 10), // Aumenta o espaço entre imagem e texto
             Text(
-              categorias[index].name,
+              categorias.isEmpty ? text : categorias[index].name,
               style: TextStyle(
                   fontSize: 19, // Aumenta o tamanho do texto
                   color: isSelected ? Colors.black : Colors.white,
