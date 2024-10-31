@@ -69,7 +69,7 @@ class InterestsPage extends StatelessWidget {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => MenuBarGeneral(user: createdUser)), // Alterar para enviar o usuário
+        MaterialPageRoute(builder: (context) => MenuBarGeneral(user: createdUser)),
       );
     } catch (e) {
       print("Error creating user: $e");
