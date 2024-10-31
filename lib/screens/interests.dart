@@ -2,8 +2,10 @@ import 'package:addaproject/screens/profilepersonalization.dart';
 import 'package:addaproject/screens/welcomescreen.dart';
 import 'package:addaproject/sdk/model/Categoria.dart';
 import 'package:addaproject/sdk/model/User.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 import '../utils/backgroundwidget.dart';
 import '../utils/customtogglebutton.dart';
 import 'package:addaproject/sdk/AddaSDK.dart';
@@ -31,6 +33,9 @@ class InterestsPage extends StatelessWidget {
   final UserCreate user;
   final addaSdk = AddaSDK();
   final FirebaseDatabase _firebaseDatabase = FirebaseDatabase.instance;
+  final Location location = Location();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  LocationData? _userLocation = null;
 
   InterestsPage({super.key, required this.user});
 
@@ -42,29 +47,44 @@ class InterestsPage extends StatelessWidget {
       }
 
       user.categories = selectedCategories;
+      if(_userLocation != null) {
+        user.location = [_userLocation!.latitude, _userLocation!.longitude];
+      }else {
+        user.location = [0, 0];
+      }
 
       final createdUser = await AddaSDK().createUser(
         user,
       );
 
+      final authUser = await _auth.createUserWithEmailAndPassword(
+        email: user.email,
+        password: user.password,
+      );
+
       await _firebaseDatabase
           .ref()
-          .child('users/${user.email}')
+          .child('users/${authUser.user!.uid}')
           .set({'user_id': createdUser!.id});
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => MenuBarGeneral()),
+        MaterialPageRoute(builder: (context) => MenuBarGeneral()), // Alterar para enviar o usuário
       );
     } catch (e) {
       print("Error creating user: $e");
     }
   }
 
+  void setLocation() async {
+    _userLocation = await addaSdk.getLocation();
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    setLocation();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -96,7 +116,7 @@ class InterestsPage extends StatelessWidget {
           bottom: screenHeight * 0.2, // Para evitar sobreposição com o botão
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
-            child: FutureBuilder<List<Categoria>>(
+            child: FutureBuilder<CategoriesResponse>(
               future: addaSdk
                   .listCategories(), // Chamando a função da instância addaSdk
               builder: (context, snapshot) {
@@ -104,10 +124,10 @@ class InterestsPage extends StatelessWidget {
                   return Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Erro ao carregar categorias'));
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                } else if (!snapshot.hasData || snapshot.data!.categories.isEmpty) {
                   return Center(child: Text('Nenhuma categoria encontrada'));
                 } else {
-                  final categories = snapshot.data!;
+                  final categories = snapshot.data!.categories;
                   SelectedCategories.allCategories.addAll(categories);
                   return SingleChildScrollView(
                     child: Wrap(

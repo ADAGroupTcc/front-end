@@ -14,7 +14,6 @@ class Categoria {
     );
   }
 
-  // Método toJson para converter a instância em um mapa
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -34,6 +33,13 @@ class CategoriesResponse {
   CategoriesResponse({required this.categories, required this.next});
 
   factory CategoriesResponse.fromJson(Map<String, dynamic> json) {
+    final categoriesRaw = json["categories"] as List<dynamic>;
+    final next = json["next_page"] as int? ?? 1;
+    List<Categoria> categories = [];
+    for (var elem in categoriesRaw) {
+      categories.add(Categoria.fromJson(elem));
+    }
+
     return CategoriesResponse(categories: categories, next: next);
   }
 }

@@ -1,3 +1,5 @@
+import 'package:location/location.dart';
+
 import 'Categoria.dart';
 
 class User {
@@ -62,6 +64,8 @@ class UserCreate {
   final String nickname;
   final String cpf;
   List<String> categories;
+  List<double?> location = [];
+  final String password;
 
   UserCreate({
     required this.firstName,
@@ -71,6 +75,7 @@ class UserCreate {
     this.nickname = '',
     required this.cpf,
     required this.categories,
+    this.password = ''
   });
 
   Map<String, dynamic> toJson() {
@@ -81,7 +86,8 @@ class UserCreate {
       'description': this.description,
       'nickname': this.nickname,
       'cpf': this.cpf,
-      'categories': this.categories
+      'categories': this.categories,
+      'location': this.location
     };
   }
 }

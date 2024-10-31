@@ -10,14 +10,7 @@ import 'model/User.dart';
 import 'model/Channel.dart';
 import 'package:location/location.dart';
 
-
-abstract interface class IAddaSDK {
-  Future<User?> getUserByID(String userId);
-  Future<Channel?> getChannelByID(String channelId);
-  Future<LocationData?> getLocation();
-}
-
-class AddaSDK implements IAddaSDK {
+class AddaSDK {
   final String userBaseUrl = "https://ms-users-api.onrender.com";
   final String sessionBaseUrl = "https://ms-session-api.onrender.com";
   final String baseUrl = "https://ms-users-api.onrender.com";
@@ -51,22 +44,19 @@ class AddaSDK implements IAddaSDK {
     }
   }
 
-  @override
   Future<User?> getUserByID(String userId) async {
     try {
-      final queryParams = {
-        "user_ids": userId,
-        "show_categories": true
-      };
-      final response = await httpClient.get('$baseUrl/v1/users', queryParameters:queryParams );
-      final users = response.data;
-      return User.fromJson(users[0]);
-    } catch (e) {
-      // melhorar depois
-      if (e is DioException) {
-        throw Exception('${e.response}');
+      final response = await http.get(Uri.parse('$baseUrl/v1/users/$userId'));
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = jsonDecode(response.body);
+        return User.fromJson(data);
+      } else {
+        print('Erro ao buscar usuário: ${response.statusCode}');
+        return null;
       }
-      throw Exception("$e");
+    } catch (e) {
+      print('Erro inesperado: $e');
+      return null;
     }
   }
 
@@ -145,42 +135,26 @@ class AddaSDK implements IAddaSDK {
     }
   }
 
-  Future<bool> validateAccessToken(String session, String userId) async{
-    try {
-       await httpClient.post(
-          '$sessionBaseUrl/v1/users/$userId/validate',
-          options: Options(headers: {
-            'Authorization': session
-          })
-      );
-    }catch (e) {
-      e as DioException;
-      if (e.response!.statusCode == 401) {
-        return false;
-      }
-    }
-    return true;
-  }
-
 //////Channel//////
 
-  Future<List<Channel>> listChannelsByUserId(String userId) async {
-    List<Channel> channels = [];
+  Future<List<Channel>?> listChannelsByUser(String userId) async {
     try {
-      final queryParameters = {
-        "user_ids": userId,
-      };
-      final response = await httpClient.get('$channelBaseUrl/v1/channels', queryParameters: queryParameters);
-      for (var channel in response.data["channels"]) {
-        channels.add(Channel.fromJson(channel));
+      final response =
+          await http.get(Uri.parse('$baseUrl/v1/channels?member=$userId'));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        return data
+            .map((json) => Channel.fromJson(json as Map<String, dynamic>))
+            .toList();
+      } else {
+        print(
+            'Erro ao buscar canais para o usuário $userId: ${response.statusCode}');
+        return null;
       }
-      return channels;
     } catch (e) {
-      // melhorar depois
-      if (e is DioException) {
-        throw Exception('${e.response}');
-      }
-      throw Exception("$e");
+      print('Erro inesperado: $e');
+      return null;
     }
   }
 
@@ -373,30 +347,26 @@ class AddaSDK implements IAddaSDK {
 
   ///Location
 
-    @override
   Future<LocationData?> getLocation() async {
     bool _serviceEnabled;
     PermissionStatus _permissionGranted;
 
-    // Verifica se o serviço de localização está habilitado
     _serviceEnabled = await location.serviceEnabled();
     if (!_serviceEnabled) {
       _serviceEnabled = await location.requestService();
       if (!_serviceEnabled) {
-        return null; // Serviço de localização não habilitado
+        return null;
       }
     }
 
-    // Verifica se a permissão foi concedida
     _permissionGranted = await location.hasPermission();
     if (_permissionGranted == PermissionStatus.denied) {
       _permissionGranted = await location.requestPermission();
       if (_permissionGranted != PermissionStatus.granted) {
-        return null; // Permissão não concedida
+        return null;
       }
     }
 
-    // Obtém a localização
     LocationData _locationData = await location.getLocation();
     print('Localização: ${_locationData.latitude}, ${_locationData.longitude}');
     return _locationData; // Retorna a localização
@@ -404,7 +374,7 @@ class AddaSDK implements IAddaSDK {
 
 
   //Categories:
-  Future<List<Categoria>> listCategories() async {
+  Future<CategoriesResponse> listCategories() async {
     try {
       final response = await httpClient.get('$categoriesBaseUrl/v1/categories');
       final categories = response.data;
