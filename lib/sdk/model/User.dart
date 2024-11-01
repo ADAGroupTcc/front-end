@@ -47,6 +47,22 @@ class User {
       isDenunciated: user['is_denunciated'] as bool? ?? false,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'first_name': firstName,
+      'last_name': lastName,
+      'email': email,
+      'description': description,
+      'nickname': nickname,
+      'cpf': cpf,
+      'categories': categories.map((category) => category.toJson()).toList(),
+      'created_at': createdAt.toIso8601String(),
+      'updated_at': updatedAt.toIso8601String(),
+      'is_denunciated': isDenunciated,
+    };
+  }
 }
 
 class UserCreate {

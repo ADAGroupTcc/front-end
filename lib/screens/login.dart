@@ -1,4 +1,5 @@
 import 'package:addaproject/screens/welcomescreen.dart';
+import '../sdk/LocalCache.dart';
 import '../utils/backgroundwidget.dart';
 import 'package:addaproject/sdk/AddaSDK.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,7 +27,7 @@ class _LoginPage extends State<Login> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseDatabase _firebaseDatabase = FirebaseDatabase.instance;
   final AddaSDK _sdk = AddaSDK();
-// r2@g.com - 123456
+  final _cache = LocalCache();
 
   void _showPopup(String message) {
     showDialog(
@@ -62,10 +63,15 @@ class _LoginPage extends State<Login> {
       final userId = values["user_id"];
 
       final user = await _sdk.getUserByID(userId);
+      if (user == null) {
+        throw Exception("get user by id returned null");
+      }
+
+      await _cache.saveUserSession(user);
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => MenuBarGeneral(user: user!),
+            builder: (context) => MenuBarGeneral(user: user),
           )
       );
     } catch (e) {

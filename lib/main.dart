@@ -1,3 +1,5 @@
+import 'package:addaproject/sdk/LocalCache.dart';
+import 'package:addaproject/utils/menuBar.dart';
 import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -5,10 +7,16 @@ import 'screens/welcomescreen.dart';
 import 'screens/nointernet.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  final cache = LocalCache();
+  
   try {
     await Firebase.initializeApp();
-    runApp(const MyApp());
+    final res = await cache.getUserSession();
+    if (res == null) {
+      runApp(const MyApp());
+    } else {
+      runApp(MenuBarGeneral(user: res));
+    }
   } catch (e) {
     print('Erro ao inicializar o Firebase: $e');
   }
