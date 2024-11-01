@@ -13,6 +13,7 @@ import 'package:location/location.dart';
 class AddaSDK {
   final String userBaseUrl = "https://ms-users-api.onrender.com";
   final String sessionBaseUrl = "https://ms-session-api.onrender.com";
+  final String channelBaseUrl = "https://ms-channel-api.onrender.com";
   final String baseUrl = "https://ms-users-api.onrender.com";
   final String categoriesBaseUrl = "https://ms-categories-api.onrender.com";
   Dio httpClient = Dio();
@@ -156,53 +157,19 @@ class AddaSDK {
 
 //////Channel//////
 
-  Future<List<Channel>?> listChannelsByUser(String userId) async {
+  Future<ChannelResponse> listChannelsByUserId(String userId) async {
     try {
-      final response =
-          await http.get(Uri.parse('$baseUrl/v1/channels?member=$userId'));
-
-      if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
-        return data
-            .map((json) => Channel.fromJson(json as Map<String, dynamic>))
-            .toList();
-      } else {
-        print(
-            'Erro ao buscar canais para o usuário $userId: ${response.statusCode}');
-        return null;
-      }
+      final headers = {
+        "user_id": userId,
+      };
+      final response = await httpClient.get('$channelBaseUrl/v1/channels', options: Options(headers: headers));
+      return ChannelResponse.fromJson(response.data);
     } catch (e) {
-      print('Erro inesperado: $e');
-      return null;
-    }
-  }
-
-  Future<Channel?> createChannel(Channel newChannel) async {
-    try {
-      final response = await http.post(
-        Uri.parse('$baseUrl/v1/channels'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode({
-          'name': newChannel.name,
-          'description': newChannel.description,
-          'members': newChannel.members.map((member) => member.id).toList(),
-          'admins': newChannel.admins.map((admin) => admin.id).toList(),
-          'imageUrl': newChannel.imageUrl
-        }),
-      );
-
-      if (response.statusCode == 201) {
-        final Map<String, dynamic> data = jsonDecode(response.body);
-        return Channel.fromJson(data);
-      } else {
-        print('Erro ao criar Channel: ${response.statusCode}');
-        return null;
+      // melhorar depois
+      if (e is DioException) {
+        throw Exception('${e.response}');
       }
-    } catch (e) {
-      print('Erro inesperado: $e');
-      return null;
+      throw Exception("$e");
     }
   }
 
