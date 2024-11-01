@@ -157,52 +157,19 @@ class AddaSDK {
 
 //////Channel//////
 
-  Future<List<Channel>> listChannelsByUserId(String userId) async {
-    List<Channel> channels = [];
+  Future<ChannelResponse> listChannelsByUserId(String userId) async {
     try {
-      final queryParameters = {
-        "user_ids": userId,
+      final headers = {
+        "user_id": userId,
       };
-      final response = await httpClient.get('$channelBaseUrl/v1/channels', queryParameters: queryParameters);
-      for (var channel in response.data["channels"]) {
-        channels.add(Channel.fromJson(channel));
-      }
-      return channels;
+      final response = await httpClient.get('$channelBaseUrl/v1/channels', options: Options(headers: headers));
+      return ChannelResponse.fromJson(response.data);
     } catch (e) {
       // melhorar depois
       if (e is DioException) {
         throw Exception('${e.response}');
       }
       throw Exception("$e");
-    }
-  }
-
-  Future<Channel?> createChannel(Channel newChannel) async {
-    try {
-      final response = await http.post(
-        Uri.parse('$baseUrl/v1/channels'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode({
-          'name': newChannel.name,
-          'description': newChannel.description,
-          'members': newChannel.members.map((member) => member.id).toList(),
-          'admins': newChannel.admins.map((admin) => admin.id).toList(),
-          'imageUrl': newChannel.imageUrl
-        }),
-      );
-
-      if (response.statusCode == 201) {
-        final Map<String, dynamic> data = jsonDecode(response.body);
-        return Channel.fromJson(data);
-      } else {
-        print('Erro ao criar Channel: ${response.statusCode}');
-        return null;
-      }
-    } catch (e) {
-      print('Erro inesperado: $e');
-      return null;
     }
   }
 
