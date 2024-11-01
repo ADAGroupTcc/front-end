@@ -29,7 +29,7 @@ class MenuBarGeneral extends StatelessWidget {
 class MenuBar extends StatefulWidget {
   final User? user;
   
-  MenuBar({super.key, required this.user});
+  const MenuBar({super.key, required this.user});
 
   @override
   _MenuBarState createState() => _MenuBarState();
