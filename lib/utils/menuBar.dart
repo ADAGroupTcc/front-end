@@ -1,7 +1,7 @@
 import 'package:addaproject/sdk/model/User.dart';
 
 import '../screens/home.dart';
-import '../screens/othersprofile.dart';
+import '../screens/profile.dart';
 import '../screens/searchingstations.dart';
 import 'package:flutter/material.dart';
 
@@ -46,9 +46,9 @@ class MenuBar extends StatefulWidget {
 
     List<Widget> get _pages =>
         [
-          Home(user: widget.user),
+          Home(user: widget.user!),
           const Placeholder(),
-          OthersProfile(user: widget.user)
+          Profile(user: widget.user!)
         ];
 
     @override

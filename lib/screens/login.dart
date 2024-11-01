@@ -14,12 +14,14 @@ const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
 const Color cinzar = Color(0x4dfffafe);
 
+
 class Login extends StatefulWidget {
   const Login({super.key});
 
   @override
   _LoginPage createState() => _LoginPage();
 }
+
 
 class _LoginPage extends State<Login> {
   final TextEditingController _emailController = TextEditingController();
@@ -57,15 +59,16 @@ class _LoginPage extends State<Login> {
       final authUid = authResponse.user!.uid;
       final userInfoSnapshot = await _firebaseDatabase.ref().child('users').child(authUid).get();
       if(!userInfoSnapshot.exists) {
-        throw Exception("User not found. You need to sing up first");
+        throw Exception("Usuário não encontrado");
       }
       final values = userInfoSnapshot.value as dynamic;
       final userId = values["user_id"];
 
       final user = await _sdk.getUserByID(userId);
       if (user == null) {
-        throw Exception("get user by id returned null");
+        throw Exception("User nulo");
       }
+      print('User info: ${user.toJson()}');
 
       await _cache.saveUserSession(user);
       Navigator.push(
