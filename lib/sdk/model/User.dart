@@ -1,4 +1,3 @@
-import 'package:location/location.dart';
 
 import 'Categoria.dart';
 
@@ -31,15 +30,15 @@ class User {
         updatedAt = updatedAt ?? DateTime.now();
 
   factory User.fromJson(Map<String, dynamic> user) {
-    String _parseString(String? value, [String defaultValue = '']) => value ?? defaultValue;
+    String parseString(String? value, [String defaultValue = '']) => value ?? defaultValue;
     return User(
-      id: _parseString(user['id']),
-      firstName: _parseString(user['first_name']),
-      lastName: _parseString(user['last_name']),
-      email: _parseString(user['email']),
-      description: _parseString(user['description']),
-      nickname: _parseString(user['nickname']),
-      cpf: _parseString(user['cpf']),
+      id: parseString(user['id']),
+      firstName: parseString(user['first_name']),
+      lastName: parseString(user['last_name']),
+      email: parseString(user['email']),
+      description: parseString(user['description']),
+      nickname: parseString(user['nickname']),
+      cpf: parseString(user['cpf']),
       categories: (user['categories'] as List<dynamic>?)
           ?.map((categorieJson) => Categoria.fromJson(categorieJson as Map<String, dynamic>))
           .toList() ?? [],
@@ -74,14 +73,14 @@ class UserCreate {
 
   Map<String, dynamic> toJson() {
     return {
-      'first_name': this.firstName,
-      'last_name': this.lastName,
-      'email': this.email,
-      'description': this.description,
-      'nickname': this.nickname,
-      'cpf': this.cpf,
-      'categories': this.categories,
-      'location': this.location
+      'first_name': firstName,
+      'last_name': lastName,
+      'email': email,
+      'description': description,
+      'nickname': nickname,
+      'cpf': cpf,
+      'categories': categories,
+      'location': location
     };
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:location/location.dart';
 import 'screens/welcomescreen.dart';
 import 'screens/nointernet.dart';
 void main() async {

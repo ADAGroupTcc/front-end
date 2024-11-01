@@ -7,7 +7,6 @@ import '../utils/customtextfield.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../utils/menuBar.dart';
-import 'interests.dart';
 import 'register.dart';
 
 const Color branco = Color(0xFFFFFAFE);

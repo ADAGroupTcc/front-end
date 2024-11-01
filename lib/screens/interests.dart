@@ -1,4 +1,3 @@
-import 'package:addaproject/screens/profilepersonalization.dart';
 import 'package:addaproject/screens/welcomescreen.dart';
 import 'package:addaproject/sdk/model/Categoria.dart';
 import 'package:addaproject/sdk/model/User.dart';
@@ -35,7 +34,7 @@ class InterestsPage extends StatelessWidget {
   final FirebaseDatabase _firebaseDatabase = FirebaseDatabase.instance;
   final Location location = Location();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  LocationData? _userLocation = null;
+  LocationData? _userLocation;
 
   InterestsPage({super.key, required this.user});
 

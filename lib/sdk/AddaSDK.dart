@@ -16,7 +16,7 @@ class AddaSDK {
   final String baseUrl = "https://ms-users-api.onrender.com";
   final String categoriesBaseUrl = "https://ms-categories-api.onrender.com";
   Dio httpClient = Dio();
-  Location location = new Location();
+  Location location = Location();
 
   AddaSDK() {
     // Configuração para ignorar a verificação de certificado
@@ -367,28 +367,28 @@ class AddaSDK {
   ///Location
 
   Future<LocationData?> getLocation() async {
-    bool _serviceEnabled;
-    PermissionStatus _permissionGranted;
+    bool serviceEnabled;
+    PermissionStatus permissionGranted;
 
-    _serviceEnabled = await location.serviceEnabled();
-    if (!_serviceEnabled) {
-      _serviceEnabled = await location.requestService();
-      if (!_serviceEnabled) {
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
         return null;
       }
     }
 
-    _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
+    permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
         return null;
       }
     }
 
-    LocationData _locationData = await location.getLocation();
-    print('Localização: ${_locationData.latitude}, ${_locationData.longitude}');
-    return _locationData; // Retorna a localização
+    LocationData locationData = await location.getLocation();
+    print('Localização: ${locationData.latitude}, ${locationData.longitude}');
+    return locationData; // Retorna a localização
   }
 
 

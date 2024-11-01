@@ -3,7 +3,6 @@ import 'package:addaproject/sdk/model/User.dart';
 import '../utils/backgroundwidget.dart';
 import '../utils/searchbarwithnotify.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../utils/stationbutton.dart';
 
 const Color branco = Color(0xFFFFFAFE);
@@ -98,7 +97,7 @@ class HomePage extends StatelessWidget {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.084),
                             child: Center(
-                              child: Container( // Adicionar um Container ao redor do texto
+                              child: SizedBox( // Adicionar um Container ao redor do texto
                                 width: screenWidth * 0.8, // Define uma largura máxima para o texto
                                 child: Text(
                                   "Você não está em nenhuma estação por enquanto...",
