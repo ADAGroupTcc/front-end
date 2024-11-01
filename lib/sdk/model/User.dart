@@ -1,3 +1,4 @@
+
 import 'Categoria.dart';
 
 class User {
@@ -22,23 +23,22 @@ class User {
     this.nickname = '',
     this.cpf = '',
     this.categories = const [],
-    DateTime?
-        createdAt,
+    DateTime? createdAt,
     DateTime? updatedAt,
     this.isDenunciated = false,
   })  : createdAt = createdAt ?? DateTime.now(),
         updatedAt = updatedAt ?? DateTime.now();
 
   factory User.fromJson(Map<String, dynamic> user) {
-    String _parseString(String? value, [String defaultValue = '']) => value ?? defaultValue;
+    String parseString(String? value, [String defaultValue = '']) => value ?? defaultValue;
     return User(
-      id: _parseString(user['id']),
-      firstName: _parseString(user['first_name']),
-      lastName: _parseString(user['last_name']),
-      email: _parseString(user['email']),
-      description: _parseString(user['description']),
-      nickname: _parseString(user['nickname']),
-      cpf: _parseString(user['cpf']),
+      id: parseString(user['id']),
+      firstName: parseString(user['first_name']),
+      lastName: parseString(user['last_name']),
+      email: parseString(user['email']),
+      description: parseString(user['description']),
+      nickname: parseString(user['nickname']),
+      cpf: parseString(user['cpf']),
       categories: (user['categories'] as List<dynamic>?)
           ?.map((categorieJson) => Categoria.fromJson(categorieJson as Map<String, dynamic>))
           .toList() ?? [],
@@ -56,7 +56,9 @@ class UserCreate {
   final String description;
   final String nickname;
   final String cpf;
-  final List<String> categories;
+  List<String> categories;
+  List<double?> location = [];
+  final String password;
 
   UserCreate({
     required this.firstName,
@@ -66,17 +68,19 @@ class UserCreate {
     this.nickname = '',
     required this.cpf,
     required this.categories,
+    this.password = ''
   });
 
   Map<String, dynamic> toJson() {
     return {
-      'first_name': this.firstName,
-      'last_name': this.lastName,
-      'email': this.email,
-      'description': this.description,
-      'nickname': this.nickname,
-      'cpf': this.cpf,
-      'categories': this.categories
+      'first_name': firstName,
+      'last_name': lastName,
+      'email': email,
+      'description': description,
+      'nickname': nickname,
+      'cpf': cpf,
+      'categories': categories,
+      'location': location
     };
   }
 }

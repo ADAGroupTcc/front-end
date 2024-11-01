@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../sdk/model/User.dart';
 import '../utils/backgroundwidget.dart';
 import '../utils/customtextfield.dart';
 import '../utils/menuBar.dart';
+
 
 const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
@@ -27,8 +27,8 @@ class ProfilePersonalizationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    final TextEditingController _nameController = TextEditingController();
-    final TextEditingController _bioController = TextEditingController();
+    final TextEditingController nameController = TextEditingController();
+    final TextEditingController bioController = TextEditingController();
 
     return Scaffold(
         resizeToAvoidBottomInset: false,
@@ -103,13 +103,13 @@ class ProfilePersonalizationPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 15),
                 CustomTextField(
-                  controller: _nameController,
+                  controller: nameController,
                   label: 'Email',
                   inputType: TextInputType.emailAddress,
                   isobscure: false,
                 ),
                 CustomTextField(
-                  controller: _bioController,
+                  controller: bioController,
                   label: 'Senha',
                   inputType: TextInputType.visiblePassword,
                   isobscure: true,

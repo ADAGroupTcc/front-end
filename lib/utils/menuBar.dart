@@ -2,7 +2,6 @@ import 'package:addaproject/sdk/model/User.dart';
 
 import '../screens/home.dart';
 import '../screens/othersprofile.dart';
-import '../screens/profile.dart';
 import '../screens/searchingstations.dart';
 import 'package:flutter/material.dart';
 

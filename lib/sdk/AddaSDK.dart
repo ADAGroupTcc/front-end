@@ -3,17 +3,21 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:http/http.dart' as http;
+import 'model/Categoria.dart';
 import 'model/Message.dart';
 import 'model/SessionToken.dart';
 import 'model/User.dart';
 import 'model/Channel.dart';
+import 'package:location/location.dart';
 
 class AddaSDK {
   final String userBaseUrl = "https://ms-users-api.onrender.com";
   final String sessionBaseUrl = "https://ms-session-api.onrender.com";
   final String channelBaseUrl = "https://ms-channel-api.onrender.com";
   final String baseUrl = "https://ms-users-api.onrender.com";
+  final String categoriesBaseUrl = "https://ms-categories-api.onrender.com";
   Dio httpClient = Dio();
+  Location location = Location();
 
   AddaSDK() {
     // Configuração para ignorar a verificação de certificado
@@ -357,6 +361,49 @@ class AddaSDK {
     } catch (e) {
       print('Erro inesperado ao deletar Messages não lidas: $e');
       return false;
+    }
+  }
+
+  ///Location
+
+  Future<LocationData?> getLocation() async {
+    bool serviceEnabled;
+    PermissionStatus permissionGranted;
+
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        return null;
+      }
+    }
+
+    permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        return null;
+      }
+    }
+
+    LocationData locationData = await location.getLocation();
+    print('Localização: ${locationData.latitude}, ${locationData.longitude}');
+    return locationData; // Retorna a localização
+  }
+
+
+  //Categories:
+  Future<CategoriesResponse> listCategories() async {
+    try {
+      final response = await httpClient.get('$categoriesBaseUrl/v1/categories');
+      final categories = response.data;
+      return CategoriesResponse.fromJson(categories);
+    } catch (e) {
+      // melhorar depois
+      if (e is DioException) {
+        throw Exception('${e.response}');
+      }
+      throw Exception("$e");
     }
   }
 }

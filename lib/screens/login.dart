@@ -60,15 +60,6 @@ class _LoginPage extends State<Login> {
       }
       final values = userInfoSnapshot.value as dynamic;
       final userId = values["user_id"];
-      final session = values["session"];
-
-      final validUser = await _sdk.validateAccessToken(session, userId);
-      if (!validUser) {
-        final session = await _sdk.getAccessToken(userId);
-        await _firebaseDatabase.ref()
-            .child('users/$authUid')
-            .set({'session': session.sessionToken, 'user_id': userId});
-      }
 
       final user = await _sdk.getUserByID(userId);
       Navigator.push(
