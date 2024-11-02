@@ -21,8 +21,10 @@ class AddaSDK {
 
   AddaSDK() {
     // Configuração para ignorar a verificação de certificado
-    (httpClient.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
-      client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    (httpClient.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate =
+        (HttpClient client) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
       return client;
     };
   }
@@ -47,11 +49,9 @@ class AddaSDK {
 
   Future<User?> getUserByID(String userId) async {
     try {
-      final queryParams = {
-        "user_ids": userId,
-        "show_categories": true
-      };
-      final response = await httpClient.get('$baseUrl/v1/users', queryParameters:queryParams );
+      final queryParams = {"user_ids": userId, "show_categories": true};
+      final response = await httpClient.get('$baseUrl/v1/users',
+          queryParameters: queryParams);
       final users = response.data;
       return User.fromJson(users[0]);
     } catch (e) {
@@ -84,7 +84,7 @@ class AddaSDK {
   Future<List<User>?> getUserByName(String name) async {
     try {
       final response =
-      await http.get(Uri.parse('$baseUrl/v1/users?name=$name'));
+          await http.get(Uri.parse('$baseUrl/v1/users?name=$name'));
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
         return data
@@ -100,7 +100,8 @@ class AddaSDK {
     }
   }
 
-  Future<User?> updateUserByID(String userId, Map<String, dynamic> updates) async {
+  Future<User?> updateUserByID(
+      String userId, Map<String, dynamic> updates) async {
     try {
       final response = await http.patch(
         Uri.parse('$baseUrl/v1/users/$userId'),
@@ -113,6 +114,9 @@ class AddaSDK {
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = jsonDecode(response.body);
         return User.fromJson(data);
+      } else if (response.statusCode == 204) {
+        // Se a atualização foi bem-sucedida mas não há conteúdo, retorne null ou a instância atual do usuário
+        return null; // ou `return user;` se quiser manter o usuário atual
       } else {
         print('Erro ao atualizar usuário: ${response.statusCode}');
         return null;
@@ -125,11 +129,11 @@ class AddaSDK {
 
   Future<SessionToken> getAccessToken(String userId) async {
     try {
-      final response = await httpClient.post(
-          '$sessionBaseUrl/v1/users/$userId/session', data: null);
+      final response = await httpClient
+          .post('$sessionBaseUrl/v1/users/$userId/session', data: null);
       final dynamic responseBody = await response.data;
       return SessionToken().fromJson(responseBody);
-    } catch(e) {
+    } catch (e) {
       // melhorar depois
       if (e is DioException) {
         throw Exception('${e.response}');
@@ -138,15 +142,11 @@ class AddaSDK {
     }
   }
 
-  Future<bool> validateAccessToken(String session, String userId) async{
+  Future<bool> validateAccessToken(String session, String userId) async {
     try {
-       await httpClient.post(
-          '$sessionBaseUrl/v1/users/$userId/validate',
-          options: Options(headers: {
-            'Authorization': session
-          })
-      );
-    }catch (e) {
+      await httpClient.post('$sessionBaseUrl/v1/users/$userId/validate',
+          options: Options(headers: {'Authorization': session}));
+    } catch (e) {
       e as DioException;
       if (e.response!.statusCode == 401) {
         return false;
@@ -162,7 +162,8 @@ class AddaSDK {
       final headers = {
         "user_id": userId,
       };
-      final response = await httpClient.get('$channelBaseUrl/v1/channels', options: Options(headers: headers));
+      final response = await httpClient.get('$channelBaseUrl/v1/channels',
+          options: Options(headers: headers));
       return ChannelResponse.fromJson(response.data);
     } catch (e) {
       // melhorar depois
@@ -357,7 +358,6 @@ class AddaSDK {
     print('Localização: ${locationData.latitude}, ${locationData.longitude}');
     return locationData; // Retorna a localização
   }
-
 
   //Categories:
   Future<CategoriesResponse> listCategories() async {

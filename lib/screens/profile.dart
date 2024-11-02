@@ -143,7 +143,7 @@ class ProfilePage extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "I’ve got my red dress on tonight, dancin’ in the dark, in the pale moonlight",
+                    "Olá! Vamos nos conhecer no Adda.",
                     style: TextStyle(
                       decoration: TextDecoration.none,
                       fontSize: screenWidth * 0.047,
@@ -220,32 +220,32 @@ class ProfilePage extends StatelessWidget {
               ),
             ],
           ),
-          Positioned.fill(
-            top: screenHeight * 0.45,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
-              child: SizedBox(
-                height: 100,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: List.generate(
-                      18,
-                      (index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 10.0),
-                          child: CustomToggleButton(
-                            text: "Interesse $index",
-                            imagePath: 'assets/transparenttarget.png',
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
+          // Positioned.fill(
+          //   top: screenHeight * 0.45,
+          //   child: Padding(
+          //     padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
+          //     child: SizedBox(
+          //       height: 100,
+          //       child: SingleChildScrollView(
+          //         scrollDirection: Axis.horizontal,
+          //         child: Row(
+          //           children: List.generate(
+          //             18,
+          //             (index) {
+          //               return Padding(
+          //                 padding: const EdgeInsets.only(right: 10.0),
+          //                 child: CustomToggleButton(
+          //                   text: "Interesse $index",
+          //                   imagePath: 'assets/transparenttarget.png',
+          //                 ),
+          //               );
+          //             },
+          //           ),
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
           Positioned(
             top: 40,
             right: screenWidth * 0.064,
