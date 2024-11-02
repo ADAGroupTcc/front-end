@@ -1,4 +1,3 @@
-import 'package:addaproject/screens/profilepersonalization.dart';
 import 'package:addaproject/screens/welcomescreen.dart';
 import 'package:addaproject/sdk/model/Categoria.dart';
 import 'package:addaproject/sdk/model/User.dart';

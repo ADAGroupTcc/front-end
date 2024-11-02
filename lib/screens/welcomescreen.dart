@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import '../utils/backgroundwidget.dart';
+import '../utils/popups/confirmation.dart';
+import '../utils/popups/temporary.dart';
 import 'register.dart';
 import 'login.dart';
 
 const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
-// const Color pretor = Color(0x500D0D0D);
 
 class FirstScreen extends StatelessWidget {
   const FirstScreen({super.key});
@@ -19,8 +20,48 @@ class FirstScreen extends StatelessWidget {
   }
 }
 
-class WelcomePage extends StatelessWidget {
+class WelcomePage extends StatefulWidget {
   const WelcomePage({super.key});
+
+  @override
+  _WelcomePageState createState() => _WelcomePageState();
+}
+
+class _WelcomePageState extends State<WelcomePage> {
+  @override
+  void initState() {
+    super.initState();
+
+    // Exibe o popup temporário assim que a tela carrega
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) => ConfirmationPopup(
+          message: 'Tem certeza que deseja cancelar?',
+          // Texto do segundo popup
+          onConfirm: () {
+            // Ação ao confirmar
+            Navigator.of(context).pop();
+          },
+          onCancel: () {
+            // Ação ao cancelar
+            Navigator.of(context).pop();
+          },
+        ),
+      );
+
+      // Atraso para exibir o segundo popup após o primeiro desaparecer
+      Future.delayed(const Duration(seconds: 3), () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) => TemporaryPopup(
+            message: 'Ação cancelada', // Texto do primeiro popup
+            isAffirmative: false, // Define o ícone como "cancelar"
+          ),
+        );
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,8 +159,7 @@ class WelcomePage extends StatelessWidget {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  const RegisterPage()),
+                              builder: (context) => const RegisterPage()),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -147,8 +187,7 @@ class WelcomePage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) =>
-                                  const Login()),
+                              builder: (context) => const Login()),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -169,7 +208,7 @@ class WelcomePage extends StatelessWidget {
                           fontSize: screenWidth * 0.06,
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ],

@@ -28,9 +28,9 @@ class Home extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
-  User? user;
+  final User? user;
 
-  HomePage({super.key, this.user});
+  const HomePage({super.key, this.user});
 
   @override
   Widget build(BuildContext context) {

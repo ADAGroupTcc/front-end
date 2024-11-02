@@ -105,14 +105,14 @@ class ProfilePersonalizationPage extends StatelessWidget {
                 const SizedBox(height: 15),
                 CustomTextField(
                   controller: _nameController,
-                  label: 'Email',
-                  inputType: TextInputType.emailAddress,
+                  label: 'Nome de usuário',
+                  inputType: TextInputType.text,
                   isobscure: false,
                 ),
                 CustomTextField(
                   controller: _bioController,
-                  label: 'Senha',
-                  inputType: TextInputType.visiblePassword,
+                  label: 'Bio',
+                  inputType: TextInputType.text,
                   isobscure: true,
                 ),
                 const SizedBox(height: 45),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../utils/customtogglebutton.dart';
+import '../utils/interestshow.dart';
 
 const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
@@ -26,9 +26,10 @@ class ProfilePage extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-        backgroundColor: pretobg,
-        resizeToAvoidBottomInset: false,
-        body: Stack(children: [
+      backgroundColor: pretobg,
+      resizeToAvoidBottomInset: false,
+      body: Stack(
+        children: [
           Align(
             alignment: Alignment.topCenter,
             child: Stack(
@@ -78,157 +79,158 @@ class ProfilePage extends StatelessWidget {
               ],
             ),
           ),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(height: 260),
-                Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: screenWidth * 0.064,
-                      vertical: screenHeight * 0.01,
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 260),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth * 0.064,
+                  vertical: screenHeight * 0.01,
+                ),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "@lanita",
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontSize: screenWidth * 0.06,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Inter',
+                      color: Colors.white,
+                      height: 1.1,
                     ),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "@lanita",
-                        style: TextStyle(
-                          decoration: TextDecoration.none,
-                          fontSize: screenWidth * 0.06,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Inter',
-                          color: Colors.white,
-                          height: 1.1,
-                        ),
-                        softWrap: true,
-                        overflow: TextOverflow.visible,
-                      ),
-                    )),
-                Padding(
-                    padding: EdgeInsets.only(
-                      left: screenWidth * 0.064,
-                      top: screenHeight * 0.015,
-                      bottom: screenHeight * 0.01,
-                    ),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Lana Del Rey",
-                        style: TextStyle(
-                          decoration: TextDecoration.none,
-                          fontSize: screenWidth * 0.06,
-                          fontWeight: FontWeight.w300,
-                          fontFamily: 'Inter',
-                          color: branco,
-                          fontStyle: FontStyle.italic,
-                          height: 1.1,
-                        ),
-                        softWrap: true,
-                        overflow: TextOverflow.visible,
-                      ),
-                    )),
-                Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: screenWidth * 0.064,
-                      vertical: screenHeight * 0.01,
-                    ),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "I’ve got my red dress on tonight, dancin’ in the dark, in the pale moonlight",
-                        style: TextStyle(
-                          decoration: TextDecoration.none,
-                          fontSize: screenWidth * 0.047,
-                          fontWeight: FontWeight.w300,
-                          fontFamily: 'Inter',
-                          color: branco,
-                          fontStyle: FontStyle.italic,
-                          height: 1.1,
-                        ),
-                        softWrap: true,
-                        overflow: TextOverflow.visible,
-                      ),
-                    )),
-                Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: screenWidth * 0.064,
-                      vertical: screenHeight * 0.02,
-                    ),
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: screenWidth * 0.2,
-                                vertical: screenHeight * 0.012),
-                            backgroundColor: Colors.transparent,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              side: const BorderSide(color: branco, width: 2),
-                            ),
-                          ),
-                          child: Text(
-                            "Personalizar perfil",
-                            style: TextStyle(
-                              color: branco,
-                              fontFamily: "Amaranth",
-                              fontSize: screenWidth * 0.06,
-                            ),
-                          ),
-                        ))),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: screenWidth * 0.064,
-                    vertical: screenHeight * 0.02,
-                  ),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Interesses",
-                      style: TextStyle(
-                        decoration: TextDecoration.none,
-                        fontSize: screenWidth * 0.06,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Inter',
-                        color: Colors.white,
-                        height: 1.1,
-                      ),
-                      softWrap: true,
-                      overflow: TextOverflow.visible,
-                    ),
+                    softWrap: true,
+                    overflow: TextOverflow.visible,
                   ),
                 ),
-              ],
-            ),
-          Positioned.fill(
-            top: screenHeight * 0.45, // Ajuste conforme necessário para sua UI
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
-              child: SizedBox(
-                height: 100, // Altura definida para o container dos botões
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal, // Habilita rolagem horizontal
-                  child: Row(
-                    children: List.generate(
-                      18,
-                          (index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 10.0), // Espaço entre os botões
-                          child: CustomToggleButton(
-                            text: "Interesse $index",
-                            imagePath: 'assets/transparenttarget.png',
-                          ),
-                        );
-                      },
+              ),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: screenWidth * 0.064,
+                  top: screenHeight * 0.015,
+                  bottom: screenHeight * 0.01,
+                ),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Lana Del Rey",
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontSize: screenWidth * 0.06,
+                      fontWeight: FontWeight.w300,
+                      fontFamily: 'Inter',
+                      color: branco,
+                      fontStyle: FontStyle.italic,
+                      height: 1.1,
+                    ),
+                    softWrap: true,
+                    overflow: TextOverflow.visible,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth * 0.064,
+                  vertical: screenHeight * 0.01,
+                ),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "I’ve got my red dress on tonight, dancin’ in the dark, in the pale moonlight",
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontSize: screenWidth * 0.047,
+                      fontWeight: FontWeight.w300,
+                      fontFamily: 'Inter',
+                      color: branco,
+                      fontStyle: FontStyle.italic,
+                      height: 1.1,
+                    ),
+                    softWrap: true,
+                    overflow: TextOverflow.visible,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth * 0.064,
+                  vertical: screenHeight * 0.02,
+                ),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: screenWidth * 0.2,
+                          vertical: screenHeight * 0.012),
+                      backgroundColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        side: const BorderSide(color: branco, width: 2),
+                      ),
+                    ),
+                    child: Text(
+                      "Personalizar perfil",
+                      style: TextStyle(
+                        color: branco,
+                        fontFamily: "Amaranth",
+                        fontSize: screenWidth * 0.06,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth * 0.064,
+                  vertical: screenHeight * 0.02,
+                ),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Interesses",
+                    style: TextStyle(
+                      decoration: TextDecoration.none,
+                      fontSize: screenWidth * 0.06,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: 'Inter',
+                      color: Colors.white,
+                      height: 1.1,
+                    ),
+                    softWrap: true,
+                    overflow: TextOverflow.visible,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
+                child: SizedBox(
+                  height: 50,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: List.generate(
+                        14,
+                            (index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 10.0),
+                            child: ShowInterest(
+                              text: "Interesse $index",
+                              imagePath: 'assets/transparenttarget.png',
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
           Positioned(
             top: 40,
-            // Ajuste esse valor conforme necessário para posicionar mais perto do topo
             right: screenWidth * 0.064,
             child: ClipOval(
               child: Image.asset(
@@ -238,7 +240,9 @@ class ProfilePage extends StatelessWidget {
                 height: screenWidth * 0.12,
               ),
             ),
-          )
-        ]));
+          ),
+        ],
+      ),
+    );
   }
 }

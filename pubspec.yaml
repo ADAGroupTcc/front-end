@@ -46,6 +46,9 @@ flutter:
     - assets/transparenttarget.png
     - assets/billie.png
     - assets/bgbillie.png
+    - assets/fullblackwave.png
+    - assets/iconcheck.png
+    - assets/iconcancel.png
 
   fonts:
     - family: Amaranth
