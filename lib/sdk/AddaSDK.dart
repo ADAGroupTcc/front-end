@@ -13,10 +13,11 @@ import 'package:location/location.dart';
 class AddaSDK {
   final String userBaseUrl = "https://ms-users-api.onrender.com";
   final String sessionBaseUrl = "https://ms-session-api.onrender.com";
+  final String channelBaseUrl = "https://ms-channel-api.onrender.com";
   final String baseUrl = "https://ms-users-api.onrender.com";
   final String categoriesBaseUrl = "https://ms-categories-api.onrender.com";
   Dio httpClient = Dio();
-  Location location = new Location();
+  Location location = Location();
 
   AddaSDK() {
     // Configuração para ignorar a verificação de certificado
@@ -156,53 +157,19 @@ class AddaSDK {
 
 //////Channel//////
 
-  Future<List<Channel>?> listChannelsByUser(String userId) async {
+  Future<ChannelResponse> listChannelsByUserId(String userId) async {
     try {
-      final response =
-          await http.get(Uri.parse('$baseUrl/v1/channels?member=$userId'));
-
-      if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
-        return data
-            .map((json) => Channel.fromJson(json as Map<String, dynamic>))
-            .toList();
-      } else {
-        print(
-            'Erro ao buscar canais para o usuário $userId: ${response.statusCode}');
-        return null;
-      }
+      final headers = {
+        "user_id": userId,
+      };
+      final response = await httpClient.get('$channelBaseUrl/v1/channels', options: Options(headers: headers));
+      return ChannelResponse.fromJson(response.data);
     } catch (e) {
-      print('Erro inesperado: $e');
-      return null;
-    }
-  }
-
-  Future<Channel?> createChannel(Channel newChannel) async {
-    try {
-      final response = await http.post(
-        Uri.parse('$baseUrl/v1/channels'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode({
-          'name': newChannel.name,
-          'description': newChannel.description,
-          'members': newChannel.members.map((member) => member.id).toList(),
-          'admins': newChannel.admins.map((admin) => admin.id).toList(),
-          'imageUrl': newChannel.imageUrl
-        }),
-      );
-
-      if (response.statusCode == 201) {
-        final Map<String, dynamic> data = jsonDecode(response.body);
-        return Channel.fromJson(data);
-      } else {
-        print('Erro ao criar Channel: ${response.statusCode}');
-        return null;
+      // melhorar depois
+      if (e is DioException) {
+        throw Exception('${e.response}');
       }
-    } catch (e) {
-      print('Erro inesperado: $e');
-      return null;
+      throw Exception("$e");
     }
   }
 
@@ -367,28 +334,28 @@ class AddaSDK {
   ///Location
 
   Future<LocationData?> getLocation() async {
-    bool _serviceEnabled;
-    PermissionStatus _permissionGranted;
+    bool serviceEnabled;
+    PermissionStatus permissionGranted;
 
-    _serviceEnabled = await location.serviceEnabled();
-    if (!_serviceEnabled) {
-      _serviceEnabled = await location.requestService();
-      if (!_serviceEnabled) {
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
         return null;
       }
     }
 
-    _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
-      _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
+    permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
         return null;
       }
     }
 
-    LocationData _locationData = await location.getLocation();
-    print('Localização: ${_locationData.latitude}, ${_locationData.longitude}');
-    return _locationData; // Retorna a localização
+    LocationData locationData = await location.getLocation();
+    print('Localização: ${locationData.latitude}, ${locationData.longitude}');
+    return locationData; // Retorna a localização
   }
 
 

@@ -1,14 +1,11 @@
 import 'package:addaproject/utils/customtextfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart'
-    as firebase_auth; // Adiciona o prefixo
-import 'package:firebase_database/firebase_database.dart'; // Importa o Firebase Realtime Database
-import '../sdk/AddaSDK.dart'; // Importe sua SDK
+// Adiciona o prefixo
+// Importa o Firebase Realtime Database
+// Importe sua SDK
 import '../sdk/model/User.dart';
-import 'package:http/http.dart' as http; // Importa o http para interações com o Firebase
-import 'dart:convert';
+// Importa o http para interações com o Firebase
 import 'interests.dart';
 
 import '../utils/backgroundwidget.dart'; // Importa para usar jsonEncode
@@ -32,6 +29,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   void _showPopup(String message) {
     showDialog(
@@ -94,7 +92,28 @@ class _RegisterPageState extends State<RegisterPage> {
       _showPopup("A senha deve ter pelo menos 6 caracteres, incluir letras, números e uma letra maiúscula.");
       return;
     }
-
+    try {
+      final res = await _auth.signInWithEmailAndPassword(email: email, password: password);
+      if (res.user != null) {
+        throw FirebaseAuthException(code: "wrong-password");
+      }
+    }catch(e) {
+      e as FirebaseAuthException;
+      switch(e.code) {
+        case "user-not-found":
+        case "invalid-credential":
+        break;
+        case "invalid-email":
+        _showPopup("Email inválido");
+        return;
+        case "wrong-password":
+          _showPopup("Conta já existente, faça login");
+          return;
+        default:
+          _showPopup("Failure ${e.message}");
+          return;
+      }
+    }
     final newUser = UserCreate(
       firstName: firstName,
       lastName: lastName,

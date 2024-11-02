@@ -1,4 +1,5 @@
 import 'package:addaproject/screens/welcomescreen.dart';
+import '../sdk/LocalCache.dart';
 import '../utils/backgroundwidget.dart';
 import 'package:addaproject/sdk/AddaSDK.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,6 +14,7 @@ const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
 const Color cinzar = Color(0x4dfffafe);
 
+
 class Login extends StatefulWidget {
   const Login({super.key});
 
@@ -20,13 +22,14 @@ class Login extends StatefulWidget {
   _LoginPage createState() => _LoginPage();
 }
 
+
 class _LoginPage extends State<Login> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseDatabase _firebaseDatabase = FirebaseDatabase.instance;
   final AddaSDK _sdk = AddaSDK();
-// r2@g.com - 123456
+  final _cache = LocalCache();
 
   void _showPopup(String message) {
     showDialog(
@@ -56,16 +59,22 @@ class _LoginPage extends State<Login> {
       final authUid = authResponse.user!.uid;
       final userInfoSnapshot = await _firebaseDatabase.ref().child('users').child(authUid).get();
       if(!userInfoSnapshot.exists) {
-        throw Exception("User not found. You need to sing up first");
+        throw Exception("Usuário não encontrado");
       }
       final values = userInfoSnapshot.value as dynamic;
       final userId = values["user_id"];
 
       final user = await _sdk.getUserByID(userId);
+      if (user == null) {
+        throw Exception("User nulo");
+      }
+      print('User info: ${user.toJson()}');
+
+      await _cache.saveUserSession(user);
       Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => MenuBarGeneral(user: user!),
+            builder: (context) => MenuBarGeneral(user: user),
           )
       );
     } catch (e) {

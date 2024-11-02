@@ -1,24 +1,30 @@
+import 'package:addaproject/sdk/model/User.dart';
 import 'package:flutter/material.dart';
 import '../utils/interestshow.dart';
+import '../screens/profilepersonalization.dart';
 
 const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
 const Color pretobg = Color(0xFF171717);
 
 class Profile extends StatelessWidget {
-  const Profile({super.key});
+  const Profile({super.key, required this.user});
+
+  final User user;
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Profile page',
-      home: ProfilePage(),
+      home: ProfilePage(user: user),
     );
   }
 }
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+  const ProfilePage({super.key, required this.user});
+
+  final User user;
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +97,7 @@ class ProfilePage extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "@lanita",
+                    "@${user.nickname ?? 'Nickname não definido'}",
                     style: TextStyle(
                       decoration: TextDecoration.none,
                       fontSize: screenWidth * 0.06,
@@ -114,7 +120,7 @@ class ProfilePage extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Lana Del Rey",
+                    "${user.firstName} ${user.lastName}",
                     style: TextStyle(
                       decoration: TextDecoration.none,
                       fontSize: screenWidth * 0.06,
@@ -152,6 +158,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
               ),
+              // Botão "Personalizar perfil"
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: screenWidth * 0.064,
@@ -160,7 +167,14 @@ class ProfilePage extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProfilePersonalization(),
+                        ),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(
                           horizontal: screenWidth * 0.2,

@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import '../sdk/LocalCache.dart';
 import '../utils/backgroundwidget.dart';
 import '../utils/customtogglebutton.dart';
 import 'package:addaproject/sdk/AddaSDK.dart';
@@ -34,7 +35,8 @@ class InterestsPage extends StatelessWidget {
   final FirebaseDatabase _firebaseDatabase = FirebaseDatabase.instance;
   final Location location = Location();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  LocationData? _userLocation = null;
+  LocationData? _userLocation;
+  final _cache = LocalCache();
 
   InterestsPage({super.key, required this.user});
 
@@ -55,6 +57,13 @@ class InterestsPage extends StatelessWidget {
       final createdUser = await AddaSDK().createUser(
         user,
       );
+
+      if(createdUser == null) {
+        throw Exception("create user retornou null");
+      }
+
+      await _cache.saveUserSession(createdUser);
+
       SelectedCategories.selectedCategories = [];
       SelectedCategories.allCategories = [];
       final authUser = await _auth.createUserWithEmailAndPassword(
@@ -65,7 +74,7 @@ class InterestsPage extends StatelessWidget {
       await _firebaseDatabase
           .ref()
           .child('users/${authUser.user!.uid}')
-          .set({'user_id': createdUser!.id});
+          .set({'user_id': createdUser.id});
 
       Navigator.pushReplacement(
         context,

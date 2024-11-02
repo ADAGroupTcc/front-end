@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 const Color branco = Color(0xFFFFFAFE);
 const Color brancor = Color(0x45FFFAFE);
