@@ -227,7 +227,7 @@ class ProfilePage extends StatelessWidget {
                     child: Row(
                       children: List.generate(
                         14,
-                            (index) {
+                        (index) {
                           return Padding(
                             padding: const EdgeInsets.only(right: 10.0),
                             child: ShowInterest(
