@@ -3,7 +3,7 @@ import 'User.dart';
 
 class Message {
   final String id;
-  final Channel channel;
+  final String channelId;
   final String type;
   final User sender;
   final String content;
@@ -13,7 +13,7 @@ class Message {
 
   Message({
     required this.id,
-    required this.channel,
+    required this.channelId,
     required this.type,
     required this.sender,
     required this.content,
@@ -25,7 +25,7 @@ class Message {
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
       id: json['id'] as String,
-      channel: Channel.fromJson(json['channel'] as Map<String, dynamic>),
+      channelId: json['channel_id'] as String,
       type: json['type'] as String,
       sender: User.fromJson(json['sender'] as Map<String, dynamic>),
       content: json['content'] as String,

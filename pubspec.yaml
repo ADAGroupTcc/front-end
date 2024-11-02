@@ -29,6 +29,8 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/setaenviar.png
+    - assets/appbarchat.png
     - assets/profilebackground.png
     - assets/generalbackground.png
     - assets/welcomebackground.png
