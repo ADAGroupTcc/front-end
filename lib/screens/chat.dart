@@ -25,6 +25,8 @@ class ChatPage extends State<Chat> {
   final User user;
   final Channel channel;
   final AddaSDK sdk = AddaSDK();
+  final ScrollController _scrollController = ScrollController();
+  var history = <Message>[];
 
   ChatPage({required this.user, required this.channel});
 
@@ -38,11 +40,20 @@ class ChatPage extends State<Chat> {
   Future<List<Message>?> _fetchMessages() async {
     try {
       final res = await sdk.listMessagesByChannelId(channel.id);
+      history = res!;
       return res;
-    }catch(e){
+    } catch (e) {
       print(e);
     }
     return [];
+  }
+
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      }
+    });
   }
 
   @override
@@ -91,24 +102,30 @@ class ChatPage extends State<Chat> {
           Expanded(
             child: Container(
               color: pretobg,
-                child: FutureBuilder<List<Message>?>(
-                  future: _fetchMessages(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text("Erro ao carregar estações"));
-                    } else if (snapshot.hasData) {
-                      return _buildMessages(snapshot.data!, context);
-                    }
-                    return _buildMessages([], context);
-                  },
-                ),
+              child: FutureBuilder<List<Message>?>(
+                future: _fetchMessages(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text("Erro ao carregar estações"));
+                  } else if (snapshot.hasData) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+                    return _buildMessages(snapshot.data!, context);
+                  }
+                  return _buildMessages([], context);
+                },
               ),
             ),
+          ),
           MensagemInput(
             onSend: (mensagem) {
               print("Mensagem enviada: $mensagem");
+              // Add message handling logic here and call _scrollToBottom after a new message
+              // setState(() {
+                // history.add(Message(sender: user.id, content: mensagem)); // Example message structure
+              // });
+              _scrollToBottom();
             },
           ),
         ],
@@ -117,28 +134,22 @@ class ChatPage extends State<Chat> {
   }
 
   Widget _buildMessages(List<Message> history, BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 16.0),
-                child: ListView.builder(
-                itemCount: history.length,
-                itemBuilder: (context, index) {
-                  return MessageBubble(
-                    nickname: history[index].sender,
-                    message: history[index].content,
-                    isSender: history[index].sender == user.id,
-                  );
-                },
-              ),
-              ),
-          ),
-        ],
-      ),
+    return ListView.builder(
+      controller: _scrollController,
+      itemCount: history.length,
+      itemBuilder: (context, index) {
+        return MessageBubble(
+          nickname: history[index].sender,
+          message: history[index].content,
+          isSender: history[index].sender == user.id,
+        );
+      },
     );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 }
