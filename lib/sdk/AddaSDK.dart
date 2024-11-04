@@ -163,7 +163,10 @@ class AddaSDK {
       final headers = {
         "user_id": userId,
       };
-      final response = await httpClient.get('$channelBaseUrl/v1/channels', options: Options(headers: headers));
+      final queryParams = {
+        "show_members": true,
+      };
+      final response = await httpClient.get('$channelBaseUrl/v1/channels',queryParameters: queryParams, options: Options(headers: headers));
       return ChannelResponse.fromJson(response.data);
     } catch (e) {
       // melhorar depois

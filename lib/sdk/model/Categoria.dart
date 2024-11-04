@@ -4,7 +4,7 @@ class Categoria {
 
   Categoria({
     required this.id,
-    required this.name,
+    this.name = ''
   });
 
   factory Categoria.fromJson(Map<String, dynamic> json) {

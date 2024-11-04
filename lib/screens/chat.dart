@@ -28,7 +28,7 @@ class ChatPage extends State<Chat> {
   final Channel channel;
   final AddaSDK sdk = AddaSDK();
   final ScrollController _scrollController = ScrollController();
-  CircularList<Message> history = CircularList(50);
+  CircularList<Message> _history = CircularList(50);
   final LocalCache _cache = LocalCache();
 
   ChatPage({required this.user, required this.channel});
@@ -43,7 +43,8 @@ class ChatPage extends State<Chat> {
   Future<List<Message>?> _fetchMessages() async {
     try {
       final res = await sdk.listMessagesByChannelId(channel.id);
-      history.addAll(res!);
+      _history.addAll(res!);
+      print(""+channel.members[0].nickname + channel.members[1].nickname);
       return res;
     } catch (e) {
       print(e);
@@ -142,7 +143,7 @@ class ChatPage extends State<Chat> {
       itemCount: history.length,
       itemBuilder: (context, index) {
         return MessageBubble(
-          nickname: history[index].sender,
+          nickname: channel.members.reduce((value, element) => value.id == history[index].sender ? value : element).nickname,
           message: history[index].content,
           isSender: history[index].sender == user.id,
         );

@@ -6,8 +6,8 @@ class User {
   final String firstName;
   final String lastName;
   final String email;
-  final String description;
-  final String nickname;
+  final String? description;
+  final String? nickname;
   final String cpf;
   final List<Categoria> categories;
   final DateTime createdAt;
@@ -19,8 +19,8 @@ class User {
     this.firstName = '',
     this.lastName = '',
     this.email = '',
-    this.description = '',
-    this.nickname = '',
+    this.description,
+    this.nickname,
     this.cpf = '',
     this.categories = const [],
     DateTime? createdAt,
