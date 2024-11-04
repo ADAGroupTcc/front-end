@@ -1,3 +1,4 @@
+import 'package:addaproject/sdk/AddaSDK.dart';
 import 'package:addaproject/sdk/model/Message.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +24,7 @@ class Chat extends StatefulWidget {
 class ChatPage extends State<Chat> {
   final User user;
   final Channel channel;
+  final AddaSDK sdk = AddaSDK();
 
   ChatPage({required this.user, required this.channel});
 
@@ -33,39 +35,14 @@ class ChatPage extends State<Chat> {
     return AssetImage("assets/target.png");
   }
 
-  Future<List<Message>> _fetchMessages() async {
-    return Future(() => [
-      Message(
-        id: "Id",
-        type: "type",
-        sender: User(id: user.id, nickname: "name", email: "email"),
-        content: "penis penispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenispenis molhado",
-        isEdited: false,
-        createdAt: DateTime.timestamp(),
-        updatedAt: DateTime.timestamp(),
-        channelId: '1231'
-      ),
-      Message(
-          id: "Id",
-          type: "type",
-          sender: User(id: "123", nickname: "name", email: "email"),
-          content: "caraleeoooooo",
-          isEdited: false,
-          createdAt: DateTime.timestamp(),
-          updatedAt: DateTime.timestamp(),
-          channelId: '1231'
-      ),
-      Message(
-          id: "Id",
-          type: "type",
-          sender: User(id: user.id, nickname: "name", email: "email"),
-          content: "dahora ne?",
-          isEdited: false,
-          createdAt: DateTime.timestamp(),
-          updatedAt: DateTime.timestamp(),
-          channelId: '1231'
-      )
-    ]);
+  Future<List<Message>?> _fetchMessages() async {
+    try {
+      final res = await sdk.listMessagesByChannelId(channel.id);
+      return res;
+    }catch(e){
+      print(e);
+    }
+    return [];
   }
 
   @override
@@ -114,7 +91,7 @@ class ChatPage extends State<Chat> {
           Expanded(
             child: Container(
               color: pretobg,
-                child: FutureBuilder<List<Message>>(
+                child: FutureBuilder<List<Message>?>(
                   future: _fetchMessages(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -152,9 +129,9 @@ class ChatPage extends State<Chat> {
                 itemCount: history.length,
                 itemBuilder: (context, index) {
                   return MessageBubble(
-                    nickname: history[index].sender.nickname,
+                    nickname: history[index].sender,
                     message: history[index].content,
-                    isSender: history[index].sender.id == user.id,
+                    isSender: history[index].sender == user.id,
                   );
                 },
               ),

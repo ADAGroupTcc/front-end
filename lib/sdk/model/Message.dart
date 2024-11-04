@@ -4,8 +4,7 @@ import 'User.dart';
 class Message {
   final String id;
   final String channelId;
-  final String type;
-  final User sender;
+  final String sender;
   final String content;
   final bool isEdited;
   final DateTime createdAt;
@@ -14,7 +13,6 @@ class Message {
   Message({
     required this.id,
     required this.channelId,
-    required this.type,
     required this.sender,
     required this.content,
     required this.isEdited,
@@ -26,12 +24,26 @@ class Message {
     return Message(
       id: json['id'] as String,
       channelId: json['channel_id'] as String,
-      type: json['type'] as String,
-      sender: User.fromJson(json['sender'] as Map<String, dynamic>),
-      content: json['content'] as String,
-      isEdited: json['isEdited'] as bool,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      updatedAt: DateTime.parse(json['updatedAt'] as String),
+      sender:json['sender_id'] as String,
+      content: json['message'] as String,
+      isEdited: json['is_edited'] as bool,
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
     );
+  }
+}
+
+class MessagesResponse {
+  final List<Message> messages;
+  final int nextPage;
+
+  MessagesResponse({required this.messages, this.nextPage = 0});
+
+  factory MessagesResponse.fromJson(Map<String, dynamic> json) {
+    List<Message> messages = [];
+    for (var values in json["messages"]) {
+      messages.add(Message.fromJson(values));
+    }
+    return MessagesResponse(messages: messages, nextPage: json["next_page"] ?? 1);
   }
 }
