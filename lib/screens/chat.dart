@@ -1,5 +1,7 @@
 import 'package:addaproject/sdk/AddaSDK.dart';
+import 'package:addaproject/sdk/LocalCache.dart';
 import 'package:addaproject/sdk/model/Message.dart';
+import 'package:addaproject/utils/circularlist.dart';
 import 'package:flutter/material.dart';
 
 import '../sdk/model/Channel.dart';
@@ -26,7 +28,8 @@ class ChatPage extends State<Chat> {
   final Channel channel;
   final AddaSDK sdk = AddaSDK();
   final ScrollController _scrollController = ScrollController();
-  var history = <Message>[];
+  CircularList<Message> history = CircularList(50);
+  final LocalCache _cache = LocalCache();
 
   ChatPage({required this.user, required this.channel});
 
@@ -40,7 +43,7 @@ class ChatPage extends State<Chat> {
   Future<List<Message>?> _fetchMessages() async {
     try {
       final res = await sdk.listMessagesByChannelId(channel.id);
-      history = res!;
+      history.addAll(res!);
       return res;
     } catch (e) {
       print(e);

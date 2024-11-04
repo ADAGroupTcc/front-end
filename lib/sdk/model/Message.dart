@@ -24,12 +24,24 @@ class Message {
     return Message(
       id: json['id'] as String,
       channelId: json['channel_id'] as String,
-      sender:json['sender_id'] as String,
+      sender: json['sender_id'] as String,
       content: json['message'] as String,
       isEdited: json['is_edited'] as bool,
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'channel_id': channelId,
+      'sender_id': sender,
+      'message': content,
+      'is_edited': isEdited,
+      'created_at': createdAt.toIso8601String(),
+      'updated_at': updatedAt.toIso8601String(),
+    };
   }
 }
 
