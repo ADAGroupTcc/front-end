@@ -93,14 +93,14 @@ class OthersProfilePage extends StatelessWidget {
                         "@billie_eilish",
                         style: TextStyle(
                           decoration: TextDecoration.none,
-                          fontSize: screenWidth * 0.06,
+                          fontSize: screenWidth * 0.05,
                           fontWeight: FontWeight.w600,
                           fontFamily: 'Inter',
                           color: Colors.white,
                           height: 1.1,
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: screenHeight * 0.023),
                       Text(
                         "Billie Eilish",
                         style: TextStyle(
@@ -113,7 +113,7 @@ class OthersProfilePage extends StatelessWidget {
                           height: 1.1,
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: screenHeight * 0.01),
                       Text(
                         "What do you want from me?",
                         style: TextStyle(
@@ -130,6 +130,7 @@ class OthersProfilePage extends StatelessWidget {
                   ),
                 ),
                 // Seção de interesses
+                const SizedBox(height: 40),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.064, vertical: screenHeight * 0.02),
                   child: Column(
@@ -146,9 +147,9 @@ class OthersProfilePage extends StatelessWidget {
                           height: 1.1,
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: screenHeight * 0.023),
                       SizedBox(
-                        height: 50,
+                        height: screenHeight * 0.06,
                         child: ListView(
                           scrollDirection: Axis.horizontal,
                           children: List.generate(
@@ -183,7 +184,7 @@ class OthersProfilePage extends StatelessWidget {
                           height: 1.1,
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: screenHeight * 0.023),
                       Wrap(
                         spacing: 10,
                         children: List.generate(
@@ -197,19 +198,6 @@ class OthersProfilePage extends StatelessWidget {
                   ),
                 ),
               ],
-            ),
-          ),
-          // Ícone de compartilhar fixo no topo
-          Positioned(
-            top: 40,
-            right: screenWidth * 0.064,
-            child: ClipOval(
-              child: Image.asset(
-                'assets/iconcompartilharlink.png',
-                fit: BoxFit.cover,
-                width: screenWidth * 0.12,
-                height: screenWidth * 0.12,
-              ),
             ),
           ),
         ],

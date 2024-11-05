@@ -34,32 +34,32 @@ class _WelcomePageState extends State<WelcomePage> {
 
     // Exibe o popup temporário assim que a tela carrega
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) => ConfirmationPopup(
-          message: 'Tem certeza que deseja cancelar?',
-          // Texto do segundo popup
-          onConfirm: () {
-            // Ação ao confirmar
-            Navigator.of(context).pop();
-          },
-          onCancel: () {
-            // Ação ao cancelar
-            Navigator.of(context).pop();
-          },
-        ),
-      );
+      // showDialog(
+      //   context: context,
+      //   builder: (BuildContext context) => ConfirmationPopup(
+      //     message: 'Tem certeza que deseja cancelar?',
+      //     // Texto do segundo popup
+      //     onConfirm: () {
+      //       // Ação ao confirmar
+      //       Navigator.of(context).pop();
+      //     },
+      //     onCancel: () {
+      //       // Ação ao cancelar
+      //       Navigator.of(context).pop();
+      //     },
+      //   ),
+      // );
 
       // Atraso para exibir o segundo popup após o primeiro desaparecer
-      Future.delayed(const Duration(seconds: 3), () {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) => TemporaryPopup(
-            message: 'Ação cancelada', // Texto do primeiro popup
-            isAffirmative: false, // Define o ícone como "cancelar"
-          ),
-        );
-      });
+      // Future.delayed(const Duration(seconds: 3), () {
+      //   showDialog(
+      //     context: context,
+      //     builder: (BuildContext context) => TemporaryPopup(
+      //       message: 'Ação cancelada', // Texto do primeiro popup
+      //       isAffirmative: false, // Define o ícone como "cancelar"
+      //     ),
+      //   );
+      // });
     });
   }
 
@@ -94,7 +94,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   child: Text(
                     "Bem vindo(a) ao ADDA!",
                     style: TextStyle(
-                      fontSize: screenWidth * 0.132,
+                      fontSize: screenWidth * 0.11,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
                       fontFamily: 'Amaranth',
@@ -110,7 +110,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   child: Text(
                     "Aqui você encontra estações de tripulantes que combinam com você, de forma altamente personalizável!",
                     style: TextStyle(
-                      fontSize: screenWidth * 0.0572,
+                      fontSize: screenWidth * 0.05,
                       fontFamily: 'Inter',
                       color: Colors.white,
                       fontStyle: FontStyle.italic,
@@ -131,6 +131,8 @@ class _WelcomePageState extends State<WelcomePage> {
                 Image.asset(
                   'assets/blackwave.png',
                   fit: BoxFit.fitWidth,
+                  alignment: Alignment.topCenter,
+                  height: screenHeight * 0.35,
                   width: double.infinity,
                 ),
                 Column(
@@ -192,7 +194,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       },
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.symmetric(
-                            horizontal: screenWidth * 0.361,
+                            horizontal: screenWidth * 0.24,
                             vertical: screenHeight * 0.012),
                         backgroundColor: Colors.transparent,
                         shape: RoundedRectangleBorder(
@@ -201,7 +203,7 @@ class _WelcomePageState extends State<WelcomePage> {
                         ),
                       ),
                       child: Text(
-                        "Login",
+                        "        Login        ",
                         style: TextStyle(
                           color: branco,
                           fontFamily: "Amaranth",

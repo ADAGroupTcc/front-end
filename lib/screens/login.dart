@@ -19,11 +19,11 @@ class Login extends StatefulWidget {
   const Login({super.key});
 
   @override
-  _LoginPage createState() => _LoginPage();
+  LoginPage createState() => LoginPage();
 }
 
 
-class _LoginPage extends State<Login> {
+class LoginPage extends State<Login> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -99,7 +99,7 @@ class _LoginPage extends State<Login> {
               child: Image.asset(
                 'assets/logoadda.png',
                 fit: BoxFit.fitWidth,
-                width: screenWidth * 0.26,
+                width: screenWidth * 0.24,
               ),
             ),
             Padding(
@@ -110,7 +110,7 @@ class _LoginPage extends State<Login> {
                 "Bem vindo(a) de volta!",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: screenWidth * 0.107,
+                  fontSize: screenWidth * 0.1,
                   fontWeight: FontWeight.w600,
                   color: branco,
                   fontFamily: 'Amaranth',
@@ -156,7 +156,7 @@ class _LoginPage extends State<Login> {
                 onPressed: _signInUser,
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(
-                      horizontal: screenWidth * 0.361,
+                      horizontal: screenWidth * 0.375,
                       vertical: screenHeight * 0.012),
                   backgroundColor: Colors.transparent,
                   shape: RoundedRectangleBorder(
@@ -171,7 +171,7 @@ class _LoginPage extends State<Login> {
                       style: TextStyle(
                         color: branco,
                         fontFamily: "Amaranth",
-                        fontSize: screenWidth * 0.06,
+                        fontSize: screenWidth * 0.055,
                       )),
                 )),
               ),

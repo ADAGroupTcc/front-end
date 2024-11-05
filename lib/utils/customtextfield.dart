@@ -82,7 +82,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                                 fontFamily: 'Inter',
                                 color: Colors.white,
                                 fontWeight: FontWeight.w300,
-                                fontSize: screenWidth * 0.043,
+                                fontSize: 18.4,
                                 decoration: TextDecoration.none,
                               ),
                             ),

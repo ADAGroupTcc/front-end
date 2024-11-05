@@ -1,4 +1,10 @@
+import 'package:addaproject/screens/acceptstation.dart';
+import 'package:addaproject/screens/interests.dart';
+import 'package:addaproject/screens/othersprofile.dart';
+import 'package:addaproject/screens/profile.dart';
+import 'package:addaproject/screens/profilepersonalization.dart';
 import 'package:addaproject/sdk/LocalCache.dart';
+import 'package:addaproject/sdk/model/User.dart';
 import 'package:addaproject/utils/menuBar.dart';
 import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -75,6 +81,8 @@ class MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return _isOffline ? const NoInternet() : const FirstScreen();
+    return _isOffline ? const NoInternet() : AcceptStation();
   }
 }
+
+// user: User(firstName: 'Gabriel', lastName: 'Lopes', email: 'gabriellopes.gl2805@gmail.com', cpf: '24158608830', categories: []),

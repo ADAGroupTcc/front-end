@@ -219,19 +219,6 @@ class GroupInfoPage extends StatelessWidget {
               ],
             ),
           ),
-          // Ícone de compartilhar fixo no topo
-          Positioned(
-            top: 40,
-            right: screenWidth * 0.064,
-            child: ClipOval(
-              child: Image.asset(
-                'assets/iconcompartilharlink.png',
-                fit: BoxFit.cover,
-                width: screenWidth * 0.12,
-                height: screenWidth * 0.12,
-              ),
-            ),
-          ),
         ],
       ),
     );
