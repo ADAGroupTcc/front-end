@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../sdk/LocalCache.dart';
 import '../utils/customtogglebutton.dart';
 import '../screens/profilepersonalization.dart';
+import '../sdk/AddaSDK.dart';
 
 const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
@@ -29,8 +30,6 @@ class ProfilePage extends StatefulWidget {
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
-
-  
 }
 
 class _ProfilePageState extends State<ProfilePage> {
@@ -44,15 +43,18 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _getUserData() async {
     final LocalCache _localCache = LocalCache();
-    final User? user = await _localCache.getUserSession();
-    setState(() {
-      _user = user;
-    });
+    final userSession = await _localCache.getUserSession();
+    if (userSession != null) {
+      final AddaSDK sdk = AddaSDK();
+      final User? user = await sdk.getUserByID(userSession.id);
+      setState(() {
+        _user = user;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    _getUserData();
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -183,7 +185,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
               ),
-              // Botão "Personalizar perfil"
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: screenWidth * 0.064,
@@ -254,18 +255,16 @@ class _ProfilePageState extends State<ProfilePage> {
           //       child: SingleChildScrollView(
           //         scrollDirection: Axis.horizontal,
           //         child: Row(
-          //           children: List.generate(
-          //             18,
-          //             (index) {
-          //               return Padding(
-          //                 padding: const EdgeInsets.only(right: 10.0),
-          //                 child: CustomToggleButton(
-          //                   text: "Interesse $index",
-          //                   imagePath: 'assets/transparenttarget.png',
-          //                 ),
-          //               );
-          //             },
-          //           ),
+          //           children: (_user?.categories ?? []).map((category) {
+          //             return Padding(
+          //               padding: const EdgeInsets.only(right: 10.0),
+          //               child: CustomToggleButton(
+          //                 text: category
+          //                     .name, 
+          //                 imagePath: 'assets/transparenttarget.png',
+          //               ),
+          //             );
+          //           }).toList(),
           //         ),
           //       ),
           //     ),
