@@ -32,19 +32,18 @@ class ProfilePersonalizationPage extends StatelessWidget {
     final TextEditingController nicknameController = TextEditingController();
     final TextEditingController bioController = TextEditingController();
 
-/*************  ✨ Codeium Command 🌟  *************/
     Future<void> _updateUser(BuildContext context) async {
       LocalCache _localCache = LocalCache();
       User? user = await _localCache.getUserSession();
 
-      // Verifica se o usuário logado foi encontrado
       if (user == null) {
         await showDialog<void>(
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
                 title: const Text("Usuário não encontrado"),
-                content: const Text("Não foi possível identificar o usuário logado."),
+                content: const Text(
+                    "Não foi possível identificar o usuário logado."),
                 actions: [
                   TextButton(
                     child: const Text("OK"),
@@ -56,12 +55,57 @@ class ProfilePersonalizationPage extends StatelessWidget {
         return;
       }
 
-      // Imprime o ID do usuário
-      print("Atualizando usuário com ID: ${user.id}");
+      final String nickname = nicknameController.text;
+      final String description = bioController.text;
+
+      // Validação do nickname
+      final nicknameRegExp = RegExp(r'^[a-zA-Z0-9._]{1,30}$');
+      if (!nicknameRegExp.hasMatch(nickname)) {
+        final errorMessage = nickname.length > 30
+            ? "Máximo 30 caracteres."
+            : "Presença de caracter(es) inválido(s). Você pode usar apenas letras, pontos, números ou sublinhados.";
+
+        await showDialog<void>(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Nickname inválido"),
+              content: Text(errorMessage),
+              actions: [
+                TextButton(
+                  child: const Text("OK"),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ],
+            );
+          },
+        );
+        return;
+      }
+
+      // Validação da descrição
+      if (description.length > 150) {
+        await showDialog<void>(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Descrição muito longa"),
+              content: const Text("Sua descrição deve conter no máximo 150 caracteres."),
+              actions: [
+                TextButton(
+                  child: const Text("OK"),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ],
+            );
+          },
+        );
+        return;
+      }
 
       final Map<String, dynamic> updates = {
-        'nickname': nicknameController.text,
-        'description': bioController.text,
+        'nickname': nickname,
+        'description': description,
       };
 
       try {
@@ -69,6 +113,7 @@ class ProfilePersonalizationPage extends StatelessWidget {
             await AddaSDK().updateUserByID(user.id, updates);
 
         if (updatedUser != null) {
+          await LocalCache().saveUserSession(updatedUser);
           await showDialog<void>(
               context: context,
               builder: (BuildContext context) {
@@ -96,7 +141,8 @@ class ProfilePersonalizationPage extends StatelessWidget {
               builder: (BuildContext context) {
                 return AlertDialog(
                   title: const Text("Erro ao atualizar"),
-                  content: const Text("Ocorreu um erro ao atualizar seu perfil."),
+                  content:
+                      const Text("Ocorreu um erro ao atualizar seu perfil."),
                   actions: [
                     TextButton(
                       child: const Text("OK"),
@@ -110,7 +156,6 @@ class ProfilePersonalizationPage extends StatelessWidget {
         print("Erro ao atualizar usuário: $e");
       }
     }
-/******  33aeeb23-ffe0-4893-acae-b06bccabceab  *******/
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -246,5 +291,4 @@ class ProfilePersonalizationPage extends StatelessWidget {
       ]),
     );
   }
-
 }
