@@ -115,8 +115,7 @@ class AddaSDK {
         final Map<String, dynamic> data = jsonDecode(response.body);
         return User.fromJson(data);
       } else if (response.statusCode == 204) {
-        // Se a atualização foi bem-sucedida mas não há conteúdo, retorne null ou a instância atual do usuário
-        return null; // ou `return user;` se quiser manter o usuário atual
+        return await getUserByID(userId);
       } else {
         print('Erro ao atualizar usuário: ${response.statusCode}');
         return null;

@@ -32,6 +32,7 @@ class ProfilePersonalizationPage extends StatelessWidget {
     final TextEditingController nicknameController = TextEditingController();
     final TextEditingController bioController = TextEditingController();
 
+/*************  ✨ Codeium Command 🌟  *************/
     Future<void> _updateUser(BuildContext context) async {
       LocalCache _localCache = LocalCache();
       User? user = await _localCache.getUserSession();
@@ -60,7 +61,7 @@ class ProfilePersonalizationPage extends StatelessWidget {
 
       final Map<String, dynamic> updates = {
         'nickname': nicknameController.text,
-        'bio': bioController.text,
+        'description': bioController.text,
       };
 
       try {
@@ -68,6 +69,21 @@ class ProfilePersonalizationPage extends StatelessWidget {
             await AddaSDK().updateUserByID(user.id, updates);
 
         if (updatedUser != null) {
+          await showDialog<void>(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text("Perfil atualizado com sucesso"),
+                  content: const Text("Seu perfil foi atualizado com sucesso"),
+                  actions: [
+                    TextButton(
+                      child: const Text("OK"),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
+                  ],
+                );
+              });
+
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -94,6 +110,7 @@ class ProfilePersonalizationPage extends StatelessWidget {
         print("Erro ao atualizar usuário: $e");
       }
     }
+/******  33aeeb23-ffe0-4893-acae-b06bccabceab  *******/
 
     return Scaffold(
       resizeToAvoidBottomInset: false,

@@ -1,5 +1,6 @@
 import 'package:addaproject/sdk/model/User.dart';
 import 'package:flutter/material.dart';
+import '../sdk/LocalCache.dart';
 import '../utils/customtogglebutton.dart';
 import '../screens/profilepersonalization.dart';
 
@@ -21,13 +22,35 @@ class Profile extends StatelessWidget {
   }
 }
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key, required this.user});
-
+class ProfilePage extends StatefulWidget {
   final User user;
+
+  ProfilePage({required this.user});
+
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  User? _user;
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserData();
+  }
+
+  Future<void> _getUserData() async {
+    final LocalCache _localCache = LocalCache();
+    final User? user = await _localCache.getUserSession();
+    setState(() {
+      _user = user;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    _getUserData();
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -97,7 +120,7 @@ class ProfilePage extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "@${user.nickname ?? 'Nickname não definido'}",
+                    "@${_user?.nickname}",
                     style: TextStyle(
                       decoration: TextDecoration.none,
                       fontSize: screenWidth * 0.06,
@@ -120,7 +143,7 @@ class ProfilePage extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "${user.firstName} ${user.lastName}",
+                    "${_user?.firstName} ${_user?.lastName}",
                     style: TextStyle(
                       decoration: TextDecoration.none,
                       fontSize: screenWidth * 0.06,
@@ -143,7 +166,7 @@ class ProfilePage extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Olá! Vamos nos conhecer no Adda.",
+                    "${_user?.description ?? 'Olá, vamos nos conhecer no Adda!'}",
                     style: TextStyle(
                       decoration: TextDecoration.none,
                       fontSize: screenWidth * 0.047,
