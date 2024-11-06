@@ -1,15 +1,9 @@
 import 'package:addaproject/screens/acceptstation.dart';
-import 'package:addaproject/screens/interests.dart';
-import 'package:addaproject/screens/othersprofile.dart';
-import 'package:addaproject/screens/profile.dart';
-import 'package:addaproject/screens/profilepersonalization.dart';
 import 'package:addaproject/sdk/LocalCache.dart';
-import 'package:addaproject/sdk/model/User.dart';
 import 'package:addaproject/utils/menuBar.dart';
 import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'screens/welcomescreen.dart';
 import 'screens/nointernet.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

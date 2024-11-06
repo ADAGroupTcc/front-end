@@ -117,7 +117,7 @@ class AcceptStationPage extends StatelessWidget {
                 ),
                 // Scrollable area for the list of members with scrollbar
                 Container(
-                  height: screenHeight * 0.23,
+                  height: screenHeight * 0.255,
                   child: RawScrollbar(
                     thumbColor: Colors.white, // Cor da "thumb" branca
                     thickness: 6.0, // Espessura da barra
@@ -182,7 +182,7 @@ class AcceptStationPage extends StatelessWidget {
                           style: TextStyle(
                             color: preto,
                             fontFamily: "Amaranth",
-                            fontSize: screenWidth * 0.06,
+                            fontSize: screenWidth * 0.055,
                           ),
                         ),
                       ),
@@ -206,7 +206,7 @@ class AcceptStationPage extends StatelessWidget {
                             style: TextStyle(
                               color: branco,
                               fontFamily: "Amaranth",
-                              fontSize: screenWidth * 0.06,
+                              fontSize: screenWidth * 0.055,
                             ),
                           ),
                         ),
