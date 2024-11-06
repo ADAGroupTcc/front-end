@@ -1,7 +1,7 @@
+import 'package:addaproject/screens/editprofile.dart';
 import 'package:addaproject/sdk/model/User.dart';
 import 'package:flutter/material.dart';
 import '../utils/interestshow.dart';
-import '../screens/profilepersonalization.dart';
 
 const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
@@ -115,7 +115,7 @@ class ProfilePage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ProfilePersonalization()),
+                        MaterialPageRoute(builder: (context) => EditProfile()),
                       );
                     },
                     style: ElevatedButton.styleFrom(

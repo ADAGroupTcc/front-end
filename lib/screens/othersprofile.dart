@@ -85,7 +85,8 @@ class OthersProfilePage extends StatelessWidget {
                 const SizedBox(height: 40),
                 // Informações do perfil
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.064),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: screenWidth * 0.064),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -132,7 +133,9 @@ class OthersProfilePage extends StatelessWidget {
                 // Seção de interesses
                 const SizedBox(height: 40),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.064, vertical: screenHeight * 0.02),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.064,
+                      vertical: screenHeight * 0.02),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -154,7 +157,7 @@ class OthersProfilePage extends StatelessWidget {
                           scrollDirection: Axis.horizontal,
                           children: List.generate(
                             18,
-                                (index) => Padding(
+                            (index) => Padding(
                               padding: const EdgeInsets.only(right: 10.0),
                               child: ShowInterest(
                                 text: "Interesse $index",
@@ -169,7 +172,9 @@ class OthersProfilePage extends StatelessWidget {
                 ),
                 // Seção de estações
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.064, vertical: screenHeight * 0.02),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.064,
+                      vertical: screenHeight * 0.02),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -188,11 +193,14 @@ class OthersProfilePage extends StatelessWidget {
                       Wrap(
                         spacing: 10,
                         children: List.generate(
-                          18,
-                              (index) => Station(
-                            stationName: 'Estação $index',
-                          ),
-                        ),
+                            18,
+                            (index) => Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: screenWidth * 0.03),
+                                  child: Station(
+                                    stationName: 'Estação $index',
+                                  ),
+                                )),
                       ),
                     ],
                   ),

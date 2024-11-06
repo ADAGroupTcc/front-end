@@ -1,5 +1,6 @@
 import 'package:addaproject/screens/acceptstation.dart';
 import 'package:addaproject/sdk/LocalCache.dart';
+import 'package:addaproject/sdk/model/User.dart';
 import 'package:addaproject/utils/menuBar.dart';
 import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -75,8 +76,8 @@ class MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return _isOffline ? const NoInternet() : AcceptStation();
+    return _isOffline ? const NoInternet() : MenuBarGeneral(user: User(firstName: 'Gabriel', lastName: 'Lopes', email: 'gabriellopes.gl2805@gmail.com', nickname: 'biellok4sso', cpf: '24158608830', categories: []),);
   }
 }
 
-// user: User(firstName: 'Gabriel', lastName: 'Lopes', email: 'gabriellopes.gl2805@gmail.com', cpf: '24158608830', categories: []),
+//

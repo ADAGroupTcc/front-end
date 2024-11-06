@@ -12,7 +12,9 @@ const Color preto = Color(0xFF0D0D0D);
 
 class Home extends StatelessWidget {
   User? user;
+
   Home({super.key, this.user});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,11 +34,12 @@ class HomePage extends StatelessWidget {
   final _cache = LocalCache();
 
   HomePage({super.key, this.user});
+
   Future<List<Channel>> _fetchChannels() async {
     if (user != null) {
       try {
         final res = await _cache.listChannelCached();
-        if(res != null && res.isNotEmpty) {
+        if (res != null && res.isNotEmpty) {
           return res;
         }
 
@@ -58,8 +61,7 @@ class HomePage extends StatelessWidget {
       body: Stack(
         children: [
           // Background
-          const BackgroundWidget(
-              imagePath: 'assets/generalbackground.png'),
+          const BackgroundWidget(imagePath: 'assets/generalbackground.png'),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -69,20 +71,18 @@ class HomePage extends StatelessWidget {
                 child: FutureBuilder<List<Channel>>(
                   future: _fetchChannels(),
                   builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return Center(child: Text("Erro ao carregar estações"));
-                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return _buildNoStations(screenWidth, screenHeight);
-                    } else {
-                      return _buildStationsList(
-                          snapshot.data!, context);
-                    }
+                    // if (snapshot.connectionState == ConnectionState.waiting) {
+                    //   return const Center(child: CircularProgressIndicator());
+                    // } else if (snapshot.hasError) {
+                    //   return Center(child: Text("Erro ao carregar estações"));
+                    // } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    //   return _buildNoStations(screenWidth, screenHeight);
+                    // } else {
+                    return _buildStationsList(snapshot.data!, context);
+                    // }
                   },
                 ),
               ),
-
             ],
           ),
         ],
@@ -98,11 +98,12 @@ class HomePage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.084),
+                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.078),
                 child: Center(
                   child: SizedBox(
                     // Adicionar um Container ao redor do texto
-                    width: screenWidth * 0.8, // Define uma largura máxima para o texto
+                    width: screenWidth,
+                    // Define uma largura máxima para o texto
                     child: Text(
                       "Você não está em nenhuma estação por enquanto...",
                       style: TextStyle(
@@ -142,8 +143,8 @@ class HomePage extends StatelessWidget {
           Positioned(
             bottom: 20,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment
-                  .start, // Garante que a seta e o texto fiquem alinhados à esquerda
+              crossAxisAlignment: CrossAxisAlignment.start,
+              // Garante que a seta e o texto fiquem alinhados à esquerda
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
@@ -168,9 +169,8 @@ class HomePage extends StatelessWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.only(
-                      left: screenWidth * 0.18,
-                      top: screenHeight *
-                          0.012), // Move apenas a seta levemente para a esquerda
+                      left: screenWidth * 0.18, top: screenHeight * 0.012),
+                  // Move apenas a seta levemente para a esquerda
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Image.asset(
@@ -190,46 +190,46 @@ class HomePage extends StatelessWidget {
 
   Widget _buildStationsList(List<Channel> channels, BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 80.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text(
-              'Minhas estações',
-              style: TextStyle(
-                fontFamily: 'Inter',
-                color: branco,
-                fontWeight: FontWeight.w600,
-                fontSize: screenWidth * 0.06,
-                decoration: TextDecoration.none,
-              ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: screenHeight * 0.03),
+          child: Text(
+            'Minhas estações',
+            style: TextStyle(
+              fontFamily: 'Inter',
+              color: branco,
+              fontWeight: FontWeight.w600,
+              fontSize: screenWidth * 0.06,
+              decoration: TextDecoration.none,
             ),
           ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 80.0),
-              child: ListView.builder(
-                itemCount: channels.length,
-                itemBuilder: (context, index) {
-                  return StationButton(
-                    stationName: channels[index].name,
-                    onPressed: () {
-                      print('Estação ${channels[index].name} pressionada');
-                    },
-                  );
-                },
-              ),
+        ),
+        Expanded(
+          child: Padding(
+            padding: EdgeInsets.only(
+                left: screenWidth * 0.03, right: screenWidth * 0.03),
+            child: ListView.builder(
+              itemCount: 18,
+              // channels.length
+              itemBuilder: (context, index) {
+                return StationButton(
+                  stationName: "Estação $index",
+                  // channels[index].name
+                  onPressed: () {
+                    print('Estação ${channels[index].name} pressionada');
+                  },
+                );
+              },
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
-
 
   Widget _buildInfoText(double screenWidth) {
     return Column(
@@ -271,4 +271,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-
