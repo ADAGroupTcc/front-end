@@ -3,12 +3,14 @@ import 'package:addaproject/utils/menuBar.dart';
 import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 import 'screens/welcomescreen.dart';
 import 'screens/nointernet.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final cache = LocalCache();
-  
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
   try {
     await Firebase.initializeApp();
     final res = await cache.getUserSession();
@@ -29,9 +31,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'My App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData.light(),
       home: const MainScreen(),
     );
   }

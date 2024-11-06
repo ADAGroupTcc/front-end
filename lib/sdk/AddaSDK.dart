@@ -15,6 +15,7 @@ class AddaSDK {
   final String sessionBaseUrl = "https://ms-session-api.onrender.com";
   final String channelBaseUrl = "https://ms-channel-api.onrender.com";
   final String baseUrl = "https://ms-users-api.onrender.com";
+  final String messagesBaseUrl = "https://ms-messages-api.onrender.com";
   final String categoriesBaseUrl = "https://ms-categories-api.onrender.com";
   Dio httpClient = Dio();
   Location location = Location();
@@ -162,7 +163,10 @@ class AddaSDK {
       final headers = {
         "user_id": userId,
       };
-      final response = await httpClient.get('$channelBaseUrl/v1/channels', options: Options(headers: headers));
+      final queryParams = {
+        "show_members": true,
+      };
+      final response = await httpClient.get('$channelBaseUrl/v1/channels',queryParameters: queryParams, options: Options(headers: headers));
       return ChannelResponse.fromJson(response.data);
     } catch (e) {
       // melhorar depois
@@ -173,8 +177,7 @@ class AddaSDK {
     }
   }
 
-  Future<Channel?> updateChannelByID(
-      String channelId, Map<String, dynamic> updates) async {
+  Future<Channel?> updateChannelByID(String channelId, Map<String, dynamic> updates) async {
     try {
       final response = await http.patch(
         Uri.parse('$baseUrl/v1/channels/$channelId'),
@@ -226,27 +229,20 @@ class AddaSDK {
 
 //////Messages//////
 
-  Future<List<Message>?> listMessagesByChannel(String channelId) async {
+  Future<List<Message>?> listMessagesByChannelId(String channelId) async {
     try {
-      final response =
-          await http.get(Uri.parse('$baseUrl/v1/channels/$channelId/messages'));
-      if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
-        return data
-            .map((msgJson) => Message.fromJson(msgJson as Map<String, dynamic>))
-            .toList();
-      } else {
-        print('Erro ao buscar Messages: ${response.statusCode}');
-        return null;
-      }
+      final response = await httpClient.get('$messagesBaseUrl/v1/channels/$channelId/messages');
+      return MessagesResponse.fromJson(response.data).messages;
     } catch (e) {
-      print('Erro inesperado: $e');
-      return null;
+      // melhorar depois
+      if (e is DioException) {
+        throw Exception('${e.response}');
+      }
+      throw Exception("$e");
     }
   }
 
-  Future<Message?> updateMessageByID(
-      String channelId, String messageId, Map<String, dynamic> updates) async {
+  Future<Message?> updateMessageByID(String channelId, String messageId, Map<String, dynamic> updates) async {
     try {
       final response = await http.patch(
         Uri.parse('$baseUrl/v1/channels/$channelId/messages/$messageId'),
@@ -266,68 +262,6 @@ class AddaSDK {
     } catch (e) {
       print('Erro inesperado: $e');
       return null;
-    }
-  }
-
-  Future<bool> sendMessage({
-    required String channelId,
-    required String senderId,
-    required String type,
-    required String content,
-  }) async {
-    final url = Uri.parse('$baseUrl/v1/channels/$channelId/messages');
-
-    // Criar o corpo da requisição
-    final body = jsonEncode({
-      'sender_id': senderId,
-      'type': type,
-      'content': content,
-    });
-
-    try {
-      // Fazer a requisição POST
-      final response = await http.post(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: body,
-      );
-
-      // Verificar a resposta
-      if (response.statusCode == 201) {
-        print('Message enviada com sucesso');
-        return true;
-      } else {
-        print('Erro ao enviar Message: ${response.statusCode}');
-        return false;
-      }
-    } catch (e) {
-      print('Erro inesperado ao enviar Message: $e');
-      return false;
-    }
-  }
-
-  Future<bool> deleteUnreadMessages() async {
-    final url = Uri.parse('$baseUrl/v1/messages/unread');
-
-    try {
-      // Fazer a requisição DELETE
-      final response = await http.delete(url, headers: {
-        'Content-Type': 'application/json',
-      });
-
-      // Verificar a resposta
-      if (response.statusCode == 200 || response.statusCode == 204) {
-        print('Messages não lidas deletadas com sucesso.');
-        return true;
-      } else {
-        print('Erro ao deletar Messages não lidas: ${response.statusCode}');
-        return false;
-      }
-    } catch (e) {
-      print('Erro inesperado ao deletar Messages não lidas: $e');
-      return false;
     }
   }
 

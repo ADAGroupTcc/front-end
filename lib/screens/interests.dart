@@ -62,8 +62,6 @@ class InterestsPage extends StatelessWidget {
         throw Exception("create user retornou null");
       }
 
-      await _cache.saveUserSession(createdUser);
-
       SelectedCategories.selectedCategories = [];
       SelectedCategories.allCategories = [];
       final authUser = await _auth.createUserWithEmailAndPassword(
@@ -75,6 +73,8 @@ class InterestsPage extends StatelessWidget {
           .ref()
           .child('users/${authUser.user!.uid}')
           .set({'user_id': createdUser.id});
+
+      await _cache.saveUserSession(createdUser);
 
       Navigator.pushReplacement(
         context,
