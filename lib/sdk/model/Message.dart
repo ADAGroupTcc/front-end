@@ -45,6 +45,31 @@ class Message {
   }
 }
 
+class MessageCreated {
+  final String channelId;
+  final List<String> members;
+  final String sender;
+  final String content;
+
+  MessageCreated({
+    required this.channelId,
+    required this.sender,
+    required this.content,
+    required this.members,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      "channel": {
+        "channel_id": channelId,
+        "members": members,
+      },
+      'sender_id': sender,
+      'message': content,
+    };
+  }
+}
+
 class MessagesResponse {
   final List<Message> messages;
   final int nextPage;

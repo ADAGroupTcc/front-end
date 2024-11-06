@@ -22,6 +22,10 @@ class CircularList<T> {
 
   int get length => _items.length;
 
+  void clear() {
+    _items.clear();
+  }
+
   T operator [](int index) => _items[index];
 
   map(Function(dynamic message) param0) {
