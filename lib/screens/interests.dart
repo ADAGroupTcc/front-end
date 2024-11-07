@@ -48,9 +48,9 @@ class InterestsPage extends StatelessWidget {
       }
 
       user.categories = selectedCategories;
-      if(_userLocation != null) {
+      if (_userLocation != null) {
         user.location = [_userLocation!.latitude, _userLocation!.longitude];
-      }else {
+      } else {
         user.location = [0, 0];
       }
 
@@ -58,7 +58,7 @@ class InterestsPage extends StatelessWidget {
         user,
       );
 
-      if(createdUser == null) {
+      if (createdUser == null) {
         throw Exception("create user retornou null");
       }
 
@@ -78,7 +78,8 @@ class InterestsPage extends StatelessWidget {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => MenuBarGeneral(user: createdUser)),
+        MaterialPageRoute(
+            builder: (context) => MenuBarGeneral(user: createdUser)),
       );
     } catch (e) {
       print("Error creating user: $e");
@@ -133,7 +134,8 @@ class InterestsPage extends StatelessWidget {
                   return Center(child: CircularProgressIndicator());
                 } else if (snapshot.hasError) {
                   return Center(child: Text('Erro ao carregar categorias'));
-                } else if (!snapshot.hasData || snapshot.data!.categories.isEmpty) {
+                } else if (!snapshot.hasData ||
+                    snapshot.data!.categories.isEmpty) {
                   return Center(child: Text('Nenhuma categoria encontrada'));
                 } else {
                   final categories = snapshot.data!.categories;

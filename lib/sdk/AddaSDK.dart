@@ -22,8 +22,10 @@ class AddaSDK {
 
   AddaSDK() {
     // Configuração para ignorar a verificação de certificado
-    (httpClient.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate = (HttpClient client) {
-      client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    (httpClient.httpClientAdapter as IOHttpClientAdapter).onHttpClientCreate =
+        (HttpClient client) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
       return client;
     };
   }
@@ -85,7 +87,7 @@ class AddaSDK {
   Future<List<User>?> getUserByName(String name) async {
     try {
       final response =
-      await http.get(Uri.parse('$baseUrl/v1/users?name=$name'));
+          await http.get(Uri.parse('$baseUrl/v1/users?name=$name'));
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
         return data
@@ -101,36 +103,27 @@ class AddaSDK {
     }
   }
 
-  Future<User?> updateUserByID(String userId, Map<String, dynamic> updates) async {
+  Future<void> updateUserByID(
+      String userId, Map<String, dynamic> updates) async {
     try {
-      final response = await http.patch(
-        Uri.parse('$baseUrl/v1/users/$userId'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(updates),
+      await httpClient.patch(
+        '$userBaseUrl/v1/users/$userId',
+        data: jsonEncode(updates),
       );
-
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> data = jsonDecode(response.body);
-        return User.fromJson(data);
-      } else {
-        print('Erro ao atualizar usuário: ${response.statusCode}');
-        return null;
-      }
+      return;
     } catch (e) {
       print('Erro inesperado: $e');
-      return null;
+      return;
     }
   }
 
   Future<SessionToken> getAccessToken(String userId) async {
     try {
-      final response = await httpClient.post(
-          '$sessionBaseUrl/v1/users/$userId/session', data: null);
+      final response = await httpClient
+          .post('$sessionBaseUrl/v1/users/$userId/session', data: null);
       final dynamic responseBody = await response.data;
       return SessionToken().fromJson(responseBody);
-    } catch(e) {
+    } catch (e) {
       // melhorar depois
       if (e is DioException) {
         throw Exception('${e.response}');
@@ -139,15 +132,11 @@ class AddaSDK {
     }
   }
 
-  Future<bool> validateAccessToken(String session, String userId) async{
+  Future<bool> validateAccessToken(String session, String userId) async {
     try {
-       await httpClient.post(
-          '$sessionBaseUrl/v1/users/$userId/validate',
-          options: Options(headers: {
-            'Authorization': session
-          })
-      );
-    }catch (e) {
+      await httpClient.post('$sessionBaseUrl/v1/users/$userId/validate',
+          options: Options(headers: {'Authorization': session}));
+    } catch (e) {
       e as DioException;
       if (e.response!.statusCode == 401) {
         return false;
@@ -291,7 +280,6 @@ class AddaSDK {
     print('Localização: ${locationData.latitude}, ${locationData.longitude}');
     return locationData; // Retorna a localização
   }
-
 
   //Categories:
   Future<CategoriesResponse> listCategories() async {

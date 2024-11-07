@@ -1,7 +1,9 @@
 import 'package:addaproject/sdk/model/User.dart';
 import 'package:flutter/material.dart';
+import '../sdk/LocalCache.dart';
 import '../utils/customtogglebutton.dart';
 import '../screens/profilepersonalization.dart';
+import '../sdk/AddaSDK.dart';
 
 const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
@@ -21,10 +23,35 @@ class Profile extends StatelessWidget {
   }
 }
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key, required this.user});
-
+class ProfilePage extends StatefulWidget {
   final User user;
+
+  ProfilePage({required this.user});
+
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  User? _user;
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserData();
+  }
+
+  Future<void> _getUserData() async {
+    final LocalCache _localCache = LocalCache();
+    final userSession = await _localCache.getUserSession();
+    if (userSession != null) {
+      final AddaSDK sdk = AddaSDK();
+      final User? user = await sdk.getUserByID(userSession.id);
+      setState(() {
+        _user = user;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +124,7 @@ class ProfilePage extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "@${user.nickname ?? 'Nickname não definido'}",
+                    "@${_user?.nickname}",
                     style: TextStyle(
                       decoration: TextDecoration.none,
                       fontSize: screenWidth * 0.06,
@@ -120,7 +147,7 @@ class ProfilePage extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "${user.firstName} ${user.lastName}",
+                    "${_user?.firstName} ${_user?.lastName}",
                     style: TextStyle(
                       decoration: TextDecoration.none,
                       fontSize: screenWidth * 0.06,
@@ -143,7 +170,7 @@ class ProfilePage extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "I’ve got my red dress on tonight, dancin’ in the dark, in the pale moonlight",
+                    "${_user?.description ?? 'Olá, vamos nos conhecer no Adda!'}",
                     style: TextStyle(
                       decoration: TextDecoration.none,
                       fontSize: screenWidth * 0.047,
@@ -158,7 +185,6 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ),
               ),
-              // Botão "Personalizar perfil"
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: screenWidth * 0.064,
@@ -220,32 +246,30 @@ class ProfilePage extends StatelessWidget {
               ),
             ],
           ),
-          Positioned.fill(
-            top: screenHeight * 0.45,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
-              child: SizedBox(
-                height: 100,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: List.generate(
-                      18,
-                      (index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 10.0),
-                          child: CustomToggleButton(
-                            text: "Interesse $index",
-                            imagePath: 'assets/transparenttarget.png',
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
+          // Positioned.fill(
+          //   top: screenHeight * 0.45,
+          //   child: Padding(
+          //     padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.03),
+          //     child: SizedBox(
+          //       height: 100,
+          //       child: SingleChildScrollView(
+          //         scrollDirection: Axis.horizontal,
+          //         child: Row(
+          //           children: (_user?.categories ?? []).map((category) {
+          //             return Padding(
+          //               padding: const EdgeInsets.only(right: 10.0),
+          //               child: CustomToggleButton(
+          //                 text: category
+          //                     .name, 
+          //                 imagePath: 'assets/transparenttarget.png',
+          //               ),
+          //             );
+          //           }).toList(),
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
           Positioned(
             top: 40,
             right: screenWidth * 0.064,
