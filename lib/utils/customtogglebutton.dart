@@ -56,6 +56,7 @@ class _CustomToggleButtonState extends State<CustomToggleButton> {
           children: [
             Image.asset(
               widget.imagePath,
+              fit: BoxFit.contain,
               width: 28, // Aumenta o tamanho da imagem
               height: 28,
             ),

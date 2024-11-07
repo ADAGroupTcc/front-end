@@ -1,31 +1,33 @@
 import 'package:flutter/material.dart';
-import '../sdk/model/User.dart';
-import '../utils/customtogglebutton.dart';
 import '../utils/interestshow.dart';
-import '../utils/station.dart';
+import '../sdk/model/User.dart';
+import '../utils/userprofilecard.dart';
 
 const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
-const Color pretobg = Color(0xFF171717);
+const Color pretobg = Color(0xFF242424);
 
-class OthersProfile extends StatelessWidget {
+class GroupInfo extends StatelessWidget {
   final User? user;
 
-  OthersProfile({super.key, this.user});
+  const GroupInfo({super.key, this.user});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Others profile page',
-      home: OthersProfilePage(user: user),
+      home: GroupInfoPage(user: user),
     );
   }
 }
 
-class OthersProfilePage extends StatelessWidget {
+class GroupInfoPage extends StatelessWidget {
   final User? user;
 
-  const OthersProfilePage({super.key, this.user});
+  // Definimos uma variável local para simular se o usuário é administrador
+  final bool isAdmin = true; // Altere para false para esconder o botão
+
+  const GroupInfoPage({super.key, this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +47,7 @@ class OthersProfilePage extends StatelessWidget {
                   alignment: Alignment.center,
                   children: [
                     Image.asset(
-                      'assets/bgbillie.png',
+                      'assets/fullblackwave.png',
                       fit: BoxFit.fitWidth,
                       width: double.infinity,
                     ),
@@ -69,7 +71,7 @@ class OthersProfilePage extends StatelessWidget {
                               ),
                               child: ClipOval(
                                 child: Image.asset(
-                                  'assets/billie.png',
+                                  'assets/target.png',
                                   fit: BoxFit.cover,
                                   width: screenWidth * 0.26,
                                   height: screenWidth * 0.26,
@@ -85,57 +87,62 @@ class OthersProfilePage extends StatelessWidget {
                 const SizedBox(height: 40),
                 // Informações do perfil
                 Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: screenWidth * 0.064),
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.064),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "@billie_eilish",
+                        "Estação 01",
                         style: TextStyle(
                           decoration: TextDecoration.none,
-                          fontSize: screenWidth * 0.05,
+                          fontSize: screenWidth * 0.075,
                           fontWeight: FontWeight.w600,
                           fontFamily: 'Inter',
                           color: Colors.white,
                           height: 1.1,
                         ),
                       ),
-                      SizedBox(height: screenHeight * 0.023),
-                      Text(
-                        "Billie Eilish",
-                        style: TextStyle(
-                          decoration: TextDecoration.none,
-                          fontSize: screenWidth * 0.06,
-                          fontWeight: FontWeight.w300,
-                          fontFamily: 'Inter',
-                          color: branco,
-                          fontStyle: FontStyle.italic,
-                          height: 1.1,
+                      const SizedBox(height: 10),
+                      if (isAdmin)
+                        Padding(
+                          padding: EdgeInsets.symmetric(
+                            vertical: screenHeight * 0.02,
+                          ),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: ElevatedButton(
+                              onPressed: () {},
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: screenWidth * 0.167,
+                                  vertical: screenHeight * 0.012,
+                                ),
+                                backgroundColor: Colors.transparent,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  side: const BorderSide(color: branco, width: 2),
+                                ),
+                              ),
+                              child: Text(
+                                "Personalizar estação",
+                                style: TextStyle(
+                                  color: branco,
+                                  fontFamily: "Amaranth",
+                                  fontSize: screenWidth * 0.06,
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                      SizedBox(height: screenHeight * 0.01),
-                      Text(
-                        "What do you want from me?",
-                        style: TextStyle(
-                          decoration: TextDecoration.none,
-                          fontSize: screenWidth * 0.047,
-                          fontWeight: FontWeight.w300,
-                          fontFamily: 'Inter',
-                          color: branco,
-                          fontStyle: FontStyle.italic,
-                          height: 1.1,
-                        ),
-                      ),
                     ],
                   ),
                 ),
                 // Seção de interesses
-                const SizedBox(height: 40),
                 Padding(
                   padding: EdgeInsets.symmetric(
-                      horizontal: screenWidth * 0.064,
-                      vertical: screenHeight * 0.02),
+                    horizontal: screenWidth * 0.064,
+                    vertical: screenHeight * 0.02,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -150,14 +157,14 @@ class OthersProfilePage extends StatelessWidget {
                           height: 1.1,
                         ),
                       ),
-                      SizedBox(height: screenHeight * 0.023),
+                      const SizedBox(height: 10),
                       SizedBox(
-                        height: screenHeight * 0.06,
+                        height: 50,
                         child: ListView(
                           scrollDirection: Axis.horizontal,
                           children: List.generate(
                             18,
-                            (index) => Padding(
+                                (index) => Padding(
                               padding: const EdgeInsets.only(right: 10.0),
                               child: ShowInterest(
                                 text: "Interesse $index",
@@ -173,13 +180,14 @@ class OthersProfilePage extends StatelessWidget {
                 // Seção de estações
                 Padding(
                   padding: EdgeInsets.symmetric(
-                      horizontal: screenWidth * 0.064,
-                      vertical: screenHeight * 0.02),
+                    horizontal: screenWidth * 0.064,
+                    vertical: screenHeight * 0.02,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Estações",
+                        "Integrantes",
                         style: TextStyle(
                           decoration: TextDecoration.none,
                           fontSize: screenWidth * 0.06,
@@ -189,18 +197,21 @@ class OthersProfilePage extends StatelessWidget {
                           height: 1.1,
                         ),
                       ),
-                      SizedBox(height: screenHeight * 0.023),
+                      const SizedBox(height: 10),
                       Wrap(
                         spacing: 10,
                         children: List.generate(
-                            18,
-                            (index) => Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: screenWidth * 0.03),
-                                  child: Station(
-                                    stationName: 'Estação $index',
-                                  ),
-                                )),
+                          18,
+                              (index) => Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: UserProfileCard(
+                              imagePath: 'assets/billie.png', // Caminho da imagem
+                              name: 'Billie Eilish',
+                              username: 'billie_eilish',
+                              isAdmin: index % 2 == 0,
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),

@@ -1,3 +1,4 @@
+import 'package:addaproject/screens/register.dart';
 import 'package:addaproject/screens/welcomescreen.dart';
 import 'package:addaproject/sdk/model/Categoria.dart';
 import 'package:addaproject/sdk/model/User.dart';
@@ -110,7 +111,7 @@ class InterestsPage extends StatelessWidget {
             "Selecione seus interesses",
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: screenWidth * 0.107,
+              fontSize: screenWidth * 0.1,
               fontWeight: FontWeight.w600,
               color: branco,
               fontFamily: 'Amaranth',
@@ -126,38 +127,40 @@ class InterestsPage extends StatelessWidget {
           bottom: screenHeight * 0.2, // Para evitar sobreposição com o botão
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
-            child: FutureBuilder<CategoriesResponse>(
-              future: addaSdk
-                  .listCategories(), // Chamando a função da instância addaSdk
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Erro ao carregar categorias'));
-                } else if (!snapshot.hasData ||
-                    snapshot.data!.categories.isEmpty) {
-                  return Center(child: Text('Nenhuma categoria encontrada'));
-                } else {
-                  final categories = snapshot.data!.categories;
-                  SelectedCategories.allCategories.addAll(categories);
-                  return SingleChildScrollView(
-                    child: Wrap(
-                      spacing: 20.0, // Espaço horizontal entre os itens
-                      runSpacing: 15.0, // Espaço vertical entre as linhas
-                      children: List.generate(
-                        categories.length,
-                        (index) {
-                          return CustomToggleButton(
-                            index: index, // Usando as categorias obtidas
-                            imagePath: 'assets/transparenttarget.png',
-                          );
-                        },
+            child: Align(
+              alignment: Alignment.center,
+              child: FutureBuilder<CategoriesResponse>(
+                future: addaSdk
+                    .listCategories(), // Chamando a função da instância addaSdk
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Erro ao carregar categorias'));
+                  } else if (!snapshot.hasData || snapshot.data!.categories.isEmpty) {
+                    return Center(child: Text('Nenhuma categoria encontrada'));
+                  } else {
+                    final categories = snapshot.data!.categories;
+                    SelectedCategories.allCategories.addAll(categories);
+                    return SingleChildScrollView(
+                      child: Wrap(
+                        spacing: 20.0, // Espaço horizontal entre os itens
+                        runSpacing: 15.0, // Espaço vertical entre as linhas
+                        children: List.generate(
+                          categories.length,
+                              (index) {
+                            return CustomToggleButton(
+                              index: index, // Usando as categorias obtidas
+                              imagePath: 'assets/transparenttarget.png',
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  );
-                }
-              },
-            ),
+                    );
+                  }
+                },
+              ),
+            )
           ),
         ),
 
@@ -187,7 +190,7 @@ class InterestsPage extends StatelessWidget {
                   style: TextStyle(
                     color: branco,
                     fontFamily: "Amaranth",
-                    fontSize: screenWidth * 0.06,
+                    fontSize: screenWidth * 0.055,
                   )),
             )),
           ),
@@ -201,7 +204,7 @@ class InterestsPage extends StatelessWidget {
             onTap: () {
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => const WelcomePage()),
+                MaterialPageRoute(builder: (context) => const RegisterPage()),
               );
             },
             child: Container(

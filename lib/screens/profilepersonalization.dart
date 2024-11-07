@@ -6,9 +6,10 @@ import '../utils/menuBar.dart';
 import 'package:addaproject/sdk/AddaSDK.dart';
 import 'package:addaproject/sdk/LocalCache.dart';
 import '../screens/profile.dart';
-
 const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
+const Color cinzar = Color(0x4dfffafe);
+const Color pretobg = Color(0xFF242424);
 
 class ProfilePersonalization extends StatelessWidget {
   const ProfilePersonalization({super.key});
@@ -147,137 +148,163 @@ class ProfilePersonalizationPage extends StatelessWidget {
     }
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Stack(children: [
-        const BackgroundWidget(imagePath: 'assets/profilebackground.png'),
-        Align(
-          alignment: Alignment.topCenter,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Image.asset(
-                'assets/blackwavetwo.png',
-                fit: BoxFit.fitWidth,
-                width: double.infinity,
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const SizedBox(height: 120),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(left: screenWidth * 0.064),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Image.asset(
-                            'assets/personalizeprofile.png',
-                            fit: BoxFit.fitWidth,
-                            width: screenWidth * 0.26,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(right: screenWidth * 0.064),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Image.asset(
-                            'assets/personalizeprofile.png',
-                            fit: BoxFit.fitWidth,
-                            width: screenWidth * 0.12,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        Align(
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(height: 180),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: screenWidth * 0.064,
-                    vertical: screenHeight * 0.02),
-                child: Text(
-                  "Personalize seu perfil!",
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.107,
-                    fontWeight: FontWeight.w600,
-                    color: branco,
-                    fontFamily: 'Amaranth',
-                    decoration: TextDecoration.none,
-                    height: 1,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 15),
-              CustomTextField(
-                controller: nicknameController,
-                label: 'Nickname',
-                inputType: TextInputType.text,
-                isobscure: false,
-              ),
-              CustomTextField(
-                controller: bioController,
-                label: 'Descrição',
-                inputType: TextInputType.text,
-                isobscure: false,
-              ),
-              const SizedBox(height: 45),
-              Padding(
-                padding: EdgeInsets.only(
-                    top: screenHeight * 0.17, bottom: screenHeight * 0.01),
-                child: ElevatedButton(
-                  onPressed: () => _updateUser(context),
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: screenWidth * 0.303,
-                        vertical: screenHeight * 0.012),
-                    backgroundColor: branco,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      side: const BorderSide(color: branco, width: 4),
+      backgroundColor: pretobg,
+      body: Stack(
+        children: [
+          // Conteúdo rolável
+          SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/fullblackwave.png',
+                      fit: BoxFit.fitWidth,
+                      width: double.infinity,
                     ),
-                  ),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(height: screenHeight * 0.134),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Padding(
+                                padding:
+                                    EdgeInsets.only(left: screenWidth * 0.064),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Container(
+                                    width: screenWidth * 0.27,
+                                    height: screenWidth * 0.27,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: pretobg,
+                                        width: 5.0,
+                                      ),
+                                    ),
+                                    child: ClipOval(
+                                      child: Image.asset(
+                                        'assets/personalizeprofile.png',
+                                        fit: BoxFit.cover,
+                                        width: screenWidth * 0.26,
+                                        height: screenWidth * 0.26,
+                                      ),
+                                    ),
+                                  ),
+                                )),
+                            Padding(
+                                padding:
+                                    EdgeInsets.only(right: screenWidth * 0.064),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Image.asset(
+                                    'assets/personalizeprofile.png',
+                                    fit: BoxFit.fitWidth,
+                                    width: screenWidth * 0.101,
+                                  ),
+                                )),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 40),
+                // Informações do perfil
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: screenWidth * 0.064),
                   child: Text(
-                    "Continuar",
+                    "Personalize seu perfil!",
                     style: TextStyle(
-                      color: preto,
-                      fontFamily: "Amaranth",
-                      fontSize: screenWidth * 0.06,
+                      fontSize: MediaQuery.of(context).size.width * 0.1,
+                      fontWeight: FontWeight.w600,
+                      color: branco,
+                      fontFamily: 'Amaranth',
+                      decoration: TextDecoration.none,
+                      height: 1,
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
-        Positioned(
-          bottom: screenHeight * 0.023,
-          left: screenWidth * 0.04,
-          child: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Container(
-              alignment: Alignment.center,
-              child: Image.asset(
-                'assets/voltarbtn.png',
-                fit: BoxFit.fitWidth,
-                width: screenWidth * 0.1,
-              ),
+                // Seção de interesses
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: screenHeight * 0.02,
+                  ),
+                  child: CustomTextField(
+                    controller: bioController,
+                    label: 'Nome de usuário',
+                    inputType: TextInputType.visiblePassword,
+                    isobscure: true,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: screenHeight * 0.02,
+                  ),
+                  child: CustomTextField(
+                    controller: bioController,
+                    label: 'Bio',
+                    inputType: TextInputType.visiblePassword,
+                    isobscure: true,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: screenHeight * 0.2,
+                  ),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: ElevatedButton(
+                      onPressed: () {
+
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: screenWidth * 0.31,
+                            vertical: screenHeight * 0.012),
+                        backgroundColor: branco,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: const BorderSide(color: branco, width: 4),
+                        ),
+                      ),
+                      child: Text(
+                        "Continuar",
+                        style: TextStyle(
+                          color: preto,
+                          fontFamily: "Amaranth",
+                          fontSize: screenWidth * 0.06,
+                        ),
+                      ),
+                    ),
+                  )
+                ),
+              ],
             ),
           ),
-        ),
-      ]),
+          Positioned(
+              top: screenHeight * 0.06,
+              left: screenWidth * 0.04,
+              child: GestureDetector(
+                onTap: () {
+
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    'assets/voltarbtn.png',
+                    fit: BoxFit.fitWidth,
+                    width: screenWidth * 0.1,
+                  ),
+                ),
+              )),
+        ],
+      ),
     );
   }
 }

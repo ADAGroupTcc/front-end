@@ -52,6 +52,7 @@ class MenuBar extends StatefulWidget {
     @override
     Widget build(BuildContext context) {
       return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: _pages[_selectedIndex],
         bottomNavigationBar: BottomAppBar(
           color: preto,

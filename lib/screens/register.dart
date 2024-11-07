@@ -1,5 +1,8 @@
+import 'package:addaproject/screens/login.dart';
+import 'package:addaproject/screens/welcomescreen.dart';
 import 'package:addaproject/utils/customtextfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 // Adiciona o prefixo
 // Importa o Firebase Realtime Database
@@ -146,7 +149,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Image.asset(
                   'assets/logoadda.png',
                   fit: BoxFit.fitWidth,
-                  width: screenWidth * 0.26,
+                  width: screenWidth * 0.24,
                 ),
               ),
               Padding(
@@ -157,7 +160,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   "Crie sua conta!",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: screenWidth * 0.107,
+                    fontSize: screenWidth * 0.1,
                     fontWeight: FontWeight.w600,
                     color: branco,
                     fontFamily: 'Amaranth',
@@ -202,15 +205,14 @@ class _RegisterPageState extends State<RegisterPage> {
                 controller: _confirmPasswordController,
                 isobscure: true,
               ),
-              const SizedBox(height: 4),
               Padding(
                 padding: EdgeInsets.only(
-                    top: screenHeight * 0.05, bottom: screenHeight * 0.01),
+                    top: screenHeight * 0.035, bottom: screenHeight * 0.01),
                 child: ElevatedButton(
                   onPressed: _registerUser, // Chama a função de registro
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.symmetric(
-                        horizontal: screenWidth * 0.313,
+                        horizontal: screenWidth * 0.32,
                         vertical: screenHeight * 0.012),
                     backgroundColor: Colors.transparent,
                     shape: RoundedRectangleBorder(
@@ -223,13 +225,61 @@ class _RegisterPageState extends State<RegisterPage> {
                     style: TextStyle(
                       color: branco,
                       fontFamily: "Amaranth",
-                      fontSize: screenWidth * 0.06,
+                      fontSize: screenWidth * 0.055,
                     ),
                   ),
                 ),
               ),
+              RichText(
+                  text: TextSpan(
+                      style: TextStyle(
+                        fontFamily: 'Inter',
+                        color: branco,
+                        fontWeight: FontWeight.w300,
+                        fontSize: screenWidth * 0.046,
+                        decoration: TextDecoration.none,
+                      ),
+                      children: [
+                        const TextSpan(text: 'Já tem uma conta?  '),
+                        TextSpan(
+                            text: 'Faça login aqui',
+                            style: TextStyle(
+                              fontFamily: 'Inter',
+                              color: branco,
+                              fontSize: screenWidth * 0.046,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.none,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Login()),
+                                );
+                              })
+                      ])),
             ],
           ),
+          Positioned(
+              bottom: screenHeight * 0.015,
+              left: screenWidth * 0.04,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const WelcomePage()),
+                  );
+                },
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    'assets/voltarbtn.png',
+                    fit: BoxFit.fitWidth,
+                    width: screenWidth * 0.1,
+                  ),
+                ),
+              )),
         ],
       ),
     );
