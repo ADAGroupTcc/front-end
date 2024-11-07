@@ -100,29 +100,17 @@ class AddaSDK {
     }
   }
 
-  Future<User?> updateUserByID(
+  Future<void> updateUserByID(
       String userId, Map<String, dynamic> updates) async {
     try {
-      final response = await http.patch(
-        Uri.parse('$baseUrl/v1/users/$userId'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(updates),
+      await httpClient.patch(
+        '$userBaseUrl/v1/users/$userId',
+        data: jsonEncode(updates),
       );
-
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> data = jsonDecode(response.body);
-        return User.fromJson(data);
-      } else if (response.statusCode == 204) {
-        return await getUserByID(userId);
-      } else {
-        print('Erro ao atualizar usuário: ${response.statusCode}');
-        return null;
-      }
+      return;
     } catch (e) {
       print('Erro inesperado: $e');
-      return null;
+      return;
     }
   }
 

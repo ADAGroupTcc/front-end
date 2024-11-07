@@ -1,4 +1,3 @@
-
 import 'Categoria.dart';
 
 class User {
@@ -6,8 +5,8 @@ class User {
   final String firstName;
   final String lastName;
   final String email;
-  final String description;
-  final String nickname;
+  String description;
+  String nickname;
   final String cpf;
   final List<Categoria> categories;
   final DateTime createdAt;
@@ -30,7 +29,8 @@ class User {
         updatedAt = updatedAt ?? DateTime.now();
 
   factory User.fromJson(Map<String, dynamic> user) {
-    String parseString(String? value, [String defaultValue = '']) => value ?? defaultValue;
+    String parseString(String? value, [String defaultValue = '']) =>
+        value ?? defaultValue;
     return User(
       id: parseString(user['id']),
       firstName: parseString(user['first_name']),
@@ -40,10 +40,16 @@ class User {
       nickname: parseString(user['nickname']),
       cpf: parseString(user['cpf']),
       categories: (user['categories'] as List<dynamic>?)
-          ?.map((categorieJson) => Categoria.fromJson(categorieJson as Map<String, dynamic>))
-          .toList() ?? [],
-      createdAt: user['created_at'] != null ? DateTime.parse(user['created_at']) : DateTime.now(),
-      updatedAt: user['updated_at'] != null ? DateTime.parse(user['updated_at']) : DateTime.now(),
+              ?.map((categorieJson) =>
+                  Categoria.fromJson(categorieJson as Map<String, dynamic>))
+              .toList() ??
+          [],
+      createdAt: user['created_at'] != null
+          ? DateTime.parse(user['created_at'])
+          : DateTime.now(),
+      updatedAt: user['updated_at'] != null
+          ? DateTime.parse(user['updated_at'])
+          : DateTime.now(),
       isDenunciated: user['is_denunciated'] as bool? ?? false,
     );
   }
@@ -76,16 +82,15 @@ class UserCreate {
   List<double?> location = [];
   final String password;
 
-  UserCreate({
-    required this.firstName,
-    required this.lastName,
-    required this.email,
-    this.description = '',
-    this.nickname = '',
-    required this.cpf,
-    required this.categories,
-    this.password = ''
-  });
+  UserCreate(
+      {required this.firstName,
+      required this.lastName,
+      required this.email,
+      this.description = '',
+      this.nickname = '',
+      required this.cpf,
+      required this.categories,
+      this.password = ''});
 
   Map<String, dynamic> toJson() {
     return {

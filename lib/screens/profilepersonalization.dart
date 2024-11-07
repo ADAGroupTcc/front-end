@@ -90,7 +90,8 @@ class ProfilePersonalizationPage extends StatelessWidget {
           builder: (BuildContext context) {
             return AlertDialog(
               title: const Text("Descrição muito longa"),
-              content: const Text("Sua descrição deve conter no máximo 150 caracteres."),
+              content: const Text(
+                  "Sua descrição deve conter no máximo 150 caracteres."),
               actions: [
                 TextButton(
                   child: const Text("OK"),
@@ -109,49 +110,37 @@ class ProfilePersonalizationPage extends StatelessWidget {
       };
 
       try {
-        final User? updatedUser =
-            await AddaSDK().updateUserByID(user.id, updates);
-
-        if (updatedUser != null) {
-          await LocalCache().saveUserSession(updatedUser);
-          await showDialog<void>(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text("Perfil atualizado com sucesso"),
-                  content: const Text("Seu perfil foi atualizado com sucesso"),
-                  actions: [
-                    TextButton(
-                      child: const Text("OK"),
-                      onPressed: () => Navigator.of(context).pop(),
-                    ),
-                  ],
-                );
-              });
-
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ProfilePage(user: user),
-            ),
-          );
-        } else {
-          await showDialog<void>(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text("Erro ao atualizar"),
-                  content:
-                      const Text("Ocorreu um erro ao atualizar seu perfil."),
-                  actions: [
-                    TextButton(
-                      child: const Text("OK"),
-                      onPressed: () => Navigator.of(context).pop(),
-                    ),
-                  ],
-                );
-              });
+        if (nickname != "") {
+          user.nickname = nickname;
         }
+
+        if (description != "") {
+          user.description = description;
+        }
+
+        await AddaSDK().updateUserByID(user.id, updates);
+        await LocalCache().saveUserSession(user);
+        await showDialog<void>(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text("Perfil atualizado com sucesso"),
+                content: const Text("Seu perfil foi atualizado com sucesso"),
+                actions: [
+                  TextButton(
+                    child: const Text("OK"),
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ],
+              );
+            });
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProfilePage(user: user),
+          ),
+        );
       } catch (e) {
         print("Erro ao atualizar usuário: $e");
       }

@@ -29,7 +29,7 @@ class Interests extends StatelessWidget {
   }
 }
 
-class InterestsPage extends StatelessWidget {gti
+class InterestsPage extends StatelessWidget {
   final UserCreate user;
   final addaSdk = AddaSDK();
   final FirebaseDatabase _firebaseDatabase = FirebaseDatabase.instance;
