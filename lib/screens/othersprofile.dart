@@ -1,3 +1,4 @@
+import 'package:addaproject/sdk/model/Channel.dart';
 import 'package:flutter/material.dart';
 import '../sdk/model/User.dart';
 import '../utils/customtogglebutton.dart';
@@ -9,7 +10,7 @@ const Color preto = Color(0xFF0D0D0D);
 const Color pretobg = Color(0xFF171717);
 
 class OthersProfile extends StatelessWidget {
-  final User? user;
+  final UserChannel? user;
 
   OthersProfile({super.key, this.user});
 
@@ -17,15 +18,39 @@ class OthersProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Others profile page',
-      home: OthersProfilePage(user: user),
+      home: OthersProfilePage(user: user!),
     );
   }
 }
 
-class OthersProfilePage extends StatelessWidget {
-  final User? user;
+class OthersProfilePage extends StatefulWidget {
+  final UserChannel user;
 
-  const OthersProfilePage({super.key, this.user});
+    const OthersProfilePage({Key? key, required this.user}) : super(key: key);
+
+  @override
+  _OthersProfilePageState createState() => _OthersProfilePageState();
+}
+
+class _OthersProfilePageState extends State<OthersProfilePage> {
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     appBar: AppBar(
+  //       title: Text('User Profile'),
+  //     ),
+  //     body: Center(
+  //       child: Column(
+  //         mainAxisAlignment: MainAxisAlignment.center,
+  //         children: [
+  //           Text('Name: ${widget.user?.firstName} ${widget.user?.lastName}'),
+  //           Text('Username: ${widget.user?.nickname}'),
+  //           // Add other user info fields as needed
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +70,7 @@ class OthersProfilePage extends StatelessWidget {
                   alignment: Alignment.center,
                   children: [
                     Image.asset(
-                      'assets/bgbillie.png',
+                      'assets/blackwave.png',
                       fit: BoxFit.fitWidth,
                       width: double.infinity,
                     ),
@@ -69,7 +94,7 @@ class OthersProfilePage extends StatelessWidget {
                               ),
                               child: ClipOval(
                                 child: Image.asset(
-                                  'assets/billie.png',
+                                  'assets/default-pfp.png',
                                   fit: BoxFit.cover,
                                   width: screenWidth * 0.26,
                                   height: screenWidth * 0.26,
@@ -91,7 +116,7 @@ class OthersProfilePage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "@billie_eilish",
+                        "@${widget.user.nickname}",
                         style: TextStyle(
                           decoration: TextDecoration.none,
                           fontSize: screenWidth * 0.05,
@@ -103,7 +128,7 @@ class OthersProfilePage extends StatelessWidget {
                       ),
                       SizedBox(height: screenHeight * 0.023),
                       Text(
-                        "Billie Eilish",
+                        '${widget.user.firstName} ${widget.user.lastName}',
                         style: TextStyle(
                           decoration: TextDecoration.none,
                           fontSize: screenWidth * 0.06,
@@ -116,7 +141,9 @@ class OthersProfilePage extends StatelessWidget {
                       ),
                       SizedBox(height: screenHeight * 0.01),
                       Text(
-                        "What do you want from me?",
+                        widget.user.description == ""
+                            ? "Olá, vamos nos conhecer no Adda!"
+                            : "${widget.user.description}", //case user description == " " then show this sentence
                         style: TextStyle(
                           decoration: TextDecoration.none,
                           fontSize: screenWidth * 0.047,
@@ -212,4 +239,8 @@ class OthersProfilePage extends StatelessWidget {
       ),
     );
   }
+
+
 }
+
+  

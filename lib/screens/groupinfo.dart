@@ -1,8 +1,11 @@
+import '../screens/profile.dart';
+import 'package:addaproject/sdk/LocalCache.dart';
 import 'package:flutter/material.dart';
 import '../utils/interestshow.dart';
 import '../sdk/model/User.dart';
 import '../utils/userprofilecard.dart';
 import '../sdk/model/Channel.dart';
+import '../screens/othersprofile.dart';
 
 const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
@@ -218,16 +221,38 @@ class GroupInfoPage extends StatelessWidget {
                           int index = groupMembers.indexOf(user);
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: UserProfileCard(
-                              imagePath:
-                                  'assets/default_pfp.png', // Replace with the actual image path for each user
-                              name: '${user.firstName} ${user.lastName}',
-                              username: user.nickname!,
-                              isAdmin: index % 2 == 0,
+
+                            child: GestureDetector(
+                              onTap: () async {
+                                final LocalCache _localCache = LocalCache();
+                                final userSession = await _localCache.getUserSession();
+                                if (userSession?.id == user.id) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ProfilePage(user: userSession!),
+                                    ),
+                                  );
+                                } else {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          OthersProfilePage(user: user),
+                                    ),
+                                  );
+                                }
+                              },
+                              child: UserProfileCard(
+                                imagePath: 'assets/default_pfp.png',
+                                name: '${user.firstName} ${user.lastName}',
+                                username: user.nickname,
+                                isAdmin: index % 2 == 0,
+                              ),
                             ),
                           );
                         }).toList(),
-                      ),
+                      )
                     ],
                   ),
                 ),

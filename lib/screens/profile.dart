@@ -131,7 +131,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   SizedBox(height: screenHeight * 0.01),
                   Text(
-                    "${_user?.description ?? 'Olá, vamos nos conhecer no Adda!'}",
+                    "${_user?.description?.isNotEmpty == true ? _user!.description : 'Olá, vamos nos conhecer no Adda!'}",
                     style: TextStyle(
                       decoration: TextDecoration.none,
                       fontSize: screenWidth * 0.047,
