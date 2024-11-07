@@ -2,43 +2,58 @@ import 'package:flutter/material.dart';
 import '../utils/interestshow.dart';
 import '../sdk/model/User.dart';
 import '../utils/userprofilecard.dart';
+import '../sdk/model/Channel.dart';
 
 const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
 const Color pretobg = Color(0xFF242424);
 
 class GroupInfo extends StatelessWidget {
-  final User? user;
+  final List<UserChannel> groupMembers;
+  final Channel channel;
+  final User user;
 
-  const GroupInfo({super.key, this.user});
+  const GroupInfo({
+    super.key,
+    required this.groupMembers,
+    required this.channel,
+    required this.user,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Others profile page',
-      home: GroupInfoPage(user: user),
+      home: GroupInfoPage(
+        groupMembers: groupMembers,
+        channel: channel,
+        user: user,
+      ),
     );
   }
 }
 
 class GroupInfoPage extends StatelessWidget {
+  final List<UserChannel> groupMembers;
   final User? user;
+  final Channel channel;
 
-  // Definimos uma variável local para simular se o usuário é administrador
-  final bool isAdmin = true; // Altere para false para esconder o botão
-
-  const GroupInfoPage({super.key, this.user});
+  GroupInfoPage({
+    required this.groupMembers,
+    this.user,
+    required this.channel,
+  });
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final bool isAdmin = true;
 
     return Scaffold(
       backgroundColor: pretobg,
       body: Stack(
         children: [
-          // Conteúdo rolável
           SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,14 +100,14 @@ class GroupInfoPage extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 40),
-                // Informações do perfil
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.064),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: screenWidth * 0.064),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Estação 01",
+                        "${channel.name}",
                         style: TextStyle(
                           decoration: TextDecoration.none,
                           fontSize: screenWidth * 0.075,
@@ -120,7 +135,8 @@ class GroupInfoPage extends StatelessWidget {
                                 backgroundColor: Colors.transparent,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
-                                  side: const BorderSide(color: branco, width: 2),
+                                  side:
+                                      const BorderSide(color: branco, width: 2),
                                 ),
                               ),
                               child: Text(
@@ -137,7 +153,6 @@ class GroupInfoPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                // Seção de interesses
                 Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: screenWidth * 0.064,
@@ -164,7 +179,7 @@ class GroupInfoPage extends StatelessWidget {
                           scrollDirection: Axis.horizontal,
                           children: List.generate(
                             18,
-                                (index) => Padding(
+                            (index) => Padding(
                               padding: const EdgeInsets.only(right: 10.0),
                               child: ShowInterest(
                                 text: "Interesse $index",
@@ -177,7 +192,6 @@ class GroupInfoPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                // Seção de estações
                 Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: screenWidth * 0.064,
@@ -200,18 +214,19 @@ class GroupInfoPage extends StatelessWidget {
                       const SizedBox(height: 10),
                       Wrap(
                         spacing: 10,
-                        children: List.generate(
-                          18,
-                              (index) => Padding(
+                        children: groupMembers.map((user) {
+                          int index = groupMembers.indexOf(user);
+                          return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
                             child: UserProfileCard(
-                              imagePath: 'assets/billie.png', // Caminho da imagem
-                              name: 'Billie Eilish',
-                              username: 'billie_eilish',
+                              imagePath:
+                                  'assets/default_pfp.png', // Replace with the actual image path for each user
+                              name: '${user.firstName} ${user.lastName}',
+                              username: user.nickname!,
                               isAdmin: index % 2 == 0,
                             ),
-                          ),
-                        ),
+                          );
+                        }).toList(),
                       ),
                     ],
                   ),

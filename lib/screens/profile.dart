@@ -71,12 +71,13 @@ class _ProfilePageState extends State<ProfilePage> {
               alignment: Alignment.center,
               children: [
                 Image.asset(
-                  'assets/bglanita.png',
+                  'assets/blackwave.png',
                   fit: BoxFit.fitWidth,
                   width: double.infinity,
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: screenWidth * 0.064, top: screenHeight * 0.12),
+                  padding: EdgeInsets.only(
+                      left: screenWidth * 0.064, top: screenHeight * 0.12),
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Container(
@@ -88,7 +89,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       child: ClipOval(
                         child: Image.asset(
-                          'assets/lanita.png',
+                          'assets/default_pfp.png',
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -98,7 +99,9 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.064, vertical: screenHeight * 0.015),
+              padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth * 0.064,
+                  vertical: screenHeight * 0.015),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -149,7 +152,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     },
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(
-                          horizontal: screenWidth * 0.2, vertical: screenHeight * 0.012),
+                          horizontal: screenWidth * 0.2,
+                          vertical: screenHeight * 0.012),
                       backgroundColor: Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -185,7 +189,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: Row(
                         children: List.generate(
                           14,
-                              (index) {
+                          (index) {
                             return Padding(
                               padding: const EdgeInsets.only(right: 10.0),
                               child: ShowInterest(
