@@ -1,6 +1,10 @@
 import 'package:addaproject/screens/editprofile.dart';
 import 'package:addaproject/sdk/model/User.dart';
 import 'package:flutter/material.dart';
+import '../sdk/LocalCache.dart';
+import '../utils/customtogglebutton.dart';
+import '../screens/profilepersonalization.dart';
+import '../sdk/AddaSDK.dart';
 import '../utils/interestshow.dart';
 
 const Color branco = Color(0xFFFFFAFE);
@@ -21,10 +25,35 @@ class Profile extends StatelessWidget {
   }
 }
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key, required this.user});
-
+class ProfilePage extends StatefulWidget {
   final User user;
+
+  ProfilePage({required this.user});
+
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  User? _user;
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserData();
+  }
+
+  Future<void> _getUserData() async {
+    final LocalCache _localCache = LocalCache();
+    final userSession = await _localCache.getUserSession();
+    if (userSession != null) {
+      final AddaSDK sdk = AddaSDK();
+      final User? user = await sdk.getUserByID(userSession.id);
+      setState(() {
+        _user = user;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +103,7 @@ class ProfilePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "@${user.nickname ?? 'Nickname não definido'}",
+                    "@${_user?.nickname}",
                     style: TextStyle(
                       decoration: TextDecoration.none,
                       fontSize: screenWidth * 0.05,
@@ -86,7 +115,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                   SizedBox(height: screenHeight * 0.023),
                   Text(
-                    "${user.firstName} ${user.lastName}",
+                    "${_user?.firstName} ${_user?.lastName}",
                     style: TextStyle(
                       decoration: TextDecoration.none,
                       fontSize: screenWidth * 0.06,
@@ -99,7 +128,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                   SizedBox(height: screenHeight * 0.01),
                   Text(
-                    "I’ve got my red dress on tonight, dancin’ in the dark, in the pale moonlight",
+                    "${_user?.description ?? 'Olá, vamos nos conhecer no Adda!'}",
                     style: TextStyle(
                       decoration: TextDecoration.none,
                       fontSize: screenWidth * 0.047,

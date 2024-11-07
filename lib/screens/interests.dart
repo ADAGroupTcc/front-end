@@ -49,9 +49,9 @@ class InterestsPage extends StatelessWidget {
       }
 
       user.categories = selectedCategories;
-      if(_userLocation != null) {
+      if (_userLocation != null) {
         user.location = [_userLocation!.latitude, _userLocation!.longitude];
-      }else {
+      } else {
         user.location = [0, 0];
       }
 
@@ -59,11 +59,9 @@ class InterestsPage extends StatelessWidget {
         user,
       );
 
-      if(createdUser == null) {
+      if (createdUser == null) {
         throw Exception("create user retornou null");
       }
-
-      await _cache.saveUserSession(createdUser);
 
       SelectedCategories.selectedCategories = [];
       SelectedCategories.allCategories = [];
@@ -77,9 +75,12 @@ class InterestsPage extends StatelessWidget {
           .child('users/${authUser.user!.uid}')
           .set({'user_id': createdUser.id});
 
+      await _cache.saveUserSession(createdUser);
+
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => MenuBarGeneral(user: createdUser)),
+        MaterialPageRoute(
+            builder: (context) => MenuBarGeneral(user: createdUser)),
       );
     } catch (e) {
       print("Error creating user: $e");

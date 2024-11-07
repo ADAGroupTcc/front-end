@@ -18,9 +18,7 @@ class MenuBarGeneral extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'My App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData.light(),
       home: MenuBar(user: user),
     );
   }
