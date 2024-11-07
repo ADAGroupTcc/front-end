@@ -4,6 +4,8 @@ import '../sdk/model/User.dart';
 import '../utils/customtogglebutton.dart';
 import '../utils/interestshow.dart';
 import '../utils/station.dart';
+import '../sdk/AddaSDK.dart';
+import '../sdk/model/Categoria.dart';
 
 const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
@@ -26,7 +28,7 @@ class OthersProfile extends StatelessWidget {
 class OthersProfilePage extends StatefulWidget {
   final UserChannel user;
 
-    const OthersProfilePage({Key? key, required this.user}) : super(key: key);
+  const OthersProfilePage({Key? key, required this.user}) : super(key: key);
 
   @override
   _OthersProfilePageState createState() => _OthersProfilePageState();
@@ -178,60 +180,86 @@ class _OthersProfilePageState extends State<OthersProfilePage> {
                         ),
                       ),
                       SizedBox(height: screenHeight * 0.023),
-                      SizedBox(
-                        height: screenHeight * 0.06,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: List.generate(
-                            18,
-                            (index) => Padding(
-                              padding: const EdgeInsets.only(right: 10.0),
-                              child: ShowInterest(
-                                text: "Interesse $index",
-                                imagePath: 'assets/transparenttarget.png',
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                      FutureBuilder(
+                        future: AddaSDK().listCategories(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            final categoriesResponse = snapshot.data;
+                            if (categoriesResponse != null) {
+                              List<Categoria> categories =
+                                  categoriesResponse.categories;
+                              return SizedBox(
+                                height: screenHeight * 0.06,
+                                child: ListView(
+                                  scrollDirection: Axis.horizontal,
+                                  children: List.generate(
+                                    widget.user.categories.length,
+                                    (index) {
+                                      Categoria? category =
+                                          categories.firstWhere(
+                                        (c) =>
+                                            c.id ==
+                                            widget.user.categories[index],
+                                      );
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 10.0),
+                                        child: ShowInterest(
+                                          text: category?.name ?? '',
+                                          imagePath:
+                                              'assets/transparenttarget.png',
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return Text('No categories found');
+                            }
+                          } else {
+                            return CircularProgressIndicator();
+                          }
+                        },
+                      )
                     ],
                   ),
                 ),
                 // Seção de estações
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: screenWidth * 0.064,
-                      vertical: screenHeight * 0.02),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Estações",
-                        style: TextStyle(
-                          decoration: TextDecoration.none,
-                          fontSize: screenWidth * 0.06,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Inter',
-                          color: Colors.white,
-                          height: 1.1,
-                        ),
-                      ),
-                      SizedBox(height: screenHeight * 0.023),
-                      Wrap(
-                        spacing: 10,
-                        children: List.generate(
-                            18,
-                            (index) => Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: screenWidth * 0.03),
-                                  child: Station(
-                                    stationName: 'Estação $index',
-                                  ),
-                                )),
-                      ),
-                    ],
-                  ),
-                ),
+                // Padding(
+                //   padding: EdgeInsets.symmetric(
+                //       horizontal: screenWidth * 0.064,
+                //       vertical: screenHeight * 0.02),
+                //   child: Column(
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: [
+                //       Text(
+                //         "Estações",
+                //         style: TextStyle(
+                //           decoration: TextDecoration.none,
+                //           fontSize: screenWidth * 0.06,
+                //           fontWeight: FontWeight.w600,
+                //           fontFamily: 'Inter',
+                //           color: Colors.white,
+                //           height: 1.1,
+                //         ),
+                //       ),
+                //       SizedBox(height: screenHeight * 0.023),
+                //       Wrap(
+                //         spacing: 10,
+                //         children: List.generate(
+                //             18,
+                //             (index) => Padding(
+                //                   padding: EdgeInsets.symmetric(
+                //                       horizontal: screenWidth * 0.03),
+                //                   child: Station(
+                //                     stationName: 'Estação $index',
+                //                   ),
+                //                 )),
+                //       ),
+                //     ],
+                //   ),
+                // ),
               ],
             ),
           ),
@@ -239,8 +267,4 @@ class _OthersProfilePageState extends State<OthersProfilePage> {
       ),
     );
   }
-
-
 }
-
-  
