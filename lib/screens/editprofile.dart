@@ -42,13 +42,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text("Usuário não encontrado"),
-            content: const Text("Não foi possível identificar o usuário logado."),
+            content:
+                const Text("Não foi possível identificar o usuário logado."),
             actions: [
               TextButton(
                 child: const Text("OK"),
                 onPressed: () {
-                Navigator.of(context).pop();
-              },
+                  Navigator.of(context).pop();
+                },
               ),
             ],
           );
@@ -92,7 +93,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text("Descrição muito longa"),
-            content: const Text("Sua descrição deve conter no máximo 150 caracteres."),
+            content: const Text(
+                "Sua descrição deve conter no máximo 150 caracteres."),
             actions: [
               TextButton(
                 child: const Text("OK"),
@@ -165,7 +167,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     width: double.infinity,
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 120),
+                    padding: const EdgeInsets.only(top: 110),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -173,7 +175,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           padding: EdgeInsets.only(left: screenWidth * 0.064),
                           child: CircleAvatar(
                             radius: screenWidth * 0.13,
-                            backgroundImage: const AssetImage('assets/default_pfp.png'),
+                            backgroundImage:
+                                const AssetImage('assets/default_pfp.png'),
                           ),
                         ),
                         Padding(
@@ -217,7 +220,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             child: GestureDetector(
               onTap: () {
                 // Após salvar as alterações
-                Navigator.pop(context, true); 
+                Navigator.pop(context, true);
               },
               child: Image.asset(
                 'assets/voltarbtn.png',

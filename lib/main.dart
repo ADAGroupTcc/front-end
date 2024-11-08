@@ -108,6 +108,6 @@ class MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return _isOffline ? const NoInternet() : ProfilePersonalization();
+    return _isOffline ? const NoInternet() : FirstScreen();
   }
 }
