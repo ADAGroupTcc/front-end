@@ -4,10 +4,12 @@ import 'package:addaproject/utils/customtextfield.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+
 // Adiciona o prefixo
 // Importa o Firebase Realtime Database
 // Importe sua SDK
 import '../sdk/model/User.dart';
+
 // Importa o http para interações com o Firebase
 import 'interests.dart';
 
@@ -64,7 +66,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
     final RegExp emailRegExp = RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$');
     final RegExp cpfRegExp = RegExp(r'^\d{11}$');
-    final RegExp passwordRegExp = RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{6,}$');
+    final RegExp passwordRegExp =
+        RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{6,}$');
 
     if (firstName.isEmpty ||
         lastName.isEmpty ||
@@ -92,23 +95,25 @@ class _RegisterPageState extends State<RegisterPage> {
     }
 
     if (!passwordRegExp.hasMatch(password)) {
-      _showPopup("A senha deve ter pelo menos 6 caracteres, incluir letras, números e uma letra maiúscula.");
+      _showPopup(
+          "A senha deve ter pelo menos 6 caracteres, incluir letras, números e uma letra maiúscula.");
       return;
     }
     try {
-      final res = await _auth.signInWithEmailAndPassword(email: email, password: password);
+      final res = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
       if (res.user != null) {
         throw FirebaseAuthException(code: "wrong-password");
       }
-    }catch(e) {
+    } catch (e) {
       e as FirebaseAuthException;
-      switch(e.code) {
+      switch (e.code) {
         case "user-not-found":
         case "invalid-credential":
-        break;
+          break;
         case "invalid-email":
-        _showPopup("Email inválido");
-        return;
+          _showPopup("Email inválido");
+          return;
         case "wrong-password":
           _showPopup("Conta já existente, faça login");
           return;
@@ -125,10 +130,10 @@ class _RegisterPageState extends State<RegisterPage> {
       password: password,
       categories: [],
     );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => Interests(user: newUser)),
-      );
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => Interests(user: newUser)),
+    );
   }
 
   @override
@@ -142,20 +147,23 @@ class _RegisterPageState extends State<RegisterPage> {
         children: [
           const BackgroundWidget(imagePath: 'assets/generalbackground.png'),
           Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(
-                alignment: Alignment.center,
-                child: Image.asset(
-                  'assets/logoadda.png',
-                  fit: BoxFit.fitWidth,
-                  width: screenWidth * 0.24,
+              Padding(
+                padding: EdgeInsets.only(top: screenHeight * 0.022),
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    'assets/logoadda.png',
+                    fit: BoxFit.fitWidth,
+                    width: screenWidth * 0.24,
+                  ),
                 ),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal: screenWidth * 0.064,
-                    vertical: screenHeight * 0.02),
+                    vertical: screenHeight * 0.015),
                 child: Text(
                   "Crie sua conta!",
                   textAlign: TextAlign.center,
@@ -240,25 +248,24 @@ class _RegisterPageState extends State<RegisterPage> {
                         decoration: TextDecoration.none,
                       ),
                       children: [
-                        const TextSpan(text: 'Já tem uma conta?  '),
-                        TextSpan(
-                            text: 'Faça login aqui',
-                            style: TextStyle(
-                              fontFamily: 'Inter',
-                              color: branco,
-                              fontSize: screenWidth * 0.046,
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.none,
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Login()),
-                                );
-                              })
-                      ])),
+                    const TextSpan(text: 'Já tem uma conta?  '),
+                    TextSpan(
+                        text: 'Faça login aqui',
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          color: branco,
+                          fontSize: screenWidth * 0.046,
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.none,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Login()),
+                            );
+                          })
+                  ])),
             ],
           ),
           Positioned(
@@ -268,7 +275,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 onTap: () {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => const WelcomePage()),
+                    MaterialPageRoute(
+                        builder: (context) => const WelcomePage()),
                   );
                 },
                 child: Container(

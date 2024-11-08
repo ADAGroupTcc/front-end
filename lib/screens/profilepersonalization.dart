@@ -167,7 +167,7 @@ class ProfilePersonalizationPage extends StatelessWidget {
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        SizedBox(height: screenHeight * 0.134),
+                        SizedBox(height: screenHeight * 0.13),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
@@ -255,7 +255,7 @@ class ProfilePersonalizationPage extends StatelessWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.only(
-                    top: screenHeight * 0.2,
+                    top: screenHeight * 0.14,
                   ),
                   child: Align(
                     alignment: Alignment.center,

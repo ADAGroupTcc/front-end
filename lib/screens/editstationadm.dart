@@ -28,129 +28,127 @@ class EditStationAdmPage extends StatelessWidget {
     final TextEditingController _groupNameController = TextEditingController();
 
     return Scaffold(
-        backgroundColor: pretobg,
-        resizeToAvoidBottomInset: false,
-        body: Stack(children: [
-          Align(
-            alignment: Alignment.topCenter,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Image.asset(
-                  'assets/fullblackwave.png',
-                  fit: BoxFit.fitWidth,
-                  width: double.infinity,
-                ),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const SizedBox(height: 120),
-                    Row(
+      backgroundColor: pretobg,
+      resizeToAvoidBottomInset: false,
+      body: Stack(
+        children: [
+          // Parte superior com a imagem de background e ícones
+          Column(
+            children: [
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  // Background de onda (wave)
+                  Image.asset(
+                    'assets/fullblackwave.png',
+                    fit: BoxFit.fitWidth,
+                    width: double.infinity,
+                  ),
+                  // Conteúdo acima dos campos de texto
+                  Padding(
+                    padding: EdgeInsets.only(top: screenHeight * 0.138),
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Padding(
-                            padding: EdgeInsets.only(left: screenWidth * 0.064),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                  BorderRadius.all(Radius.circular(10000)),
-                                  image: DecorationImage(
-                                    image: AssetImage('assets/target.png'),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: Opacity(
-                                    opacity: 1.0,
-                                    child: Image.asset(
-                                      'assets/personalizeprofile.png',
-                                      fit: BoxFit.fitWidth,
-                                      width: screenWidth * 0.26,
-                                    ),
-                                  ),
-                                ),
+                          padding: EdgeInsets.only(left: screenWidth * 0.064),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10000),
+                              image: const DecorationImage(
+                                image: AssetImage('assets/target.png'),
+                                fit: BoxFit.cover,
                               ),
-                            )),
+                            ),
+                            child: Image.asset(
+                              'assets/personalizeprofile.png',
+                              fit: BoxFit.fitWidth,
+                              width: screenWidth * 0.26,
+                            ),
+                          ),
+                        ),
                         Padding(
-                            padding:
-                            EdgeInsets.only(right: screenWidth * 0.064),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Image.asset(
-                                'assets/personalizeprofile.png',
-                                fit: BoxFit.fitWidth,
-                                width: screenWidth * 0.101,
-                              ),
-                            )),
+                          padding: EdgeInsets.only(right: screenWidth * 0.064),
+                          child: Image.asset(
+                            'assets/personalizeprofile.png',
+                            fit: BoxFit.fitWidth,
+                            width: screenWidth * 0.101,
+                          ),
+                        ),
                       ],
+                    ),
+                  ),
+                ],
+              ),
+              // Campo de Nome e Bio, fixos abaixo do conteúdo acima
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Column(
+                  children: [
+                    CustomTextField(
+                      controller: _groupNameController,
+                      label: 'Nome do grupo',
+                      inputType: TextInputType.text,
+                      isobscure: false,
                     ),
                   ],
                 ),
-              ],
+              ),
+            ],
+          ),
+          // Botão Voltar no canto superior esquerdo
+          Positioned(
+            top: screenHeight * 0.0465,
+            left: screenWidth * 0.0465,
+            child: GestureDetector(
+              onTap: () {},
+              child: Container(
+                alignment: Alignment.center,
+                child: Image.asset(
+                  'assets/voltarbtn.png',
+                  fit: BoxFit.fitWidth,
+                  width: screenWidth * 0.1,
+                ),
+              ),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(top: 300),
-            child: Column(
-              children: [
-                CustomTextField(
-                  controller: _groupNameController,
-                  label: 'Nome do grupo',
-                  inputType: TextInputType.emailAddress,
-                  isobscure: false,
-                ),
-              ],
-            ),
-          ),
+          // Botão "Salvar alterações" fixo na parte inferior
           Positioned(
-              top: screenHeight * 0.0465,
-              left: screenWidth * 0.0465,
-              child: GestureDetector(
-                onTap: () {},
-                child: Container(
-                  alignment: Alignment.center,
-                  child: Image.asset(
-                    'assets/voltarbtn.png',
-                    fit: BoxFit.fitWidth,
-                    width: screenWidth * 0.1,
-                  ),
-                ),
-              )),
-          Positioned(
-            bottom: screenHeight * 0.0465,
+            bottom: screenHeight * 0.07,
             left: 0,
             child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: screenWidth * 0.064,
-                  vertical: screenHeight * 0.02,
+              padding: EdgeInsets.symmetric(
+                horizontal: screenWidth * 0.064,
+              ),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.217,
+                      vertical: screenHeight * 0.012,
+                    ),
+                    backgroundColor: Colors.transparent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      side: const BorderSide(color: branco, width: 2),
+                    ),
+                  ),
+                  child: Text(
+                    "Salvar alterações",
+                    style: TextStyle(
+                      color: branco,
+                      fontFamily: "Amaranth",
+                      fontSize: screenWidth * 0.06,
+                    ),
+                  ),
                 ),
-                child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: screenWidth * 0.217,
-                            vertical: screenHeight * 0.012),
-                        backgroundColor: Colors.transparent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: const BorderSide(color: branco, width: 2),
-                        ),
-                      ),
-                      child: Text(
-                        "Salvar alterações",
-                        style: TextStyle(
-                          color: branco,
-                          fontFamily: "Amaranth",
-                          fontSize: screenWidth * 0.06,
-                        ),
-                      ),
-                    ))),
-          )
-        ]));
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

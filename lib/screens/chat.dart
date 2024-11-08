@@ -117,12 +117,14 @@ class ChatPage extends State<Chat> {
   }
 
   PreferredSize _buildAppBar() {
+    final screenHeight = MediaQuery.of(context).size.height;
     return PreferredSize(
-      preferredSize: const Size.fromHeight(150),
+      preferredSize: Size.fromHeight(screenHeight * 0.2),
       child: Container(
-        height: 150,
+        height: screenHeight * 0.2,
         decoration: BoxDecoration(
           image: DecorationImage(
+            alignment: Alignment.bottomCenter,
             image: AssetImage("assets/appbarchat.png"),
             fit: BoxFit.cover,
           ),
