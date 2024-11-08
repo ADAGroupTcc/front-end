@@ -35,25 +35,6 @@ class OthersProfilePage extends StatefulWidget {
 }
 
 class _OthersProfilePageState extends State<OthersProfilePage> {
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: AppBar(
-  //       title: Text('User Profile'),
-  //     ),
-  //     body: Center(
-  //       child: Column(
-  //         mainAxisAlignment: MainAxisAlignment.center,
-  //         children: [
-  //           Text('Name: ${widget.user?.firstName} ${widget.user?.lastName}'),
-  //           Text('Username: ${widget.user?.nickname}'),
-  //           // Add other user info fields as needed
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -72,7 +53,7 @@ class _OthersProfilePageState extends State<OthersProfilePage> {
                   alignment: Alignment.center,
                   children: [
                     Image.asset(
-                      'assets/blackwave.png',
+                      'assets/fullblackwave.png',
                       fit: BoxFit.fitWidth,
                       width: double.infinity,
                     ),
@@ -96,7 +77,7 @@ class _OthersProfilePageState extends State<OthersProfilePage> {
                               ),
                               child: ClipOval(
                                 child: Image.asset(
-                                  'assets/default-pfp.png',
+                                  'assets/default_pfp.png',
                                   fit: BoxFit.cover,
                                   width: screenWidth * 0.26,
                                   height: screenWidth * 0.26,
@@ -225,42 +206,24 @@ class _OthersProfilePageState extends State<OthersProfilePage> {
                     ],
                   ),
                 ),
-                // Seção de estações
-                // Padding(
-                //   padding: EdgeInsets.symmetric(
-                //       horizontal: screenWidth * 0.064,
-                //       vertical: screenHeight * 0.02),
-                //   child: Column(
-                //     crossAxisAlignment: CrossAxisAlignment.start,
-                //     children: [
-                //       Text(
-                //         "Estações",
-                //         style: TextStyle(
-                //           decoration: TextDecoration.none,
-                //           fontSize: screenWidth * 0.06,
-                //           fontWeight: FontWeight.w600,
-                //           fontFamily: 'Inter',
-                //           color: Colors.white,
-                //           height: 1.1,
-                //         ),
-                //       ),
-                //       SizedBox(height: screenHeight * 0.023),
-                //       Wrap(
-                //         spacing: 10,
-                //         children: List.generate(
-                //             18,
-                //             (index) => Padding(
-                //                   padding: EdgeInsets.symmetric(
-                //                       horizontal: screenWidth * 0.03),
-                //                   child: Station(
-                //                     stationName: 'Estação $index',
-                //                   ),
-                //                 )),
-                //       ),
-                //     ],
-                //   ),
-                // ),
               ],
+            ),
+          ),
+          Positioned(
+            top: screenHeight * 0.0465,
+            left: screenWidth * 0.0465,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: Container(
+                alignment: Alignment.center,
+                child: Image.asset(
+                  'assets/voltarbtn.png',
+                  fit: BoxFit.fitWidth,
+                  width: screenWidth * 0.1,
+                ),
+              ),
             ),
           ),
         ],

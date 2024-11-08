@@ -6,7 +6,7 @@ import '../utils/customtextfield.dart';
 
 const Color preto = Color(0xFF0D0D0D);
 const Color branco = Color(0xFFFFFAFE);
-const Color cinzar = Color(0x4dfffafe);
+const Color cinzaClaro = Color(0x4dfffafe);
 const Color pretobg = Color(0xFF171717);
 
 class EditProfile extends StatelessWidget {
@@ -14,9 +14,9 @@ class EditProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Edit profile page',
-      home: EditProfilePage(),
+    return const Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: EditProfilePage(),
     );
   }
 }
@@ -38,20 +38,22 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
     if (user == null) {
       await showDialog<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text("Usuário não encontrado"),
-              content:
-                  const Text("Não foi possível identificar o usuário logado."),
-              actions: [
-                TextButton(
-                  child: const Text("OK"),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ],
-            );
-          });
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Usuário não encontrado"),
+            content: const Text("Não foi possível identificar o usuário logado."),
+            actions: [
+              TextButton(
+                child: const Text("OK"),
+                onPressed: () {
+                Navigator.of(context).pop();
+              },
+              ),
+            ],
+          );
+        },
+      );
       return;
     }
 
@@ -90,8 +92,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text("Descrição muito longa"),
-            content: const Text(
-                "Sua descrição deve conter no máximo 150 caracteres."),
+            content: const Text("Sua descrição deve conter no máximo 150 caracteres."),
             actions: [
               TextButton(
                 child: const Text("OK"),
@@ -122,21 +123,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
       await LocalCache().saveUserSession(user);
 
       await showDialog<void>(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text("Perfil atualizado com sucesso"),
-              content: const Text("Seu perfil foi atualizado com sucesso"),
-              actions: [
-                TextButton(
-                  child: const Text("OK"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          });
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Perfil atualizado com sucesso"),
+            content: const Text("Seu perfil foi atualizado com sucesso"),
+            actions: [
+              TextButton(
+                child: const Text("OK"),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          );
+        },
+      );
     } catch (e) {
       print("Erro ao atualizar usuário: $e");
     }
@@ -164,7 +164,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     fit: BoxFit.fitWidth,
                     width: double.infinity,
                   ),
-                  // Conteúdo acima dos campos de texto
                   Padding(
                     padding: const EdgeInsets.only(top: 120),
                     child: Row(
@@ -172,19 +171,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       children: <Widget>[
                         Padding(
                           padding: EdgeInsets.only(left: screenWidth * 0.064),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10000),
-                              image: const DecorationImage(
-                                image: AssetImage('assets/default_pfp.png'),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            child: Image.asset(
-                              'assets/personalizeprofile.png',
-                              fit: BoxFit.fitWidth,
-                              width: screenWidth * 0.26,
-                            ),
+                          child: CircleAvatar(
+                            radius: screenWidth * 0.13,
+                            backgroundImage: const AssetImage('assets/default_pfp.png'),
                           ),
                         ),
                         Padding(
@@ -200,7 +189,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   ),
                 ],
               ),
-              // Campo de Nome e Bio, fixos abaixo do conteúdo acima
               Padding(
                 padding: const EdgeInsets.only(top: 20),
                 child: Column(
@@ -223,53 +211,43 @@ class _EditProfilePageState extends State<EditProfilePage> {
               ),
             ],
           ),
-          // Botão Voltar no canto superior esquerdo
           Positioned(
             top: screenHeight * 0.0465,
             left: screenWidth * 0.0465,
             child: GestureDetector(
-              onTap: () {},
-              child: Container(
-                alignment: Alignment.center,
-                child: Image.asset(
-                  'assets/voltarbtn.png',
-                  fit: BoxFit.fitWidth,
-                  width: screenWidth * 0.1,
-                ),
+              onTap: () {
+                // Após salvar as alterações
+                Navigator.pop(context, true); 
+              },
+              child: Image.asset(
+                'assets/voltarbtn.png',
+                fit: BoxFit.fitWidth,
+                width: screenWidth * 0.1,
               ),
             ),
           ),
-          // Botão "Salvar alterações" fixo na parte inferior
           Positioned(
             bottom: screenHeight * 0.07,
-            left: 0,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.064),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: screenWidth * 0.217,
-                      vertical: screenHeight * 0.012,
-                    ),
-                    backgroundColor: Colors.transparent,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      side: const BorderSide(color: branco, width: 2),
-                    ),
-                  ),
-                  child: Text(
-                    "Salvar alterações",
-                    style: TextStyle(
-                      color: branco,
-                      fontFamily: "Amaranth",
-                      fontSize: screenWidth * 0.06,
-                    ),
-                  ),
+            left: screenWidth * 0.064,
+            right: screenWidth * 0.064,
+            child: ElevatedButton(
+              onPressed: () => _updateUser(context),
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.symmetric(
+                  vertical: screenHeight * 0.012,
+                ),
+                backgroundColor: Colors.transparent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  side: const BorderSide(color: branco, width: 2),
+                ),
+              ),
+              child: Text(
+                "Salvar alterações",
+                style: TextStyle(
+                  color: branco,
+                  fontFamily: "Amaranth",
+                  fontSize: screenWidth * 0.06,
                 ),
               ),
             ),

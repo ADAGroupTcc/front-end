@@ -128,8 +128,6 @@ class GroupInfoPage extends StatelessWidget {
                           padding: EdgeInsets.symmetric(
                             vertical: screenHeight * 0.02,
                           ),
-
-                          //pass the channel id to the edit station page
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: ElevatedButton(
@@ -234,24 +232,25 @@ class GroupInfoPage extends StatelessWidget {
                           int index = groupMembers.indexOf(user);
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 10),
-
                             child: GestureDetector(
                               onTap: () async {
                                 final LocalCache _localCache = LocalCache();
-                                final userSession = await _localCache.getUserSession();
+                                final userSession =
+                                    await _localCache.getUserSession();
                                 if (userSession?.id == user.id) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ProfilePage(user: userSession!),
-                                    ),
-                                  );
-                                } else {
-                                  Navigator.push(
+                                  Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          OthersProfilePage(user: user),
+                                          ProfilePage(user: userSession!),
+                                    ),
+                                  );
+                                } else {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          ProfilePage(user: userSession!),
                                     ),
                                   );
                                 }
@@ -270,6 +269,23 @@ class GroupInfoPage extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+          ),
+          Positioned(
+            top: screenHeight * 0.0465,
+            left: screenWidth * 0.0465,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: Container(
+                alignment: Alignment.center,
+                child: Image.asset(
+                  'assets/voltarbtn.png',
+                  fit: BoxFit.fitWidth,
+                  width: screenWidth * 0.1,
+                ),
+              ),
             ),
           ),
         ],

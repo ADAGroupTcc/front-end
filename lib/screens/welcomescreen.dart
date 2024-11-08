@@ -31,36 +31,6 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   void initState() {
     super.initState();
-
-    // Exibe o popup temporário assim que a tela carrega
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // showDialog(
-      //   context: context,
-      //   builder: (BuildContext context) => ConfirmationPopup(
-      //     message: 'Tem certeza que deseja cancelar?',
-      //     // Texto do segundo popup
-      //     onConfirm: () {
-      //       // Ação ao confirmar
-      //       Navigator.of(context).pop();
-      //     },
-      //     onCancel: () {
-      //       // Ação ao cancelar
-      //       Navigator.of(context).pop();
-      //     },
-      //   ),
-      // );
-
-      // Atraso para exibir o segundo popup após o primeiro desaparecer
-      // Future.delayed(const Duration(seconds: 3), () {
-      //   showDialog(
-      //     context: context,
-      //     builder: (BuildContext context) => TemporaryPopup(
-      //       message: 'Ação cancelada', // Texto do primeiro popup
-      //       isAffirmative: false, // Define o ícone como "cancelar"
-      //     ),
-      //   );
-      // });
-    });
   }
 
   @override

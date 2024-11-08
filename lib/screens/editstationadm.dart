@@ -130,7 +130,9 @@ class _EditStationAdmPageState extends State<EditStationAdmPage> {
               top: screenHeight * 0.0465,
               left: screenWidth * 0.0465,
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
                 child: Container(
                   alignment: Alignment.center,
                   child: Image.asset(

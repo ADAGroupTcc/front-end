@@ -1,5 +1,7 @@
 import 'package:addaproject/screens/editprofile.dart';
 import 'package:addaproject/sdk/model/User.dart';
+import 'package:addaproject/utils/popups/confirmation.dart';
+import 'package:addaproject/utils/popups/temporary.dart';
 import 'package:flutter/material.dart';
 import '../sdk/LocalCache.dart';
 import '../utils/customtogglebutton.dart';
@@ -153,12 +155,18 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     const SizedBox(height: 25),
                     ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
+                      onPressed: () async {
+                        // Navega para a tela de edição e espera até que a navegação termine
+                        final result = await Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const EditProfile()),
                         );
+                        // Se a edição foi concluída, atualiza os dados do usuário
+                        if (result == true) {
+                          await _getUserData(); // Atualiza os dados do usuário
+                          setState(() {}); // Re-renderiza a tela
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.symmetric(
