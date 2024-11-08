@@ -74,7 +74,7 @@ class GroupInfoPage extends StatelessWidget {
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const SizedBox(height: 120),
+                        const SizedBox(height: 110),
                         Padding(
                           padding: EdgeInsets.only(left: screenWidth * 0.064),
                           child: Align(
@@ -129,7 +129,7 @@ class GroupInfoPage extends StatelessWidget {
                             vertical: screenHeight * 0.02,
                           ),
                           child: Align(
-                            alignment: Alignment.centerLeft,
+                            alignment: Alignment.center,
                             child: ElevatedButton(
                               onPressed: () {
                                 Navigator.push(
@@ -143,7 +143,7 @@ class GroupInfoPage extends StatelessWidget {
                               },
                               style: ElevatedButton.styleFrom(
                                 padding: EdgeInsets.symmetric(
-                                  horizontal: screenWidth * 0.167,
+                                  horizontal: screenWidth * 0.165,
                                   vertical: screenHeight * 0.012,
                                 ),
                                 backgroundColor: Colors.transparent,
@@ -158,7 +158,7 @@ class GroupInfoPage extends StatelessWidget {
                                 style: TextStyle(
                                   color: branco,
                                   fontFamily: "Amaranth",
-                                  fontSize: screenWidth * 0.06,
+                                  fontSize: screenWidth * 0.055,
                                 ),
                               ),
                             ),

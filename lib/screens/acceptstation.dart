@@ -43,15 +43,27 @@ class AcceptStationPage extends StatelessWidget {
                 Stack(
                   alignment: Alignment.center,
                   children: [
-                    Image.asset(
-                      'assets/fullblackwave.png',
-                      fit: BoxFit.fitWidth,
-                      width: double.infinity,
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: SizedBox(
+                        height: screenHeight * 0.25,
+                        width: double.infinity,
+                        child: FittedBox(
+                          alignment: Alignment.bottomCenter,
+                          fit: BoxFit.fitWidth,
+                          child: Image.asset(
+                            'assets/fullblackwave.png',
+                          ),
+                        ),
+                      ),
                     ),
+
+
+
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const SizedBox(height: 120),
+                        const SizedBox(height: 110),
                         Padding(
                           padding: EdgeInsets.only(left: screenWidth * 0.064),
                           child: Align(
@@ -83,7 +95,8 @@ class AcceptStationPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 40),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.064),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: screenWidth * 0.064),
                   child: Text(
                     "Estação 01",
                     style: TextStyle(
@@ -126,7 +139,7 @@ class AcceptStationPage extends StatelessWidget {
                       child: Column(
                         children: List.generate(
                           18,
-                              (index) {
+                          (index) {
                             String status;
                             switch (index % 3) {
                               case 0:
