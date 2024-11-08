@@ -248,7 +248,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: ElevatedButton(
-                  onPressed: () => _updateUser(context),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.symmetric(
                       horizontal: screenWidth * 0.217,

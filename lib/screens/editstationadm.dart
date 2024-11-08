@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../utils/customtextfield.dart';
 import '../sdk/AddaSDK.dart';
+import '../sdk/model/User.dart';
+import '../sdk/LocalCache.dart';
 
 const Color preto = Color(0xFF0D0D0D);
 const Color branco = Color(0xFFFFFAFE);
@@ -148,21 +150,22 @@ class _EditStationAdmPageState extends State<EditStationAdmPage> {
                 ),
                 child: Align(
                     alignment: Alignment.centerLeft,
-                    child: 
-                   ElevatedButton(
+                    child: ElevatedButton(
                       onPressed: () async {
                         final newChannelName = _groupNameController.text;
-                        final channelId = widget.channelId; // Get the channel ID from the widget
-                        final updates = {'name': newChannelName}; // Create a map with the new channel name
-                        
-                        final AddaSDK _addaSDK = AddaSDK(); // Initialize the AddaSDK instance
-                        final updatedChannel = await _addaSDK.updateChannelByID(channelId, updates); // Call the updateChannelByID function
-                        
+                        final channelId = widget.channelId;
+                        final updates = {'name': newChannelName};
+                        final localCache = LocalCache();
+                        final User? user = await localCache.getUserSession();
+                        final String userid = user?.id ?? '';
+
+                        final AddaSDK _addaSDK = AddaSDK();
+                        final updatedChannel = await _addaSDK.updateChannelByID(
+                            channelId, userid, updates);
+
                         if (updatedChannel != null) {
-                          // Channel updated successfully
                           print('Channel updated successfully');
                         } else {
-                          // Error updating channel
                           print('Error updating channel');
                         }
                       },

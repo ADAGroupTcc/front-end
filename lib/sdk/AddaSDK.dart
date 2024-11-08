@@ -166,9 +166,9 @@ class AddaSDK {
   }
 
   Future<Channel?> updateChannelByID(
-      String channelId, Map<String, dynamic> updates) async {
+      String channelId, String user_id, Map<String, dynamic> updates) async {
     try {
-      final url = Uri.parse('$baseUrl/v1/channels/$channelId');
+      final url = Uri.parse('$channelBaseUrl/v1/channels/$user_id/$channelId');
 
       final response = await http.patch(
         url,
