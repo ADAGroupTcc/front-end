@@ -7,7 +7,7 @@
     
     <application
         android:label="addaproject"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/logoaddaapp"
         android:enableOnBackInvokedCallback="true">
         <!-- Your application components, such as activities, services, etc. -->
     </application>
