@@ -250,7 +250,7 @@ class GroupInfoPage extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          ProfilePage(user: userSession!),
+                                          OthersProfilePage(user: user),
                                     ),
                                   );
                                 }
