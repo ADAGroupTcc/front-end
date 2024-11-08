@@ -80,7 +80,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 alignment: Alignment.center,
                 children: [
                   Image.asset(
-                    'assets/blackwave.png',
+                    'assets/fullblackwave.png',
                     fit: BoxFit.fitWidth,
                     width: double.infinity,
                   ),

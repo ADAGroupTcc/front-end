@@ -1,3 +1,5 @@
+import 'package:addaproject/screens/editstationadm.dart';
+
 import '../screens/profile.dart';
 import 'package:addaproject/sdk/LocalCache.dart';
 import 'package:flutter/material.dart';
@@ -126,10 +128,21 @@ class GroupInfoPage extends StatelessWidget {
                           padding: EdgeInsets.symmetric(
                             vertical: screenHeight * 0.02,
                           ),
+
+                          //pass the channel id to the edit station page
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EditStationAdmPage(
+                                      channelId: channel.id,
+                                    ),
+                                  ),
+                                );
+                              },
                               style: ElevatedButton.styleFrom(
                                 padding: EdgeInsets.symmetric(
                                   horizontal: screenWidth * 0.167,

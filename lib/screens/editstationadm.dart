@@ -1,31 +1,50 @@
 import 'package:flutter/material.dart';
 import '../utils/customtextfield.dart';
+import '../sdk/AddaSDK.dart';
 
 const Color preto = Color(0xFF0D0D0D);
 const Color branco = Color(0xFFFFFAFE);
 const Color cinzar = Color(0x4dfffafe);
 const Color pretobg = Color(0xFF242424);
 
-class EditStationAdm extends StatelessWidget {
+class EditStationAdm extends StatefulWidget {
   const EditStationAdm({super.key});
 
   @override
+  State<EditStationAdm> createState() => _EditStationAdmState();
+}
+
+class _EditStationAdmState extends State<EditStationAdm> {
+  @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Edit profile page',
-      home: EditStationAdmPage(),
+      home: EditStationAdmPage(
+        channelId: ModalRoute.of(context)!.settings.arguments as String,
+      ),
     );
   }
 }
 
-class EditStationAdmPage extends StatelessWidget {
-  const EditStationAdmPage({super.key});
+class EditStationAdmPage extends StatefulWidget {
+  final String channelId;
+
+  const EditStationAdmPage({
+    super.key,
+    required this.channelId, // Add this line
+  });
+
+  @override
+  State<EditStationAdmPage> createState() => _EditStationAdmPageState();
+}
+
+class _EditStationAdmPageState extends State<EditStationAdmPage> {
+  final TextEditingController _groupNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    final TextEditingController _groupNameController = TextEditingController();
 
     return Scaffold(
         backgroundColor: pretobg,
@@ -55,7 +74,7 @@ class EditStationAdmPage extends StatelessWidget {
                               child: Container(
                                 decoration: BoxDecoration(
                                   borderRadius:
-                                  BorderRadius.all(Radius.circular(10000)),
+                                      BorderRadius.all(Radius.circular(10000)),
                                   image: DecorationImage(
                                     image: AssetImage('assets/target.png'),
                                     fit: BoxFit.cover,
@@ -76,7 +95,7 @@ class EditStationAdmPage extends StatelessWidget {
                             )),
                         Padding(
                             padding:
-                            EdgeInsets.only(right: screenWidth * 0.064),
+                                EdgeInsets.only(right: screenWidth * 0.064),
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: Image.asset(
@@ -129,8 +148,24 @@ class EditStationAdmPage extends StatelessWidget {
                 ),
                 child: Align(
                     alignment: Alignment.centerLeft,
-                    child: ElevatedButton(
-                      onPressed: () {},
+                    child: 
+                   ElevatedButton(
+                      onPressed: () async {
+                        final newChannelName = _groupNameController.text;
+                        final channelId = widget.channelId; // Get the channel ID from the widget
+                        final updates = {'name': newChannelName}; // Create a map with the new channel name
+                        
+                        final AddaSDK _addaSDK = AddaSDK(); // Initialize the AddaSDK instance
+                        final updatedChannel = await _addaSDK.updateChannelByID(channelId, updates); // Call the updateChannelByID function
+                        
+                        if (updatedChannel != null) {
+                          // Channel updated successfully
+                          print('Channel updated successfully');
+                        } else {
+                          // Error updating channel
+                          print('Error updating channel');
+                        }
+                      },
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.symmetric(
                             horizontal: screenWidth * 0.217,
