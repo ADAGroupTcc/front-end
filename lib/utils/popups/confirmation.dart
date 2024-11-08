@@ -1,3 +1,4 @@
+import 'package:addaproject/utils/messagebubble.dart';
 import 'package:flutter/material.dart';
 
 class ConfirmationPopup extends StatelessWidget {
@@ -14,6 +15,8 @@ class ConfirmationPopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Dialog(
       backgroundColor: const Color(0xFF242424),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -35,20 +38,38 @@ class ConfirmationPopup extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ElevatedButton(
-                  onPressed: onConfirm,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                    side: BorderSide(color: Colors.white),
-                  ),
-                  child: const Text('Sim', style: TextStyle(color: Colors.white)),
-                ),
-                ElevatedButton(
-                  onPressed: onCancel,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                  ),
-                  child: const Text('Não', style: TextStyle(color: Colors.black)),
+                Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: onConfirm,
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: screenWidth * 0.2,
+                            vertical: screenHeight * 0.012),
+                        backgroundColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: const BorderSide(color: white, width: 2),
+                        ),
+                      ),
+                      child: const Text('Sim', style: TextStyle(color: Colors.white)),
+                    ),
+                    const SizedBox(height: 8),
+                    ElevatedButton(
+                      onPressed: onCancel,
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: screenWidth * 0.2,
+                            vertical: screenHeight * 0.012),
+                        backgroundColor: white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: const BorderSide(color: white, width: 2),
+                        ),
+                      ),
+                      child: const Text('Não', style: TextStyle(color: Colors.black)),
+                    ),
+                  ],
                 ),
               ],
             ),

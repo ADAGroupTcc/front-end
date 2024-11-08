@@ -1,15 +1,18 @@
+import 'package:addaproject/sdk/model/Channel.dart';
 import 'package:flutter/material.dart';
 import '../sdk/model/User.dart';
 import '../utils/customtogglebutton.dart';
 import '../utils/interestshow.dart';
 import '../utils/station.dart';
+import '../sdk/AddaSDK.dart';
+import '../sdk/model/Categoria.dart';
 
 const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
 const Color pretobg = Color(0xFF171717);
 
 class OthersProfile extends StatelessWidget {
-  final User? user;
+  final UserChannel? user;
 
   OthersProfile({super.key, this.user});
 
@@ -17,16 +20,21 @@ class OthersProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Others profile page',
-      home: OthersProfilePage(user: user),
+      home: OthersProfilePage(user: user!),
     );
   }
 }
 
-class OthersProfilePage extends StatelessWidget {
-  final User? user;
+class OthersProfilePage extends StatefulWidget {
+  final UserChannel user;
 
-  const OthersProfilePage({super.key, this.user});
+  const OthersProfilePage({Key? key, required this.user}) : super(key: key);
 
+  @override
+  _OthersProfilePageState createState() => _OthersProfilePageState();
+}
+
+class _OthersProfilePageState extends State<OthersProfilePage> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -45,7 +53,7 @@ class OthersProfilePage extends StatelessWidget {
                   alignment: Alignment.center,
                   children: [
                     Image.asset(
-                      'assets/bgbillie.png',
+                      'assets/fullblackwave.png',
                       fit: BoxFit.fitWidth,
                       width: double.infinity,
                     ),
@@ -69,7 +77,7 @@ class OthersProfilePage extends StatelessWidget {
                               ),
                               child: ClipOval(
                                 child: Image.asset(
-                                  'assets/billie.png',
+                                  'assets/default_pfp.png',
                                   fit: BoxFit.cover,
                                   width: screenWidth * 0.26,
                                   height: screenWidth * 0.26,
@@ -91,7 +99,7 @@ class OthersProfilePage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "@billie_eilish",
+                        "@${widget.user.nickname}",
                         style: TextStyle(
                           decoration: TextDecoration.none,
                           fontSize: screenWidth * 0.05,
@@ -103,7 +111,7 @@ class OthersProfilePage extends StatelessWidget {
                       ),
                       SizedBox(height: screenHeight * 0.023),
                       Text(
-                        "Billie Eilish",
+                        '${widget.user.firstName} ${widget.user.lastName}',
                         style: TextStyle(
                           decoration: TextDecoration.none,
                           fontSize: screenWidth * 0.06,
@@ -116,7 +124,9 @@ class OthersProfilePage extends StatelessWidget {
                       ),
                       SizedBox(height: screenHeight * 0.01),
                       Text(
-                        "What do you want from me?",
+                        widget.user.description == ""
+                            ? "Olá, vamos nos conhecer no Adda!"
+                            : "${widget.user.description}", //case user description == " " then show this sentence
                         style: TextStyle(
                           decoration: TextDecoration.none,
                           fontSize: screenWidth * 0.047,
@@ -151,61 +161,69 @@ class OthersProfilePage extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: screenHeight * 0.023),
-                      SizedBox(
-                        height: screenHeight * 0.06,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: List.generate(
-                            18,
-                            (index) => Padding(
-                              padding: const EdgeInsets.only(right: 10.0),
-                              child: ShowInterest(
-                                text: "Interesse $index",
-                                imagePath: 'assets/transparenttarget.png',
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                // Seção de estações
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: screenWidth * 0.064,
-                      vertical: screenHeight * 0.02),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Estações",
-                        style: TextStyle(
-                          decoration: TextDecoration.none,
-                          fontSize: screenWidth * 0.06,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'Inter',
-                          color: Colors.white,
-                          height: 1.1,
-                        ),
-                      ),
-                      SizedBox(height: screenHeight * 0.023),
-                      Wrap(
-                        spacing: 10,
-                        children: List.generate(
-                            18,
-                            (index) => Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: screenWidth * 0.03),
-                                  child: Station(
-                                    stationName: 'Estação $index',
+                      FutureBuilder(
+                        future: AddaSDK().listCategories(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            final categoriesResponse = snapshot.data;
+                            if (categoriesResponse != null) {
+                              List<Categoria> categories =
+                                  categoriesResponse.categories;
+                              return SizedBox(
+                                height: screenHeight * 0.06,
+                                child: ListView(
+                                  scrollDirection: Axis.horizontal,
+                                  children: List.generate(
+                                    widget.user.categories.length,
+                                    (index) {
+                                      Categoria? category =
+                                          categories.firstWhere(
+                                        (c) =>
+                                            c.id ==
+                                            widget.user.categories[index],
+                                      );
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 10.0),
+                                        child: ShowInterest(
+                                          text: category?.name ?? '',
+                                          imagePath:
+                                              'assets/transparenttarget.png',
+                                        ),
+                                      );
+                                    },
                                   ),
-                                )),
-                      ),
+                                ),
+                              );
+                            } else {
+                              return Text('No categories found');
+                            }
+                          } else {
+                            return CircularProgressIndicator();
+                          }
+                        },
+                      )
                     ],
                   ),
                 ),
               ],
+            ),
+          ),
+          Positioned(
+            top: screenHeight * 0.0465,
+            left: screenWidth * 0.0465,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: Container(
+                alignment: Alignment.center,
+                child: Image.asset(
+                  'assets/voltarbtn.png',
+                  fit: BoxFit.fitWidth,
+                  width: screenWidth * 0.1,
+                ),
+              ),
             ),
           ),
         ],

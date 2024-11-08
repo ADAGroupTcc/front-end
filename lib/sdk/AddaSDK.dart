@@ -50,11 +50,9 @@ class AddaSDK {
 
   Future<User?> getUserByID(String userId) async {
     try {
-      final queryParams = {
-        "user_ids": userId,
-        "show_categories": true
-      };
-      final response = await httpClient.get('$baseUrl/v1/users', queryParameters:queryParams );
+      final queryParams = {"user_ids": userId, "show_categories": true};
+      final response = await httpClient.get('$baseUrl/v1/users',
+          queryParameters: queryParams);
       final users = response.data;
       return User.fromJson(users[0]);
     } catch (e) {
@@ -155,7 +153,8 @@ class AddaSDK {
       final queryParams = {
         "show_members": true,
       };
-      final response = await httpClient.get('$channelBaseUrl/v1/channels',queryParameters: queryParams, options: Options(headers: headers));
+      final response = await httpClient.get('$channelBaseUrl/v1/channels',
+          queryParameters: queryParams, options: Options(headers: headers));
       return ChannelResponse.fromJson(response.data);
     } catch (e) {
       // melhorar depois
@@ -166,10 +165,13 @@ class AddaSDK {
     }
   }
 
-  Future<Channel?> updateChannelByID(String channelId, Map<String, dynamic> updates) async {
+  Future<Channel?> updateChannelByID(
+      String channelId, String user_id, Map<String, dynamic> updates) async {
     try {
+      final url = Uri.parse('$channelBaseUrl/v1/channels/:$channelId?$user_id');
+
       final response = await http.patch(
-        Uri.parse('$baseUrl/v1/channels/$channelId'),
+        url,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -181,6 +183,7 @@ class AddaSDK {
         return Channel.fromJson(data);
       } else {
         print('Erro ao atualizar Channel: ${response.statusCode}');
+        print('Updating channel at URI: $url'); // Print the URI
         return null;
       }
     } catch (e) {
@@ -220,7 +223,8 @@ class AddaSDK {
 
   Future<List<Message>?> listMessagesByChannelId(String channelId) async {
     try {
-      final response = await httpClient.get('$messagesBaseUrl/v1/channels/$channelId/messages');
+      final response = await httpClient
+          .get('$messagesBaseUrl/v1/channels/$channelId/messages');
       return MessagesResponse.fromJson(response.data).messages;
     } catch (e) {
       // melhorar depois
@@ -231,7 +235,8 @@ class AddaSDK {
     }
   }
 
-  Future<Message?> updateMessageByID(String channelId, String messageId, Map<String, dynamic> updates) async {
+  Future<Message?> updateMessageByID(
+      String channelId, String messageId, Map<String, dynamic> updates) async {
     try {
       final response = await http.patch(
         Uri.parse('$baseUrl/v1/channels/$channelId/messages/$messageId'),
