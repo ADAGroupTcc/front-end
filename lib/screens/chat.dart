@@ -6,6 +6,7 @@ import 'package:addaproject/sdk/WebSocket.dart';
 import 'package:addaproject/sdk/model/Message.dart';
 import 'package:addaproject/utils/circularlist.dart';
 import 'package:flutter/material.dart';
+import '../screens/groupinfo.dart';
 
 import '../sdk/model/Channel.dart';
 import '../sdk/model/User.dart';
@@ -85,7 +86,8 @@ class ChatPage extends State<Chat> {
 
   void _onMessageReceived(String message) {
     final event = JsonDecoder().convert(message);
-    if (event["event"] == "MESSAGE_CREATED" || event["event"] == "MESSAGE_RECEIVED") {
+    if (event["event"] == "MESSAGE_CREATED" ||
+        event["event"] == "MESSAGE_RECEIVED") {
       final msg = Message.fromJson(event["data"]);
       setState(() {
         _history.add(msg);
@@ -97,8 +99,6 @@ class ChatPage extends State<Chat> {
   void _onDisconnect() {
     _history.clear();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -117,12 +117,14 @@ class ChatPage extends State<Chat> {
   }
 
   PreferredSize _buildAppBar() {
+    final screenHeight = MediaQuery.of(context).size.height;
     return PreferredSize(
-      preferredSize: const Size.fromHeight(150),
+      preferredSize: Size.fromHeight(screenHeight * 0.2),
       child: Container(
-        height: 150,
+        height: screenHeight * 0.2,
         decoration: BoxDecoration(
           image: DecorationImage(
+            alignment: Alignment.bottomCenter,
             image: AssetImage("assets/appbarchat.png"),
             fit: BoxFit.cover,
           ),
@@ -144,15 +146,25 @@ class ChatPage extends State<Chat> {
                   backgroundImage: _getChannelImage(),
                 ),
                 const SizedBox(width: 20),
-                Text(
-                  channel.name,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    fontStyle: FontStyle.italic,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              GroupInfoPage(user: user, channel: channel, groupMembers: this.channel.members.map((member) => member as UserChannel).toList())),
+                    );
+                  },
+                  child: Text(
+                    channel.name,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic,
+                    ),
                   ),
-                ),
+                )
               ],
             ),
           ],
@@ -189,7 +201,10 @@ class ChatPage extends State<Chat> {
       itemCount: _history.length,
       itemBuilder: (context, index) {
         return MessageBubble(
-          nickname: channel.members.reduce((value, element) => value.id == _history[index].sender ? value : element).nickname,
+          nickname: channel.members
+              .reduce((value, element) =>
+                  value.id == _history[index].sender ? value : element)
+              .nickname,
           message: _history[index].content,
           isSender: _history[index].sender == user.id,
         );

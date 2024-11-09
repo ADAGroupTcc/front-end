@@ -72,7 +72,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   ),
                   Positioned(
                       left: _hasFocus || widget.controller.text.isNotEmpty ? 0 : 12,
-                      top: _hasFocus || widget.controller.text.isNotEmpty ? -4 : 32,
+                      top: _hasFocus || widget.controller.text.isNotEmpty ? -6 : 32,
                       child: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
                           child: IgnorePointer(
