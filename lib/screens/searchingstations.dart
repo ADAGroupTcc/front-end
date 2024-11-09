@@ -1,5 +1,11 @@
+import 'dart:convert';
+
+import 'package:addaproject/screens/acceptstation.dart';
+import 'package:addaproject/sdk/model/ChannelFound.dart';
 import 'package:flutter/material.dart';
 
+import '../sdk/WebSocket.dart';
+import '../sdk/model/User.dart';
 import '../utils/backgroundwidget.dart';
 import '../utils/menuBar.dart';
 
@@ -7,26 +13,56 @@ const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
 
 class SearchingStations extends StatefulWidget {
-  const SearchingStations({super.key});
+  final User user;
+  SearchingStations({super.key, required this.user});
 
   @override
-  SearchingPage createState() => SearchingPage();
+  SearchingPage createState() => SearchingPage(user: user);
 }
 
 class SearchingPage extends State<SearchingStations> {
+  User user;
+  late WebSocketService _webSocketService;
+
+  SearchingPage({required this.user});
+
+  void _onConnected() {
+    final search = {
+      "event": "SEARCH_REQUESTED",
+      "user_id": user.id,
+      "data": {}
+    };
+    _webSocketService.send(JsonEncoder().convert(search));
+    print("Connected!!");
+  }
+
+  void _onMessageReceived(message) {
+    final data = JsonDecoder().convert(message);
+
+    if (data['event'] == 'CHANNEL_FOUND') {
+      final channelFound = ChannelFound.fromJson(data["data"]);
+      final status = { for (var user in channelFound.users) user.id : "pendente" };
+
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AcceptStation(
+        user: user,
+        channelFound: channelFound,
+        status: status,
+        webSocketService: _webSocketService,
+      )
+      ));
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    // Delay de 3 segundos
-    Future.delayed(const Duration(seconds: 3), () {
-      // Verifica se o widget ainda está montado antes de navegar
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const MenuBarGeneral(initialIndex: 2, user: null,)), // alterar depois
-        );
-      }
-    });
+    _webSocketService = WebSocketService(
+      userId: user.id,
+      onConnected: _onConnected,
+      onMessageReceived: _onMessageReceived,
+      // onDisconnected: _onDisconnect,
+    );
+    _webSocketService.connect();
   }
 
   @override
@@ -72,8 +108,9 @@ class SearchingPage extends State<SearchingStations> {
               padding: EdgeInsets.symmetric(vertical: screenHeight * 0.03),
               child: ElevatedButton(
                 onPressed: () {
+                  _webSocketService.disconnect();
+                  print("disconnected!");
                   Navigator.pop(context);
-                  // também será necessário cancelar a chamada do serviço :0
                 },
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(

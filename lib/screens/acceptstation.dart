@@ -1,4 +1,12 @@
+import 'dart:convert';
+import 'dart:math';
+
+import 'package:addaproject/sdk/AddaSDK.dart';
+import 'package:addaproject/sdk/model/ChannelFound.dart';
 import 'package:flutter/material.dart';
+import '../sdk/LocalCache.dart';
+import '../sdk/WebSocket.dart';
+import '../sdk/model/Channel.dart';
 import '../utils/interestshow.dart';
 import '../sdk/model/User.dart';
 import '../utils/useracceptstate.dart';
@@ -8,35 +16,94 @@ const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
 const Color pretobg = Color(0xFF242424);
 
-class AcceptStation extends StatelessWidget {
+class AcceptStation extends StatefulWidget {
   final User? user;
+  final ChannelFound? channelFound;
+  final Map<String, String> status;
+  final WebSocketService webSocketService;
 
-  const AcceptStation({super.key, this.user});
+
+  const AcceptStation({super.key, this.user, this.channelFound, required this.status, required this.webSocketService});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Others profile page',
-      home: AcceptStationPage(user: user),
-    );
-  }
+  _AcceptStationState createState() => _AcceptStationState();
 }
 
-class AcceptStationPage extends StatelessWidget {
-  final User? user;
+class _AcceptStationState extends State<AcceptStation> {
+  User? user;
+  ChannelFound? channelFound;
+  late Map<String, String> status;
+  late WebSocketService webSocketService;
+  List<String> acceptedUsers = [];
+  AddaSDK sdk = AddaSDK();
+  final _cache = LocalCache();
 
-  const AcceptStationPage({super.key, this.user});
+  @override
+  initState() {
+    super.initState();
+    user = widget.user;
+    channelFound = widget.channelFound;
+    status = widget.status;
+    webSocketService = widget.webSocketService;
+  }
+
+
+  void _onMessageReceived(message) {
+    final data = JsonDecoder().convert(message);
+
+    if (data['event'] == 'CHANNEL_ACCEPTED') {
+      _acceptedUsers(data["user_id"]);
+      _updateUserStatus(data["user_id"], "aceito");
+      return;
+    }
+    if (data["event"] == 'CHANNEL_REJECTED') {
+      _updateUserStatus(data["user_id"], "recusado");
+      Navigator.pop(context);
+      return;
+    }
+  }
+
+  void _acceptedUsers(String userId) {
+    setState(() {
+      acceptedUsers.add(userId);
+    });
+  }
+
+  void checkIfCompleted() async {
+    if (acceptedUsers.length == channelFound!.users.length) {
+      final newChannel = ChannelCreated(
+        name: "Estação ${Random().nextInt(100)}",
+        members: acceptedUsers,
+          admins: [user!.id, channelFound!.users[Random().nextInt(channelFound!.users.length)].id],
+      );
+      final channel = await sdk.createChannel(newChannel);
+      var channels = await _cache.listChannelCached();
+      if (channels != null) {
+        channels.add(channel!);
+      }
+    }
+  }
+
+  void _updateUserStatus(String userId, String newStatus) {
+    setState(() {
+      status[userId] = newStatus;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    webSocketService.onMessageReceived = _onMessageReceived;
+
+    // Create a new list with the filtered users
+    final filteredUsers = channelFound!.users.where((user) => user.id != this.user!.id).toList();
 
     return Scaffold(
       backgroundColor: pretobg,
       body: Stack(
         children: [
-          SingleChildScrollView(
+          Positioned.fill(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -115,45 +182,21 @@ class AcceptStationPage extends StatelessWidget {
                     textAlign: TextAlign.left,
                   ),
                 ),
-                // Scrollable area for the list of members with scrollbar
-                Container(
-                  height: screenHeight * 0.255,
-                  child: RawScrollbar(
-                    thumbColor: Colors.white, // Cor da "thumb" branca
-                    thickness: 6.0, // Espessura da barra
-                    radius: Radius.circular(10), // Borda arredondada
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: List.generate(
-                          18,
-                              (index) {
-                            String status;
-                            switch (index % 3) {
-                              case 0:
-                                status = 'pendente';
-                                break;
-                              case 1:
-                                status = 'aceito';
-                                break;
-                              case 2:
-                              default:
-                                status = 'recusado';
-                                break;
-                            }
-
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10),
-                              child: UserAcceptState(
-                                imagePath: 'assets/billie.png',
-                                name: 'Billie Eilish',
-                                username: 'billie_eilish',
-                                status: status,
-                              ),
-                            );
-                          },
+                Expanded(
+                  child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    itemCount: filteredUsers.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: UserAcceptState(
+                          imagePath: 'assets/default_pfp.png',
+                          name: filteredUsers[index].firstName + filteredUsers[index].lastName,
+                          username: filteredUsers[index].nickname,
+                          status: status[filteredUsers[index].id]!,
                         ),
-                      ),
-                    ),
+                      );
+                    },
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.02),
@@ -166,7 +209,14 @@ class AcceptStationPage extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          final event = {
+                            'event': 'CHANNEL_ACCEPTED',
+                            'data': {}
+                          };
+                          webSocketService.send(JsonEncoder().convert(event));
+                          _updateUserStatus(user!.id, "aceito");
+                        },
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.symmetric(
                               horizontal: screenWidth * 0.333,
@@ -190,7 +240,15 @@ class AcceptStationPage extends StatelessWidget {
                       Align(
                         alignment: Alignment.center,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            final event = {
+                              'event': 'CHANNEL_REJECTED',
+                              'data': {}
+                            };
+                            _updateUserStatus(user!.id, "recusado");
+                            webSocketService.send(JsonEncoder().convert(event));
+                            Navigator.pop(context);
+                          },
                           style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.symmetric(
                                 horizontal: screenWidth * 0.325,
@@ -220,5 +278,10 @@ class AcceptStationPage extends StatelessWidget {
         ],
       ),
     );
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    webSocketService.dispose();
   }
 }

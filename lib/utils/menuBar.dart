@@ -30,11 +30,14 @@ class MenuBar extends StatefulWidget {
   const MenuBar({super.key, required this.user});
 
   @override
-  _MenuBarState createState() => _MenuBarState();
+  _MenuBarState createState() => _MenuBarState(user: user);
 }
 
   class _MenuBarState extends State<MenuBar> {
     int _selectedIndex = 0;
+    final User? user;
+
+    _MenuBarState({this.user});
 
     void _onItemTapped(int index) {
       setState(() {
@@ -89,7 +92,7 @@ class MenuBar extends StatefulWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const SearchingStations()),
+                    builder: (context) => SearchingStations(user: user!)),
               );
             },
             shape: const CircleBorder(

@@ -295,4 +295,22 @@ class AddaSDK {
       throw Exception("$e");
     }
   }
+
+  Future<Channel?> createChannel(ChannelCreated newChannel) async {
+    final body = jsonEncode(newChannel.toJson());
+    try {
+      final response = await httpClient.post(
+        '$channelBaseUrl/v1/channels',
+        data: body,
+      );
+      final dynamic data = await response.data;
+      return Channel.fromJson(data);
+    } catch (e) {
+      // melhorar depois
+      if (e is DioException) {
+        throw Exception('${e.response}');
+      }
+      throw Exception("$e");
+    }
+  }
 }

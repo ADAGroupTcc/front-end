@@ -24,8 +24,7 @@ class GroupInfo extends StatelessWidget {
 class GroupInfoPage extends StatelessWidget {
   final User? user;
 
-  // Definimos uma variável local para simular se o usuário é administrador
-  final bool isAdmin = true; // Altere para false para esconder o botão
+  final bool isAdmin = true;
 
   const GroupInfoPage({super.key, this.user});
 
