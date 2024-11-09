@@ -1,13 +1,24 @@
 import 'package:addaproject/screens/acceptstation.dart';
-import 'package:addaproject/sdk/LocalCache.dart';
+import 'package:addaproject/screens/chat.dart';
+import 'package:addaproject/screens/editprofile.dart';
+import 'package:addaproject/screens/editstationadm.dart';
+import 'package:addaproject/screens/groupinfo.dart';
+import 'package:addaproject/screens/home.dart';
+import 'package:addaproject/screens/interests.dart';
+import 'package:addaproject/screens/othersprofile.dart';
+import 'package:addaproject/screens/profilepersonalization.dart';
+import 'package:addaproject/sdk/model/Channel.dart';
 import 'package:addaproject/sdk/model/User.dart';
-import 'package:addaproject/utils/menuBar.dart';
-import 'package:flutter/material.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:addaproject/sdk/LocalCache.dart';
+import 'package:addaproject/utils/menuBar.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'screens/welcomescreen.dart';
 import 'screens/nointernet.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final cache = LocalCache();
@@ -17,12 +28,25 @@ void main() async {
     await Firebase.initializeApp();
     final res = await cache.getUserSession();
     if (res == null) {
-      runApp(const MyApp());
+      runApp(const SafeAreaWrapper(child: MyApp()));
     } else {
-      runApp(MenuBarGeneral(user: res));
+      runApp(SafeAreaWrapper(child: MenuBarGeneral(user: res)));
     }
   } catch (e) {
     print('Erro ao inicializar o Firebase: $e');
+  }
+}
+
+class SafeAreaWrapper extends StatelessWidget {
+  final Widget child;
+
+  const SafeAreaWrapper({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: child,
+    );
   }
 }
 
@@ -34,6 +58,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'My App',
       theme: ThemeData.light(),
+      debugShowCheckedModeBanner: false, // Remove o banner de "DEBUG"
       home: const MainScreen(),
     );
   }
@@ -53,6 +78,12 @@ class MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
     _checkInitialConnectivity();
     _listenForConnectivityChanges();
   }
@@ -77,6 +108,6 @@ class MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return _isOffline ? const NoInternet() : const FirstScreen();
+    return _isOffline ? const NoInternet() : FirstScreen();
   }
 }
