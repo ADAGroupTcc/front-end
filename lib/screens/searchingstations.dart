@@ -1,5 +1,15 @@
+import 'dart:convert';
+import 'dart:math';
+
+import 'package:addaproject/screens/acceptstation.dart';
+import 'package:addaproject/sdk/model/ChannelFound.dart';
 import 'package:flutter/material.dart';
 
+import '../sdk/AddaSDK.dart';
+import '../sdk/LocalCache.dart';
+import '../sdk/WebSocket.dart';
+import '../sdk/model/Channel.dart';
+import '../sdk/model/User.dart';
 import '../utils/backgroundwidget.dart';
 import '../utils/menuBar.dart';
 
@@ -7,26 +17,57 @@ const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
 
 class SearchingStations extends StatefulWidget {
-  const SearchingStations({super.key});
+  final User user;
+  final WebSocketService webSocketService;
+  SearchingStations({super.key, required this.user, required this.webSocketService});
 
   @override
-  SearchingPage createState() => SearchingPage();
+  SearchingPage createState() => SearchingPage(user: user, webSocketService: webSocketService);
 }
 
 class SearchingPage extends State<SearchingStations> {
+  User user;
+  WebSocketService webSocketService;
+  AddaSDK sdk = AddaSDK();
+  final _cache = LocalCache();
+
+  SearchingPage({required this.user, required this.webSocketService});
+
+  void _onConnected() {
+    final search = {
+      "event": "SEARCH_REQUESTED",
+      "user_id": user.id,
+      "data": {}
+    };
+    webSocketService.send(JsonEncoder().convert(search));
+    print("Connected!!");
+  }
+
+  void _onMessageReceived(message) async {
+    final data = JsonDecoder().convert(message);
+
+    if (data['event'] == 'CHANNEL_FOUND') {
+      final channelFound = ChannelFound.fromJson(data["data"]);
+      final listUsers = channelFound.users.map((user) => user.id).toList();
+      final newChannel = ChannelCreated(
+        name: "Estação ${Random().nextInt(100)}",
+        members: listUsers,
+        admins: [user.id, channelFound.users[Random().nextInt(channelFound.users.length)].id],
+      );
+      final channel = await sdk.createChannel(newChannel);
+      var channels = await _cache.listChannelCached();
+      if (channels != null) {
+        channels.add(channel!);
+      }
+      Navigator.pop(context);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    // Delay de 3 segundos
-    Future.delayed(const Duration(seconds: 3), () {
-      // Verifica se o widget ainda está montado antes de navegar
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const MenuBarGeneral(initialIndex: 2, user: null,)), // alterar depois
-        );
-      }
-    });
+    webSocketService.onConnected = _onConnected;
+    webSocketService.onMessageReceived = _onMessageReceived;
   }
 
   @override
@@ -72,8 +113,9 @@ class SearchingPage extends State<SearchingStations> {
               padding: EdgeInsets.symmetric(vertical: screenHeight * 0.03),
               child: ElevatedButton(
                 onPressed: () {
+                  webSocketService.disconnect();
+                  print("disconnected!");
                   Navigator.pop(context);
-                  // também será necessário cancelar a chamada do serviço :0
                 },
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(

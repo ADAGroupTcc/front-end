@@ -132,3 +132,23 @@ class ChannelResponse {
     return ChannelResponse(channels: channels, next: json["next_page"] ?? 1);
   }
 }
+
+class ChannelCreated {
+  final String name;
+  final List<String> members;
+  final List<String> admins;
+
+  ChannelCreated({
+    required this.name,
+    required this.members,
+    required this.admins,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'members': members,
+      'admins': admins,
+    };
+  }
+}
