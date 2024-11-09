@@ -1,3 +1,4 @@
+import 'package:addaproject/sdk/WebSocket.dart';
 import 'package:addaproject/sdk/model/User.dart';
 
 import '../screens/home.dart';
@@ -36,8 +37,15 @@ class MenuBar extends StatefulWidget {
   class _MenuBarState extends State<MenuBar> {
     int _selectedIndex = 0;
     final User? user;
+    late WebSocketService webSocketService;
 
     _MenuBarState({this.user});
+
+    @override
+  void initState() {
+    super.initState();
+    webSocketService = WebSocketService(userId: user!.id);
+  }
 
     void _onItemTapped(int index) {
       setState(() {
@@ -54,6 +62,7 @@ class MenuBar extends StatefulWidget {
 
     @override
     Widget build(BuildContext context) {
+      webSocketService.connect();
       return Scaffold(
         resizeToAvoidBottomInset: false,
         body: _pages[_selectedIndex],
@@ -92,7 +101,7 @@ class MenuBar extends StatefulWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => SearchingStations(user: user!)),
+                    builder: (context) => SearchingStations(user: user!, webSocketService: webSocketService,)),
               );
             },
             shape: const CircleBorder(
@@ -111,4 +120,10 @@ class MenuBar extends StatefulWidget {
         ),
       );
     }
+
+    @override
+  void dispose() {
+    super.dispose();
+    webSocketService.dispose();
   }
+}

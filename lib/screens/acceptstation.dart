@@ -7,10 +7,8 @@ import 'package:flutter/material.dart';
 import '../sdk/LocalCache.dart';
 import '../sdk/WebSocket.dart';
 import '../sdk/model/Channel.dart';
-import '../utils/interestshow.dart';
 import '../sdk/model/User.dart';
 import '../utils/useracceptstate.dart';
-import '../utils/userprofilecard.dart';
 
 const Color branco = Color(0xFFFFFAFE);
 const Color preto = Color(0xFF0D0D0D);
@@ -96,7 +94,6 @@ class _AcceptStationState extends State<AcceptStation> {
     final screenHeight = MediaQuery.of(context).size.height;
     webSocketService.onMessageReceived = _onMessageReceived;
 
-    // Create a new list with the filtered users
     final filteredUsers = channelFound!.users.where((user) => user.id != this.user!.id).toList();
 
     return Scaffold(
