@@ -4,4 +4,11 @@
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    
+    <application
+        android:label="addaproject"
+        android:icon="@mipmap/logoaddaapp"
+        android:enableOnBackInvokedCallback="true">
+        <!-- Your application components, such as activities, services, etc. -->
+    </application>
 </manifest>

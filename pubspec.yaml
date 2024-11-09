@@ -8,22 +8,52 @@ environment:
   sdk: ">=3.3.4 <4.0.0"
 
 dependencies:
+  dio: ^5.3.0
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.6
+  connectivity_plus: ^2.3.0
+  http: ^1.2.2
+  firebase_core: ^3.6.0
+  firebase_auth: ^5.0.0
+  firebase_database: ^11.1.4
+  location: ^7.0.1
+  shared_preferences: ^2.1.0
+  web_socket_channel: ^2.2.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 
 flutter:
   uses-material-design: true
 
   assets:
-    - assets/registerbackground.png
+    - assets/setaenviar.png
+    - assets/appbarchat.png
+    - assets/profilebackground.png
+    - assets/generalbackground.png
+    - assets/welcomebackground.png
     - assets/logoadda.png
     - assets/blackwave.png
+    - assets/blackwavetwo.png
+    - assets/personalizeprofile.png
+    - assets/astronautinha.png
+    - assets/torredesinal.png
+    - assets/voltarbtn.png
+    - assets/target.png
+    - assets/setinha.png
+    - assets/lanita.png
+    - assets/bglanita.png
+    - assets/iconcompartilharlink.png
+    - assets/transparenttarget.png
+    - assets/billie.png
+    - assets/bgbillie.png
+    - assets/fullblackwave.png
+    - assets/iconcheck.png
+    - assets/iconcancel.png
+    - assets/default_pfp.png
 
   fonts:
     - family: Amaranth

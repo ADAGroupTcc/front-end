@@ -1,0 +1,17 @@
+>> ESSA SEMANA 09/09 <<
+    1. Estudar como funciona a sintax basica do Dart.
+        - Estrutura de dados;
+        - POO (Como criar classes, interfaces, herança e abstrações);
+        - Funções;
+        - Estruturas normais da linguagem (if, for, while, etc.);
+        - Estrutura de pastas;
+
+    2. Criar todas as funções que o front vai precisar chamar do back.
+        Ex.: Criar conta; Buscar Usuário; Listar canais.
+
+        - Crie isso numa interface, para reutilização do polimorfismo futuro.
+
+    >> OPCIONAL<< (mas adianta bastante)
+    
+    3. Criar modelos e classes de serviço.
+        - Ex.: Classe de Usuário que tem todos os campos como ID, nome, etc.
